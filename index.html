@@ -3,1324 +3,1362 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>An Evening of Time</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<title>An Evening of Time — v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;600&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;height:100%;overflow:hidden;background:#020810;
   font-family:'Cormorant Garamond',Georgia,serif;color:#e8e0cc;
   -webkit-tap-highlight-color:transparent;touch-action:none}
 
-/* ── CANVAS ─────────────────────── */
+/* ── GAME CANVAS ─────────────────── */
 #gc{position:fixed;inset:0;width:100%;height:100%;display:block}
 
-/* ── SCREEN TRANSITION ──────────── */
-#curtain{position:fixed;inset:0;background:#020810;z-index:200;
-  pointer-events:none;opacity:0;transition:opacity .6s}
+/* ── FADE CURTAIN ────────────────── */
+#curtain{position:fixed;inset:0;background:#020810;z-index:500;
+  pointer-events:none;opacity:0;transition:opacity .7s}
 #curtain.in{opacity:1;pointer-events:all}
 
-/* ── CHAPTER TITLE CARD ─────────── */
+/* ── CHAPTER CARD ────────────────── */
 #chapter-card{
-  position:fixed;inset:0;z-index:180;
+  position:fixed;inset:0;z-index:300;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:rgba(2,8,16,.92);backdrop-filter:blur(12px);
-  pointer-events:none;opacity:0;transition:opacity .5s;
+  background:rgba(1,5,14,.94);backdrop-filter:blur(14px);
+  opacity:0;pointer-events:none;transition:opacity .55s;padding:30px;
 }
 #chapter-card.show{opacity:1;pointer-events:all}
-#cc-eye{font-size:2.4rem;margin-bottom:16px;opacity:.7}
-#cc-num{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.3em;
-  text-transform:uppercase;color:#4a7aaa;margin-bottom:10px}
-#cc-title{font-family:'Cinzel',serif;font-size:1.6rem;font-weight:600;
-  color:#c8b070;text-align:center;margin-bottom:12px;line-height:1.3}
-#cc-line{width:60px;height:1px;background:rgba(200,176,112,.3);margin-bottom:14px}
-#cc-sub{font-size:.9rem;color:#8090a0;font-style:italic;text-align:center;
-  max-width:280px;line-height:1.6}
-#cc-tap{margin-top:28px;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;
-  color:#3a5a78;animation:blink 1.8s ease-in-out infinite}
-@keyframes blink{0%,100%{opacity:.3}50%{opacity:.9}}
+#cc-icon{font-size:2.6rem;margin-bottom:18px;opacity:.75}
+#cc-roman{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.35em;
+  color:#3a6890;text-transform:uppercase;margin-bottom:12px}
+#cc-name{font-family:'Cinzel',serif;font-size:clamp(1.2rem,4vw,1.7rem);
+  font-weight:600;color:#c8b070;text-align:center;margin-bottom:14px;line-height:1.3}
+#cc-rule{width:56px;height:1px;background:rgba(200,176,112,.3);margin:0 auto 14px}
+#cc-sub{font-size:.92rem;color:#6a8090;font-style:italic;text-align:center;
+  max-width:260px;line-height:1.65}
+#cc-hint{margin-top:32px;font-family:'Cinzel',serif;font-size:.58rem;
+  letter-spacing:.2em;text-transform:uppercase;color:#2a4862;
+  animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
 
-/* ── HUD ────────────────────────── */
-#hud{position:fixed;top:0;left:0;right:0;z-index:30;
-  background:linear-gradient(180deg,rgba(2,8,16,.88) 0%,transparent 100%);
-  padding:10px 16px 22px;display:flex;justify-content:space-between;
-  align-items:center;pointer-events:none}
-#hud-chapter{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.16em;
-  text-transform:uppercase;color:#3a6a98}
-#hud-chapter em{color:#c8b070;font-style:italic;font-family:'Cormorant Garamond',serif}
-#hud-count{font-size:.62rem;color:#2a4a68;letter-spacing:.05em}
+/* ── HUD ─────────────────────────── */
+#hud{position:fixed;top:0;left:0;right:0;z-index:50;
+  background:linear-gradient(180deg,rgba(1,5,14,.9) 0%,transparent 100%);
+  padding:10px 16px 24px;display:flex;justify-content:space-between;align-items:center;
+  pointer-events:none}
+#hud-ch{font-family:'Cinzel',serif;font-size:.56rem;letter-spacing:.16em;
+  text-transform:uppercase;color:#2a5070}
+#hud-ch em{color:#c8b070;font-style:italic;font-family:'Cormorant Garamond',serif;font-size:.68rem}
+#hud-ct{font-size:.62rem;color:#1e3a52;letter-spacing:.04em}
 
-/* ── COLLECTION BTN ─────────────── */
-#inv-btn{position:fixed;top:9px;right:14px;z-index:40;
-  background:rgba(4,14,30,.9);border:1px solid rgba(100,160,220,.2);
-  border-radius:20px;padding:8px 16px;color:#6090b8;
-  font-size:.7rem;font-family:'Cinzel',serif;cursor:pointer;
-  letter-spacing:.08em;transition:all .2s}
-#inv-btn:hover,#inv-btn:active{border-color:rgba(200,176,112,.4);color:#c8b070}
+/* ── COLLECTION BTN ──────────────── */
+#inv-btn{position:fixed;top:8px;right:14px;z-index:60;
+  background:rgba(2,10,24,.92);border:1px solid rgba(100,160,220,.2);
+  border-radius:20px;padding:8px 16px;
+  color:#5888b0;font-family:'Cinzel',serif;font-size:.65rem;
+  cursor:pointer;letter-spacing:.08em;transition:all .25s}
+#inv-btn:hover,#inv-btn:active{color:#c8b070;border-color:rgba(200,176,112,.35)}
 
-/* ── STORY SCENE (Visual Novel) ─── */
-#vn-scene{
-  position:fixed;inset:0;z-index:100;
-  display:flex;flex-direction:column;
-  pointer-events:none;opacity:0;transition:opacity .4s;
-}
-#vn-scene.open{opacity:1;pointer-events:all}
+/* ── VISUAL NOVEL SCENE ──────────── */
+#vn{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;transition:opacity .4s}
+#vn.open{opacity:1;pointer-events:all}
 
-/* Portrait art area */
-#vn-art{
-  flex:1;position:relative;overflow:hidden;
-  background:linear-gradient(180deg,#050f1e 0%,#07142a 60%,#0a1c14 100%);
-}
-#vn-portrait-canvas{position:absolute;inset:0;width:100%;height:100%}
-#vn-item-display{
-  position:absolute;bottom:0;left:0;right:0;
-  display:flex;align-items:flex-end;justify-content:center;
-  padding-bottom:30px;
-  background:linear-gradient(0deg,rgba(5,12,24,.8) 0%,transparent 60%);
-}
-#vn-item-icon{font-size:3.8rem;filter:drop-shadow(0 0 20px rgba(200,176,112,.6));
-  display:none;animation:itemFloat 3s ease-in-out infinite}
-@keyframes itemFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+/* Art area — canvas portrait */
+#vn-art{flex:1;position:relative;overflow:hidden;min-height:0}
+#vpc{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* Floating item */
+#vn-float{position:absolute;bottom:0;left:0;right:0;
+  display:flex;justify-content:center;align-items:flex-end;padding-bottom:24px;
+  background:linear-gradient(0deg,rgba(1,6,18,.75) 0%,transparent 55%);
+  pointer-events:none}
+#vn-float-icon{font-size:3.2rem;display:none;
+  filter:drop-shadow(0 0 22px rgba(200,176,112,.65));
+  animation:floatBob 3s ease-in-out infinite}
+@keyframes floatBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 
 /* Dialogue box */
-#vn-box{
-  flex-shrink:0;
-  background:linear-gradient(0deg,rgba(2,7,18,.97) 0%,rgba(3,10,24,.95) 100%);
-  border-top:1px solid rgba(100,160,220,.12);
-  padding:18px 20px 16px;min-height:200px;
-  display:flex;flex-direction:column;
-}
-#vn-speaker{
-  font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.2em;
-  text-transform:uppercase;color:#c8b070;margin-bottom:10px;
-  display:flex;align-items:center;gap:8px;
-}
-#vn-speaker-dot{width:6px;height:6px;border-radius:50%;
-  background:#c8b070;box-shadow:0 0 8px #c8b08050;flex-shrink:0}
-#vn-text{font-size:1rem;line-height:1.82;color:#d8d0b8;
-  flex:1;min-height:80px;position:relative}
-#vn-cursor{display:inline-block;width:2px;height:1em;background:#c8b070;
-  margin-left:2px;vertical-align:text-bottom;animation:blink .8s step-end infinite}
+#vn-box{flex-shrink:0;background:linear-gradient(0deg,rgba(1,5,16,.98),rgba(2,8,22,.95));
+  border-top:1px solid rgba(100,150,220,.1);padding:16px 18px 14px}
+#vn-who{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.22em;
+  text-transform:uppercase;color:#c8b070;margin-bottom:9px;
+  display:flex;align-items:center;gap:7px}
+#vn-dot{width:5px;height:5px;border-radius:50%;background:#c8b070;
+  box-shadow:0 0 7px #c8b07060;flex-shrink:0}
+#vn-words{font-size:.97rem;line-height:1.82;color:#d8d0b8;
+  min-height:72px;position:relative;white-space:pre-wrap}
+#vn-caret{display:inline-block;width:2px;height:.9em;background:#c8b07090;
+  margin-left:1px;vertical-align:text-bottom;animation:caretBlink .75s step-end infinite}
+@keyframes caretBlink{0%,100%{opacity:1}50%{opacity:0}}
 
-/* Hidden message reveal */
-#vn-hidden{
-  margin-top:14px;padding:12px 16px;
-  background:linear-gradient(135deg,rgba(50,34,4,.7),rgba(30,20,4,.7));
-  border:1px solid rgba(200,168,48,.25);border-radius:6px;
-  font-style:italic;font-size:.88rem;color:#e8c850;
-  display:none;animation:hiddenReveal .8s ease;
-}
-#vn-hidden.show{display:block}
-@keyframes hiddenReveal{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-#vn-hidden-label{font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.2em;
-  color:#8a7030;text-transform:uppercase;margin-bottom:5px}
-#vn-hidden-msg{font-size:.92rem;line-height:1.5}
+/* Hidden message */
+#vn-hmsg{margin-top:12px;padding:11px 15px;
+  background:linear-gradient(135deg,rgba(48,32,4,.75),rgba(28,18,4,.75));
+  border:1px solid rgba(200,168,48,.22);border-radius:6px;
+  display:none;animation:hmsgIn .7s ease}
+#vn-hmsg.show{display:block}
+@keyframes hmsgIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+#vn-hlabel{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.22em;
+  color:#7a6020;text-transform:uppercase;margin-bottom:5px}
+#vn-htext{font-style:italic;font-size:.9rem;color:#e8c850;line-height:1.55}
+#vn-hmean{font-size:.8rem;color:#908070;line-height:1.5;margin-top:6px}
 
-/* VN nav */
-#vn-nav{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
-#vn-progress-dots{display:flex;gap:5px}
-.vn-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.12);transition:all .3s}
-.vn-dot.active{background:#c8b070;box-shadow:0 0 6px #c8b07060}
-.vn-dot.done{background:rgba(200,176,112,.35)}
-#vn-next{background:rgba(100,160,220,.1);border:1px solid rgba(100,160,220,.2);
-  border-radius:18px;padding:8px 20px;color:#7aace0;
-  font-size:.75rem;font-family:'Cinzel',serif;cursor:pointer;
-  letter-spacing:.08em;transition:all .2s}
-#vn-next:hover,#vn-next:active{background:rgba(200,176,112,.15);border-color:rgba(200,176,112,.3);color:#c8b070}
+/* VN nav row */
+#vn-nav{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+#vn-dots{display:flex;gap:5px;align-items:center}
+.vdot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.1);transition:all .3s}
+.vdot.active{background:#c8b070;box-shadow:0 0 6px #c8b07055;width:14px;border-radius:3px}
+.vdot.done{background:rgba(200,176,112,.3)}
+#vn-btn{background:rgba(100,155,215,.08);border:1px solid rgba(100,155,215,.18);
+  border-radius:18px;padding:9px 22px;color:#78aad8;
+  font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.08em;cursor:pointer;
+  transition:all .22s}
+#vn-btn:hover,#vn-btn:active{background:rgba(200,176,112,.12);border-color:rgba(200,176,112,.28);color:#c8b070}
+
+/* Minimap / relationship tracker */
+#minimap{position:fixed;bottom:16px;right:14px;z-index:55;
+  width:88px;background:rgba(1,6,18,.88);border:1px solid rgba(100,160,220,.12);
+  border-radius:10px;padding:8px 6px 6px;pointer-events:none}
+#mm-title{font-family:'Cinzel',serif;font-size:.46rem;letter-spacing:.14em;
+  text-transform:uppercase;color:#2a4862;text-align:center;margin-bottom:6px}
+#mm-canvas{display:block;width:76px;height:76px;margin:0 auto}
 
 /* ── INVENTORY ───────────────────── */
-#inv-overlay{position:fixed;inset:0;z-index:150;background:rgba(2,7,16,.97);
+#inv{position:fixed;inset:0;z-index:400;background:rgba(1,5,14,.97);
   display:none;flex-direction:column;overflow:hidden}
-#inv-overlay.open{display:flex}
-#inv-top{flex-shrink:0;padding:18px 18px 14px;
-  border-bottom:1px solid rgba(100,160,220,.1);
+#inv.open{display:flex}
+#inv-hdr{flex-shrink:0;padding:16px 18px 12px;
+  border-bottom:1px solid rgba(100,150,220,.09);
   display:flex;justify-content:space-between;align-items:center}
-#inv-top h2{font-family:'Cinzel',serif;font-size:.85rem;letter-spacing:.18em;
+#inv-hdr h2{font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:.18em;
   text-transform:uppercase;color:#c8b070}
-#inv-close-btn{background:transparent;border:1px solid rgba(255,255,255,.1);
-  border-radius:6px;color:#4a7090;padding:7px 16px;
-  font-family:'Cinzel',serif;font-size:.68rem;cursor:pointer;letter-spacing:.06em}
-#inv-scroll{flex:1;overflow-y:auto;padding:16px 18px}
-.inv-section-label{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.2em;
-  text-transform:uppercase;color:#2a4a68;margin:16px 0 8px;
-  padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.05)}
-.inv-section-label:first-child{margin-top:0}
+#inv-x{background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:6px;
+  color:#4a7090;padding:7px 15px;font-family:'Cinzel',serif;font-size:.65rem;
+  cursor:pointer;letter-spacing:.06em;transition:all .2s}
+#inv-x:hover{color:#c8b070;border-color:rgba(200,176,112,.3)}
+#inv-body{flex:1;overflow-y:auto;padding:14px 18px}
 
-/* Item examine card */
-.icard{display:flex;gap:14px;padding:14px;margin-bottom:8px;
-  background:rgba(255,255,255,.03);border-radius:10px;
-  border:1px solid rgba(255,255,255,.06);cursor:pointer;
-  transition:all .2s}
-.icard:hover,.icard:active{background:rgba(200,176,112,.05);border-color:rgba(200,176,112,.15)}
-.icard.expanded{background:rgba(50,34,4,.3);border-color:rgba(200,176,112,.2)}
-.ic-icon{font-size:1.8rem;flex-shrink:0;padding-top:3px}
-.ic-name{color:#f0e4c0;font-size:.9rem;font-weight:600;margin-bottom:1px}
-.ic-from{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.1em;
-  text-transform:uppercase;color:#3a6888;margin-bottom:0}
-.ic-body{display:none;margin-top:10px;padding-top:10px;
-  border-top:1px solid rgba(255,255,255,.06)}
-.icard.expanded .ic-body{display:block}
-.ic-meaning{color:#9890808;font-size:.82rem;line-height:1.58;margin-bottom:8px;color:#988070}
-.ic-msg{color:#c8a030;font-size:.82rem;font-style:italic}
-.ic-unlocks{font-size:.7rem;color:#3a6040;margin-top:6px;
-  font-family:'Cinzel',serif;letter-spacing:.06em}
+.inv-sec{font-family:'Cinzel',serif;font-size:.54rem;letter-spacing:.2em;
+  text-transform:uppercase;color:#1e3a52;margin:14px 0 7px;
+  padding-bottom:5px;border-bottom:1px solid rgba(255,255,255,.04)}
+.inv-sec:first-child{margin-top:0}
 
-#inv-events-section{margin-top:20px;padding-top:16px;
-  border-top:1px solid rgba(255,255,255,.06)}
-#inv-events-section h3{font-family:'Cinzel',serif;font-size:.58rem;
-  letter-spacing:.2em;text-transform:uppercase;color:#2a4862;margin-bottom:10px}
-.epill{display:inline-block;padding:4px 12px;background:rgba(20,50,90,.4);
-  border-radius:12px;font-size:.7rem;color:#6898c0;margin:3px}
-.inv-empty{color:#2a4a68;font-style:italic;font-size:.88rem;
-  padding:24px 0;text-align:center;line-height:1.7}
+.icard{display:flex;gap:12px;padding:13px 12px;margin-bottom:7px;
+  background:rgba(255,255,255,.028);border-radius:9px;
+  border:1px solid rgba(255,255,255,.055);cursor:pointer;transition:all .2s}
+.icard:hover,.icard:active{background:rgba(200,176,112,.06);border-color:rgba(200,176,112,.18)}
+.ic-em{font-size:1.7rem;flex-shrink:0;line-height:1}
+.ic-name{color:#f0e4c0;font-size:.88rem;font-weight:600}
+.ic-from{font-family:'Cinzel',serif;font-size:.54rem;letter-spacing:.1em;
+  text-transform:uppercase;color:#2e5870;margin-top:1px}
+.ic-unlocks{font-size:.72rem;color:#3a6040;margin-top:3px}
 
-/* ── EXAMINE OVERLAY ────────────── */
-#examine{position:fixed;inset:0;z-index:160;background:rgba(2,7,16,.96);
-  display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px 24px}
+.inv-empty{color:#1e3a52;font-style:italic;font-size:.88rem;
+  padding:28px 0;text-align:center;line-height:1.8}
+#inv-scenes{margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.05)}
+#inv-scenes h3{font-family:'Cinzel',serif;font-size:.54rem;letter-spacing:.2em;
+  text-transform:uppercase;color:#1e3a52;margin-bottom:9px}
+.epill{display:inline-block;padding:3px 11px;background:rgba(18,48,82,.4);
+  border-radius:12px;font-size:.68rem;color:#507898;margin:3px}
+
+/* ── EXAMINE ─────────────────────── */
+#examine{position:fixed;inset:0;z-index:450;background:rgba(1,5,14,.96);
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:32px 24px;text-align:center}
 #examine.open{display:flex}
-#ex-icon{font-size:4rem;margin-bottom:18px;
-  filter:drop-shadow(0 0 28px rgba(200,176,112,.5));
-  animation:itemFloat 3s ease-in-out infinite}
+#ex-em{font-size:3.8rem;margin-bottom:18px;
+  filter:drop-shadow(0 0 28px rgba(200,176,112,.55));
+  animation:floatBob 3s ease-in-out infinite}
 #ex-name{font-family:'Cinzel',serif;font-size:1.1rem;color:#c8b070;
-  letter-spacing:.12em;text-align:center;margin-bottom:4px}
-#ex-from{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.18em;
-  text-transform:uppercase;color:#3a6888;margin-bottom:18px;text-align:center}
-#ex-line{width:50px;height:1px;background:rgba(200,176,112,.25);margin:0 auto 18px}
-#ex-meaning{font-size:.95rem;line-height:1.72;color:#b0a890;text-align:center;margin-bottom:18px;max-width:320px}
-#ex-hidden{font-style:italic;font-size:.95rem;color:#e8c850;text-align:center;
-  padding:12px 18px;background:rgba(50,34,4,.5);border:1px solid rgba(200,168,48,.2);
-  border-radius:8px;max-width:320px;margin-bottom:24px;line-height:1.6}
-#ex-close{background:transparent;border:1px solid rgba(255,255,255,.12);
-  border-radius:20px;color:#4a7090;padding:10px 28px;
-  font-family:'Cinzel',serif;font-size:.7rem;cursor:pointer;letter-spacing:.1em}
+  letter-spacing:.12em;margin-bottom:4px}
+#ex-from{font-family:'Cinzel',serif;font-size:.57rem;letter-spacing:.18em;
+  text-transform:uppercase;color:#2e5870;margin-bottom:18px}
+#ex-hr{width:44px;height:1px;background:rgba(200,176,112,.22);margin:0 auto 18px}
+#ex-meaning{font-size:.92rem;line-height:1.72;color:#a09880;max-width:300px;margin-bottom:16px}
+#ex-hidden{font-style:italic;font-size:.92rem;color:#e8c850;
+  padding:12px 18px;background:rgba(48,32,4,.55);
+  border:1px solid rgba(200,168,48,.18);border-radius:7px;
+  max-width:300px;margin-bottom:24px;line-height:1.6}
+#ex-back{background:transparent;border:1px solid rgba(255,255,255,.1);
+  border-radius:20px;color:#3a6888;padding:10px 28px;
+  font-family:'Cinzel',serif;font-size:.67rem;cursor:pointer;letter-spacing:.1em}
 
-/* ── SPARKLES ───────────────────── */
-.sp{position:fixed;pointer-events:none;z-index:99;animation:spUp 1.4s ease forwards}
-@keyframes spUp{0%{opacity:1;transform:scale(1) translateY(0) rotate(0)}
-  100%{opacity:0;transform:scale(.1) translateY(-100px) rotate(600deg)}}
+/* ── SPARKLES ────────────────────── */
+.sp{position:fixed;pointer-events:none;z-index:600;
+  animation:spUp 1.5s ease forwards}
+@keyframes spUp{
+  0%{opacity:1;transform:scale(1) translateY(0) rotate(0)}
+  100%{opacity:0;transform:scale(.1) translateY(-110px) rotate(660deg)}}
 
-/* ── TAP LABEL ──────────────────── */
-#tap-label{position:fixed;bottom:24px;left:0;right:0;text-align:center;
-  font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.16em;
-  text-transform:uppercase;color:#1a3050;pointer-events:none;z-index:5;
-  animation:blink 2.5s ease-in-out infinite}
+/* ── TAP HINT ────────────────────── */
+#taphint{position:fixed;bottom:26px;left:0;right:0;text-align:center;
+  font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.18em;
+  text-transform:uppercase;color:#182838;pointer-events:none;z-index:10;
+  animation:pulse 2.8s ease-in-out infinite}
 </style>
 </head>
 <body>
 <canvas id="gc"></canvas>
-
-<!-- Curtain for transitions -->
 <div id="curtain"></div>
 
-<!-- Chapter title card -->
+<!-- Chapter card -->
 <div id="chapter-card">
-  <div id="cc-eye">🌙</div>
-  <div id="cc-num" id="cc-num">Chapter I</div>
-  <div id="cc-title">Moonlit Arrival</div>
-  <div id="cc-line"></div>
-  <div id="cc-sub"></div>
-  <div id="cc-tap">Tap to begin</div>
+  <div id="cc-icon">🌙</div>
+  <div id="cc-roman">Chapter I</div>
+  <div id="cc-name">Moonlit Arrival</div>
+  <div id="cc-rule"></div>
+  <div id="cc-sub">The evening opens.</div>
+  <div id="cc-hint">Tap anywhere to begin</div>
 </div>
 
 <!-- HUD -->
 <div id="hud">
-  <div id="hud-chapter">Chapter: <em id="hud-cname">Moonlit Arrival</em></div>
-  <div id="hud-count">0 / 21</div>
+  <div id="hud-ch">Chapter: <em id="hud-cname">Moonlit Arrival</em></div>
+  <div id="hud-ct">0 / 21</div>
 </div>
 <button id="inv-btn" onclick="openInv()">✦ Collection</button>
 
-<!-- Visual Novel Scene -->
-<div id="vn-scene">
+<!-- Minimap -->
+<div id="minimap">
+  <div id="mm-title">Characters</div>
+  <canvas id="mm-canvas" width="76" height="76"></canvas>
+</div>
+
+<!-- Visual Novel -->
+<div id="vn">
   <div id="vn-art">
-    <canvas id="vn-portrait-canvas"></canvas>
-    <div id="vn-item-display">
-      <div id="vn-item-icon"></div>
-    </div>
+    <canvas id="vpc"></canvas>
+    <div id="vn-float"><div id="vn-float-icon"></div></div>
   </div>
   <div id="vn-box">
-    <div id="vn-speaker"><div id="vn-speaker-dot"></div><span id="vn-speaker-name"></span></div>
-    <div id="vn-text"><span id="vn-words"></span><span id="vn-cursor"></span></div>
-    <div id="vn-hidden">
-      <div id="vn-hidden-label">✦ Hidden Message</div>
-      <div id="vn-hidden-msg"></div>
+    <div id="vn-who"><div id="vn-dot"></div><span id="vn-speaker"></span></div>
+    <div id="vn-words"><span id="vn-txt"></span><span id="vn-caret"></span></div>
+    <div id="vn-hmsg">
+      <div id="vn-hlabel">✦ Hidden Message</div>
+      <div id="vn-htext"></div>
+      <div id="vn-hmean"></div>
     </div>
     <div id="vn-nav">
-      <div id="vn-progress-dots"></div>
-      <button id="vn-next" onclick="vnNext()">Continue →</button>
+      <div id="vn-dots"></div>
+      <button id="vn-btn" onclick="vnAdvance()">Continue →</button>
     </div>
   </div>
 </div>
 
 <!-- Inventory -->
-<div id="inv-overlay">
-  <div id="inv-top">
+<div id="inv">
+  <div id="inv-hdr">
     <h2>✦ DJ Daddy Cool's Collection</h2>
-    <button id="inv-close-btn" onclick="closeInv()">✕ Close</button>
+    <button id="inv-x" onclick="closeInv()">✕ Close</button>
   </div>
-  <div id="inv-scroll" id="inv-scroll"></div>
+  <div id="inv-body" id="inv-body"></div>
 </div>
 
-<!-- Item examine -->
+<!-- Examine item -->
 <div id="examine">
-  <div id="ex-icon"></div>
+  <div id="ex-em"></div>
   <div id="ex-name"></div>
   <div id="ex-from"></div>
-  <div id="ex-line"></div>
+  <div id="ex-hr"></div>
   <div id="ex-meaning"></div>
   <div id="ex-hidden"></div>
-  <button id="ex-close" onclick="closeExamine()">← Back to Collection</button>
+  <button id="ex-back" onclick="closeExamine()">← Back</button>
 </div>
 
-<div id="tap-label">Tap a character to approach</div>
+<div id="taphint">Tap a glowing character to approach</div>
 
 <script>
 'use strict';
-// ════════════════════════════════════════
-//  CANVAS + RESIZE
-// ════════════════════════════════════════
-const gc = document.getElementById('gc');
-const gx = gc.getContext('2d');
-let W=0, H=0, dpr=1, portrait=false;
-
-const vpc = document.getElementById('vn-portrait-canvas');
-const vpx = vpc.getContext('2d');
-let VW=0, VH=0;
+/* ═══════════════════════════════════════════
+   CANVAS SETUP
+═══════════════════════════════════════════ */
+const gc=document.getElementById('gc');
+const g=gc.getContext('2d');
+const vpc=document.getElementById('vpc');
+const vp=vpc.getContext('2d');
+const mmc=document.getElementById('mm-canvas');
+const mm=mmc.getContext('2d');
+let W=0,H=0,dpr=1,PORT=false;
+let VW=0,VH=0;
 
 function resize(){
-  dpr = Math.min(window.devicePixelRatio||1,2);
-  W = window.innerWidth; H = window.innerHeight;
-  portrait = H > W;
+  dpr=Math.min(window.devicePixelRatio||1,2);
+  W=window.innerWidth; H=window.innerHeight; PORT=H>W;
   gc.width=W*dpr; gc.height=H*dpr;
-  gx.setTransform(dpr,0,0,dpr,0,0);
-  VW = vpc.offsetWidth; VH = vpc.offsetHeight;
-  vpc.width=VW*dpr; vpc.height=VH*dpr;
-  vpx.setTransform(dpr,0,0,dpr,0,0);
+  g.setTransform(dpr,0,0,dpr,0,0);
+  resizeVPC();
 }
-window.addEventListener('resize',resize);
+function resizeVPC(){
+  VW=vpc.offsetWidth||W; VH=vpc.offsetHeight||Math.floor(H*.52);
+  vpc.width=VW*dpr; vpc.height=VH*dpr;
+  vp.setTransform(dpr,0,0,dpr,0,0);
+}
+window.addEventListener('resize',()=>{resize();buildWorld();});
 resize();
 
-// ════════════════════════════════════════
-//  ITEM DATA  (all 21, correct attributions)
-// ════════════════════════════════════════
-const ITEMS = [
-  {id:'feather',    emoji:'🪶', name:'Feather',         from:'The Little Boy',            giver:'boy',
+/* ═══════════════════════════════════════════
+   ITEM DATA  (21 items, correct attributions)
+═══════════════════════════════════════════ */
+const ITEMS=[
+  // ── THE LITTLE BOY
+  {id:'feather',   e:'🪶',name:'Feather',        from:'The Little Boy',       giver:'boy',
    meaning:'Childhood softness, innocence — the part of you that still needs gentleness.',
-   hidden:'You were always trying.',        unlocks:'River Memory',
+   hidden:'You were always trying.',      unlocks:'River Memory',
    pages:[
-     {speaker:'THE LITTLE BOY', text:'He holds it out without meeting your eyes.'},
-     {speaker:'THE LITTLE BOY', text:'Like he\'s been keeping it safe. Until you were ready to carry it.'},
-     {speaker:'DJ DADDY COOL',  text:'The feather is lighter than you remember being.'},
+     {who:'THE LITTLE BOY',txt:'He holds it out without meeting your eyes.'},
+     {who:'THE LITTLE BOY',txt:'Like he\'s been keeping it safe — until you were ready to carry it.'},
+     {who:'DJ DADDY COOL', txt:'The feather is lighter than you remember being.'},
    ]},
-  {id:'stone',      emoji:'🪨', name:'Stone',            from:'The Little Boy',            giver:'boy',
+  {id:'stone',     e:'🪨',name:'Stone',           from:'The Little Boy',       giver:'boy',
    meaning:'The weight you carried as a child — the heaviness you didn\'t have words for.',
    hidden:'You didn\'t deserve that weight.',  unlocks:'Time Loop',
    pages:[
-     {speaker:'THE LITTLE BOY', text:'Both hands. He places it in yours slowly.'},
-     {speaker:'THE LITTLE BOY', text:'Like he\'s been carrying this a long time. And finally found the right person.'},
-     {speaker:'DJ DADDY COOL',  text:'The stone is heavier than it looks. You\'ve been carrying this longer than you knew.'},
+     {who:'THE LITTLE BOY',txt:'Both hands. He places it in yours slowly.'},
+     {who:'THE LITTLE BOY',txt:'Like he\'s been carrying this a long time. And finally found the right person.'},
+     {who:'DJ DADDY COOL', txt:'The stone is heavier than it looks. You\'ve been carrying this longer than you knew.'},
    ]},
-  {id:'calculator', emoji:'🧮', name:'Calculator',       from:'The Little Boy',            giver:'boy',
+  {id:'calculator',e:'🧮',name:'Calculator',      from:'The Little Boy',       giver:'boy',
    meaning:'Logic, problem-solving — the way you tried to make sense of things too early.',
    hidden:'You didn\'t have to figure it all out alone.',  unlocks:'Calculator Puzzle',
    pages:[
-     {speaker:'THE LITTLE BOY', text:'He hands it over shyly.'},
-     {speaker:'THE LITTLE BOY', text:'All those numbers you punched in — trying to solve what couldn\'t be solved with numbers.'},
-     {speaker:'DJ DADDY COOL',  text:'Some things can\'t be calculated. You know that now.'},
+     {who:'THE LITTLE BOY',txt:'He hands it over shyly.'},
+     {who:'THE LITTLE BOY',txt:'All those numbers you punched in, trying to solve what couldn\'t be solved with numbers.'},
+     {who:'DJ DADDY COOL', txt:'Some things can\'t be calculated. You know that now.'},
    ]},
-  {id:'mcdonalds',  emoji:'🍟', name:"McDonald's Bag",   from:'The Little Boy',            giver:'boy',
+  {id:'mcdonalds', e:'🍟',name:"McDonald's Bag",  from:'The Little Boy',       giver:'boy',
    meaning:'Nostalgia, comfort food — childhood love arriving in ordinary forms.',
-   hidden:'You were loved in small ways.',     unlocks:'Memory Cutscene',
+   hidden:'You were loved in small ways.',    unlocks:'Memory Cutscene',
    pages:[
-     {speaker:'THE LITTLE BOY', text:'He grins and holds it out with both hands.'},
-     {speaker:'THE LITTLE BOY', text:'The smell hits before anything else. You know exactly which Saturday morning this is.'},
-     {speaker:'DJ DADDY COOL',  text:'Cold fries and warm feelings. Someone tried. That counts for everything.'},
+     {who:'THE LITTLE BOY',txt:'He grins and holds it out with both hands.'},
+     {who:'THE LITTLE BOY',txt:'The smell hits first. You know exactly which Saturday morning this is.'},
+     {who:'DJ DADDY COOL', txt:'Cold fries and warm feelings. Someone tried. That counts for everything.'},
    ]},
-  {id:'pasta',      emoji:'🍝', name:'Pasta',             from:'The Little Boy',            giver:'boy',
+  {id:'pasta',     e:'🍝',name:'Pasta',            from:'The Little Boy',       giver:'boy',
    meaning:'Home, warmth — the simple things that kept you going.',
-   hidden:'You were cared for.',               unlocks:'Kitchen Memory',
+   hidden:'You were cared for.',              unlocks:'Kitchen Memory',
    pages:[
-     {speaker:'THE LITTLE BOY', text:'He presents it solemnly. Like it\'s a treasure. Steam still rising.'},
-     {speaker:'THE LITTLE BOY', text:'Someone made this for you.'},
-     {speaker:'DJ DADDY COOL',  text:'A bowl. A kitchen. Someone who loved you the best way they knew.'},
+     {who:'THE LITTLE BOY',txt:'He presents it solemnly. Like it\'s the most important thing.'},
+     {who:'THE LITTLE BOY',txt:'Steam still rising. Someone made this for you.'},
+     {who:'DJ DADDY COOL', txt:'A bowl. A kitchen. Someone who loved you the best way they knew.'},
    ]},
-  {id:'ring',       emoji:'💍', name:'Ring',              from:'The Op-Shop Woman',         giver:'opshop',
+  // ── THE OP-SHOP WOMAN
+  {id:'ring',      e:'💍',name:'Ring',             from:'The Op-Shop Woman',    giver:'opshop',
    meaning:'A promise, a connection — a future possibility.',
-   hidden:'Some things find you twice.',       unlocks:"Tall Woman's Corridor",
+   hidden:'Some things find you twice.',      unlocks:"Tall Woman's Corridor",
    pages:[
-     {speaker:'THE OP-SHOP WOMAN', text:'She doesn\'t say where it came from.'},
-     {speaker:'THE OP-SHOP WOMAN', text:'Presses it into your palm. Turns back to the shelf. It fits perfectly.'},
-     {speaker:'DJ DADDY COOL',     text:'It was always going to be yours.'},
+     {who:'THE OP-SHOP WOMAN',txt:'She doesn\'t say where it came from.'},
+     {who:'THE OP-SHOP WOMAN',txt:'Presses it into your palm. Turns back to the shelf. It fits perfectly.'},
+     {who:'DJ DADDY COOL',    txt:'It was always going to be yours.'},
    ]},
-  {id:'puffer',     emoji:'🧥', name:'Puffer Jacket',     from:'The Op-Shop Woman',         giver:'opshop',
+  {id:'puffer',    e:'🧥',name:'Puffer Jacket',    from:'The Op-Shop Woman',    giver:'opshop',
    meaning:'Warmth, safety, comfort — the feeling of being held.',
-   hidden:"You're allowed to be warm.",        unlocks:'Deep Forest',
+   hidden:"You're allowed to be warm.",       unlocks:'Deep Forest',
    pages:[
-     {speaker:'THE OP-SHOP WOMAN', text:'"Here."'},
-     {speaker:'THE OP-SHOP WOMAN', text:'She doesn\'t explain. It smells like cedar and old kindness.'},
-     {speaker:'DJ DADDY COOL',     text:'The forest won\'t frighten you now. You are held.'},
+     {who:'THE OP-SHOP WOMAN',txt:'"Here."'},
+     {who:'THE OP-SHOP WOMAN',txt:'She doesn\'t explain. It smells like cedar and old kindness.'},
+     {who:'DJ DADDY COOL',    txt:'The forest won\'t frighten you now. You are held.'},
    ]},
-  {id:'coffee',     emoji:'☕', name:'Chipped Mug',       from:'The Op-Shop Woman',         giver:'opshop',
+  {id:'coffee',    e:'☕',name:'Chipped Mug',      from:'The Op-Shop Woman',    giver:'opshop',
    meaning:'Imperfection, real life — the beauty in things that aren\'t pristine.',
-   hidden:"You don't have to be perfect to be loved.",  unlocks:'DJ Scene',
+   hidden:"You don't have to be perfect to be loved.",   unlocks:'Hidden DJ Scene',
    pages:[
-     {speaker:'THE OP-SHOP WOMAN', text:'You notice the chip first.'},
-     {speaker:'THE OP-SHOP WOMAN', text:'"That\'s the best one," she says. She completely means it.'},
-     {speaker:'DJ DADDY COOL',     text:'Chipped on one side. Still holds everything you need it to hold.'},
+     {who:'THE OP-SHOP WOMAN',txt:'You notice the chip first.'},
+     {who:'THE OP-SHOP WOMAN',txt:'"That\'s the best one," she says. She completely means it.'},
+     {who:'DJ DADDY COOL',    txt:'Chipped on one side. Still holds everything you need it to hold.'},
    ]},
-  {id:'titanium',   emoji:'⭕', name:'Titanium Ring',     from:'The Op-Shop Woman',         giver:'opshop',
+  {id:'titanium',  e:'⭕',name:'Titanium Ring',    from:'The Op-Shop Woman',    giver:'opshop',
    meaning:'Strength, durability — the unbreakable parts of you.',
-   hidden:"You're stronger than you think.",   unlocks:"Wise Woman's Blessing",
+   hidden:"You're stronger than you think.",  unlocks:"Wise Woman's Blessing",
    pages:[
-     {speaker:'THE OP-SHOP WOMAN', text:'It was on a shelf you almost didn\'t look at.'},
-     {speaker:'THE OP-SHOP WOMAN', text:'She nods when you pick it up. "That one\'s been waiting."'},
-     {speaker:'DJ DADDY COOL',     text:'Titanium doesn\'t bend. Neither do the deepest parts of you.'},
+     {who:'THE OP-SHOP WOMAN',txt:'It was on the shelf you almost didn\'t look at.'},
+     {who:'THE OP-SHOP WOMAN',txt:'She nods when you pick it up. "That one\'s been waiting."'},
+     {who:'DJ DADDY COOL',    txt:'Titanium doesn\'t bend. Neither do the deepest parts of you.'},
    ]},
-  {id:'soju',       emoji:'🍶', name:'Soju',              from:'The Op-Shop Woman',         giver:'opshop',
+  {id:'soju',      e:'🍶',name:'Soju',             from:'The Op-Shop Woman',    giver:'opshop',
    meaning:'Release, honesty — the moments where walls come down.',
-   hidden:'You can tell the truth here.',      unlocks:'Late-Night Dialogue',
+   hidden:'You can tell the truth here.',     unlocks:'Late-Night Dialogue',
    pages:[
-     {speaker:'THE OP-SHOP WOMAN', text:'She wasn\'t supposed to have this in the back room.'},
-     {speaker:'THE OP-SHOP WOMAN', text:'Neither were you. Perfect.'},
-     {speaker:'DJ DADDY COOL',     text:'Walls come down slowly. Then all at once. You say something true.'},
+     {who:'THE OP-SHOP WOMAN',txt:'She wasn\'t supposed to have this in the back room.'},
+     {who:'THE OP-SHOP WOMAN',txt:'Neither were you. Perfect.'},
+     {who:'DJ DADDY COOL',    txt:'Walls come down slowly. Then all at once. You say something true.'},
    ]},
-  {id:'sofa',       emoji:'🛋️', name:'Sofa',              from:'The Op-Shop Woman',         giver:'opshop',
+  {id:'sofa',      e:'🛋️',name:'Sofa',            from:'The Op-Shop Woman',    giver:'opshop',
    meaning:'Rest, softness — the place where you finally let yourself collapse.',
-   hidden:'You deserve rest.',                  unlocks:'Cozy Hidden Scene',
+   hidden:'You deserve rest.',                unlocks:'Cozy Hidden Scene',
    pages:[
-     {speaker:'THE OP-SHOP WOMAN', text:'"Sit down for a minute."'},
-     {speaker:'THE OP-SHOP WOMAN', text:'You didn\'t know how tired you were until you did.'},
-     {speaker:'DJ DADDY COOL',     text:'Your whole body exhales. You didn\'t know you needed this.'},
+     {who:'THE OP-SHOP WOMAN',txt:'"Sit down for a minute."'},
+     {who:'THE OP-SHOP WOMAN',txt:'You didn\'t know how tired you were until you did.'},
+     {who:'DJ DADDY COOL',    txt:'Your whole body exhales. You didn\'t know you needed this.'},
    ]},
-  {id:'metamucil',  emoji:'🧃', name:'Metamucil',         from:'The Tall Woman',            giver:'tall',
+  // ── THE TALL WOMAN  (Metamucil IS hers)
+  {id:'metamucil', e:'🧃',name:'Metamucil',        from:'The Tall Woman',       giver:'tall',
    meaning:'Humor, grounding — the silly parts of life that keep you human.',
-   hidden:'Not everything has to be serious.',  unlocks:"Fairy's Message",
+   hidden:'Not everything has to be serious.',  unlocks:"Fairy's Comedic Message",
    pages:[
-     {speaker:'THE TALL WOMAN', text:'She produces it with complete seriousness.'},
-     {speaker:'THE TALL WOMAN', text:'Then catches your eye. You both lose it entirely.'},
-     {speaker:'DJ DADDY COOL',  text:'You laugh for longer than is necessary. It feels incredible.'},
+     {who:'THE TALL WOMAN',txt:'She produces it with complete seriousness.'},
+     {who:'THE TALL WOMAN',txt:'Then catches your eye. You both lose it entirely.'},
+     {who:'DJ DADDY COOL', txt:'You laugh for longer than is necessary. It feels incredible.'},
    ]},
-  {id:'notebook',   emoji:'📓', name:'Notebook',           from:'The Tall Woman',            giver:'tall',
+  {id:'notebook',  e:'📓',name:'Notebook',          from:'The Tall Woman',       giver:'tall',
    meaning:'Future plans, dreams — the things you\'re scared to write down.',
-   hidden:"You're allowed to want things.",     unlocks:'Willow Dialogue',
+   hidden:"You're allowed to want things.",    unlocks:'Willow Dialogue',
    pages:[
-     {speaker:'THE TALL WOMAN', text:'She holds it out like she already knows what you\'ll write.'},
-     {speaker:'THE TALL WOMAN', text:'"It doesn\'t bite," she says.'},
-     {speaker:'DJ DADDY COOL',  text:'Open it near the willow. The pages glow faintly with things you haven\'t said yet.'},
+     {who:'THE TALL WOMAN',txt:'She holds it out like she already knows what you\'ll write.'},
+     {who:'THE TALL WOMAN',txt:'"It doesn\'t bite," she says.'},
+     {who:'DJ DADDY COOL', txt:'Open it near the willow. The pages glow with things you haven\'t said yet.'},
    ]},
-  {id:'vitamins',   emoji:'💊', name:'Vitamins',           from:'The Tall Woman',            giver:'tall',
+  {id:'vitamins',  e:'💊',name:'Vitamins',          from:'The Tall Woman',       giver:'tall',
    meaning:'Care, maintenance — the small things that keep you going.',
-   hidden:"You're worth taking care of.",       unlocks:'Time Loop Energy',
+   hidden:"You're worth taking care of.",      unlocks:'Time Loop Energy',
    pages:[
-     {speaker:'THE TALL WOMAN', text:'She presses the bottle into your hands.'},
-     {speaker:'THE TALL WOMAN', text:'Like it\'s medicine for something deeper than a body.'},
-     {speaker:'DJ DADDY COOL',  text:'Take one every morning. Keep going. You\'re worth the effort.'},
+     {who:'THE TALL WOMAN',txt:'She presses the bottle into your hands.'},
+     {who:'THE TALL WOMAN',txt:'Like it\'s medicine for something deeper than a body.'},
+     {who:'DJ DADDY COOL', txt:'Take one every morning. Keep going. You\'re worth the effort.'},
    ]},
-  {id:'tv',         emoji:'📺', name:'TV',                 from:'The Tall Woman',            giver:'tall',
+  {id:'tv',        e:'📺',name:'TV',                from:'The Tall Woman',       giver:'tall',
    meaning:'Reflection, distraction — the stories you tell yourself.',
-   hidden:'Look closer.',                       unlocks:'Time Loop Vision',
+   hidden:'Look closer.',                      unlocks:'Time Loop Vision',
    pages:[
-     {speaker:'THE TALL WOMAN', text:'The screen shows something you recognise but can\'t quite name.'},
-     {speaker:'THE TALL WOMAN', text:'She watches you watching it.'},
-     {speaker:'DJ DADDY COOL',  text:'You are not the story you\'ve been telling yourself. Look closer.'},
+     {who:'THE TALL WOMAN',txt:'The screen shows something you recognise but can\'t name.'},
+     {who:'THE TALL WOMAN',txt:'She watches you watching it.'},
+     {who:'DJ DADDY COOL', txt:'You are not the story you\'ve been telling yourself. Look closer.'},
    ]},
-  {id:'key',        emoji:'🗝️', name:'Key',               from:'The Nine-Finger Wise Woman', giver:'wise',
+  // ── NINE-FINGER WISE WOMAN
+  {id:'key',       e:'🗝️',name:'Key',              from:'The Nine-Finger Wise Woman', giver:'wise',
    meaning:'Truth, clarity — unlocking the moment you finally understand something.',
-   hidden:'You already know the door.',         unlocks:'Final Chapter',
+   hidden:'You already know the door.',        unlocks:'Final Chapter',
    pages:[
-     {speaker:'THE WISE WOMAN', text:'Nine fingers. Eyes that have already seen where this goes.'},
-     {speaker:'THE WISE WOMAN', text:'She doesn\'t explain the key. She doesn\'t need to.'},
-     {speaker:'DJ DADDY COOL',  text:'The key was never about a door. It was about knowing you were ready.'},
+     {who:'THE WISE WOMAN',txt:'Nine fingers. Eyes that have already seen where this goes.'},
+     {who:'THE WISE WOMAN',txt:'She doesn\'t explain the key. She doesn\'t need to.'},
+     {who:'DJ DADDY COOL', txt:'The key was never about a door. It was about knowing you were ready.'},
    ]},
-  {id:'djspintable',emoji:'🎛️', name:'DJ Spin Table',     from:'DJ Daddy Cool',             giver:'dj',
+  // ── DJ DADDY COOL (player)
+  {id:'djspintable',e:'🎛️',name:'DJ Spin Table',   from:'DJ Daddy Cool',        giver:'dj',
    meaning:'Rhythm, flow, connection — the way you move through the world.',
-   hidden:"I'm here with you.",                 unlocks:"DJ's Chapter",
+   hidden:"I'm here with you.",                unlocks:"DJ's Chapter",
    pages:[
-     {speaker:'DJ DADDY COOL', text:'Your table. Your rhythm.'},
-     {speaker:'DJ DADDY COOL', text:'It was here before you arrived and it\'ll be here after.'},
-     {speaker:'DJ DADDY COOL', text:'The music starts before you touch it. It always does.'},
+     {who:'DJ DADDY COOL',txt:'Your table. Your rhythm.'},
+     {who:'DJ DADDY COOL',txt:'It was here before you arrived and it\'ll be here after.'},
+     {who:'DJ DADDY COOL',txt:'The music starts before you touch it. It always does.'},
    ]},
-  {id:'computer',   emoji:'💻', name:'Computer',           from:'DJ Daddy Cool',             giver:'dj',
+  {id:'computer',  e:'💻',name:'Computer',          from:'DJ Daddy Cool',        giver:'dj',
    meaning:'Connection, communication — the bridge between you and the ones you love.',
-   hidden:"I'm not going anywhere.",            unlocks:'Final Hidden Message',
+   hidden:"I'm not going anywhere.",           unlocks:'Final Hidden Message',
    pages:[
-     {speaker:'DJ DADDY COOL', text:'A message already open on the screen.'},
-     {speaker:'DJ DADDY COOL', text:'Written for you. It says the thing you needed to read most.'},
-     {speaker:'DJ DADDY COOL', text:'He is not going anywhere. He wrote it so you\'d always have it.'},
+     {who:'DJ DADDY COOL',txt:'A message already open on the screen.'},
+     {who:'DJ DADDY COOL',txt:'Written for you. It says the thing you needed to read most.'},
+     {who:'DJ DADDY COOL',txt:'He is not going anywhere. He wrote it so you\'d always have it.'},
    ]},
-  {id:'willowleaf', emoji:'🍃', name:'Willow Leaf',        from:'The Willow Tree',           giver:'willow',
+  // ── WORLD
+  {id:'willowleaf',e:'🍃',name:'Willow Leaf',       from:'The Willow Tree',      giver:'willow',
    meaning:'Healing, time, cycles — you are still growing.',
-   hidden:"You're growing.",                    unlocks:'Ending Requirement',
+   hidden:"You're growing.",                   unlocks:'Ending Requirement',
    pages:[
-     {speaker:'THE WILLOW',    text:'It drifts into your hand without you reaching for it.'},
-     {speaker:'THE WILLOW',    text:'A gift that needs no asking.'},
-     {speaker:'DJ DADDY COOL', text:'The willow has been here longer than the question. It knows how things grow.'},
+     {who:'THE WILLOW',   txt:'It drifts into your hand without you reaching for it.'},
+     {who:'THE WILLOW',   txt:'A gift that needs no asking.'},
+     {who:'DJ DADDY COOL',txt:'The willow has been here longer than the question. It knows how things grow.'},
    ]},
-  {id:'moonhalo',   emoji:'🌕', name:'Moon Halo',           from:'The Moon',                  giver:'moon',
+  {id:'moonhalo',  e:'🌕',name:'Moon Halo',          from:'The Moon',             giver:'moon',
    meaning:'Protection, clarity, illumination — you are seen.',
-   hidden:"You're seen.",                       unlocks:'Hidden Sky Text',
+   hidden:"You're seen.",                      unlocks:'Sky Text',
    pages:[
-     {speaker:'THE MOON',      text:'The halo spreads slowly. Like the moon exhaling.'},
-     {speaker:'THE MOON',      text:'Something is written inside it — only visible to you.'},
-     {speaker:'DJ DADDY COOL', text:'You look up. For once, you don\'t look away.'},
+     {who:'THE MOON',     txt:'The halo spreads slowly. Like the moon exhaling.'},
+     {who:'THE MOON',     txt:'Something is written inside it — only visible to you.'},
+     {who:'DJ DADDY COOL',txt:'You look up. For once, you don\'t look away.'},
    ]},
-  {id:'fairysparkle',emoji:'✨',name:'Fairy Sparkle',      from:'The Fairy',                 giver:'fairy',
+  {id:'fairysparkle',e:'✨',name:'Fairy Sparkle',    from:'The Fairy',            giver:'fairy',
    meaning:'Truth, intuition — the things you know but don\'t say.',
-   hidden:'You already know.',                  unlocks:'Sparkle-Trail Puzzle',
+   hidden:'You already know.',                 unlocks:'Sparkle-Trail Puzzle',
    pages:[
-     {speaker:'THE FAIRY',     text:'She gives you a look that says she\'s been waiting.'},
-     {speaker:'THE FAIRY',     text:'"You didn\'t even need to ask."'},
-     {speaker:'DJ DADDY COOL', text:'The trail leads somewhere you\'ve always been heading.'},
+     {who:'THE FAIRY',    txt:'She gives you a look that says she\'s been waiting.'},
+     {who:'THE FAIRY',    txt:'"You didn\'t even need to ask."'},
+     {who:'DJ DADDY COOL',txt:'The trail leads somewhere you\'ve always been heading.'},
    ]},
 ];
 
-// ════════════════════════════════════════
-//  CHAPTERS
-// ════════════════════════════════════════
-const CHAPTERS = [
-  {n:1, name:'Moonlit Arrival',       eye:'🌙', sub:'The evening opens.', requires:null,       speaker:'THE NARRATOR',
-   text:'You are DJ Daddy Cool.\n\nThe evening is yours. Each character is holding something for you — a thing you need. Tap them to find out what.'},
-  {n:2, name:'River Memory',          eye:'🌊', sub:'The water remembers.', requires:'feather', speaker:'THE RIVER',
-   text:'The river is low and silver. Beneath the current — a version of you that is younger, looking up.'},
-  {n:3, name:'Time Loop',             eye:'⏳', sub:'Again and again.', requires:'stone',       speaker:'THE LOOP',
-   text:'The same moment keeps happening. But each time through, you understand something new.'},
-  {n:4, name:"Tall Woman's Corridor", eye:'🌿', sub:'She has been waiting.', requires:'ring',   speaker:'THE TALL WOMAN',
-   text:'Long hallway. Her shadow at the end. She has been waiting without waiting — the way people who know things do.'},
-  {n:5, name:'Deep Forest',           eye:'🌲', sub:'The trees want to know you.', requires:'puffer', speaker:'THE FOREST',
-   text:'The trees lean in close. They are not threatening. They want to know you.'},
-  {n:6, name:"Wise Woman's Blessing", eye:'🤲', sub:'No perfection required.', requires:'titanium', speaker:'THE WISE WOMAN',
-   text:'She closes both hands around yours. The blessing does not require perfection.'},
-  {n:7, name:'DJ Daddy Cool',         eye:'🎛️', sub:'Your chapter.', requires:'djspintable', speaker:'DJ DADDY COOL',
-   text:'The music was playing before you arrived.\n\nHe\'s been keeping it going.'},
-  {n:8, name:'The Final Chapter',     eye:'✨', sub:'It was always enough.', requires:'key',    speaker:'THE EVENING',
-   text:'Every item. Every message. Every person.\n\nThey were all here for you. They still are. That is enough.'},
+const CHAPTERS=[
+  {n:1,name:'Moonlit Arrival',      icon:'🌙',sub:'The evening opens.',               req:null,        who:'THE NARRATOR',
+   open:'You are DJ Daddy Cool.\n\nThe evening is yours. Walk the world — each glowing character is holding something for you. Tap them to find out what.'},
+  {n:2,name:'River Memory',         icon:'🌊',sub:'The water remembers.',             req:'feather',   who:'THE RIVER',
+   open:'The river is low and silver. Beneath the current — a version of you that is younger, looking up.'},
+  {n:3,name:'Time Loop',            icon:'⏳',sub:'Again and again.',                 req:'stone',     who:'THE LOOP',
+   open:'The same moment keeps happening. But each time through, you understand something new.'},
+  {n:4,name:"Tall Woman's Corridor",icon:'🌿',sub:'She has been waiting.',            req:'ring',      who:'THE TALL WOMAN',
+   open:'Long hallway. Her shadow at the end. She has been waiting without waiting — the way people who know things do.'},
+  {n:5,name:'Deep Forest',          icon:'🌲',sub:'The trees want to know you.',      req:'puffer',    who:'THE FOREST',
+   open:'The trees lean in close. They\'re not threatening. They want to know you.'},
+  {n:6,name:"Wise Woman's Blessing",icon:'🤲',sub:'No perfection required.',          req:'titanium',  who:'THE WISE WOMAN',
+   open:'She closes both hands around yours. The blessing does not require perfection.'},
+  {n:7,name:'DJ Daddy Cool',        icon:'🎛️',sub:'Your chapter.',                  req:'djspintable',who:'DJ DADDY COOL',
+   open:'The music was playing before you arrived.\n\nHe\'s been keeping it going.'},
+  {n:8,name:'The Final Chapter',    icon:'✨',sub:'It was always enough.',            req:'key',       who:'THE EVENING',
+   open:'Every item. Every message. Every person.\n\nThey were all here for you. They still are. That is enough.'},
 ];
 
-// ════════════════════════════════════════
-//  CHARACTERS  (scene positions)
-// ════════════════════════════════════════
-const CHARS = [
-  {id:'boy',    label:'The Little Boy',             short:'Little Boy',  col:'#5a8fd0', gCol:'#4060a0',
-   items:['feather','stone','calculator','mcdonalds','pasta'], vx:.68, vy:.60},
-  {id:'opshop', label:'The Op-Shop Woman',          short:'Op-Shop',     col:'#c060a0', gCol:'#903080',
-   items:['ring','puffer','coffee','titanium','soju','sofa'],  vx:.34, vy:.62},
-  {id:'tall',   label:'The Tall Woman',             short:'Tall Woman',  col:'#40a878', gCol:'#2a7050',
-   items:['metamucil','notebook','vitamins','tv'],             vx:.57, vy:.56},
-  {id:'wise',   label:'The Wise Woman',             short:'Wise Woman',  col:'#a09040', gCol:'#706020',
-   items:['key'],                                              vx:.20, vy:.63},
-  {id:'dj',     label:'DJ Daddy Cool',              short:'Your Spin Table',col:'#d0a020',gCol:'#a07010',
-   items:['djspintable','computer'],                           vx:.84, vy:.60},
-  {id:'willow', label:'The Willow',                 short:'Willow',      col:'#30a040', gCol:'#1a6028',
-   items:['willowleaf'],                                       vx:.11, vy:.52},
-  {id:'moon',   label:'The Moon',                   short:'Moon',        col:'#d8d060', gCol:'#a8a040',
-   items:['moonhalo'],                                         vx:.20, vy:.12},
-  {id:'fairy',  label:'The Fairy',                  short:'Fairy',       col:'#70c8a0', gCol:'#408060',
-   items:['fairysparkle'],                                     vx:.22, vy:.35},
+/* ═══════════════════════════════════════════
+   CHARACTERS  (scene layout)
+═══════════════════════════════════════════ */
+const CHARS=[
+  {id:'boy',   label:'The Little Boy',    short:'Little Boy', col:'#4a80d0',dark:'#2a4890',
+   items:['feather','stone','calculator','mcdonalds','pasta'], vx:.70,vy:.60},
+  {id:'opshop',label:'The Op-Shop Woman', short:'Op-Shop',    col:'#c050a0',dark:'#803070',
+   items:['ring','puffer','coffee','titanium','soju','sofa'],  vx:.34,vy:.62},
+  {id:'tall',  label:'The Tall Woman',    short:'Tall Woman', col:'#38a870',dark:'#206848',
+   items:['metamucil','notebook','vitamins','tv'],             vx:.57,vy:.56},
+  {id:'wise',  label:'The Wise Woman',    short:'Wise Woman', col:'#a09040',dark:'#606020',
+   items:['key'],                                             vx:.20,vy:.63},
+  {id:'dj',    label:'DJ Daddy Cool',     short:'Your Table', col:'#d0a020',dark:'#906010',
+   items:['djspintable','computer'],                          vx:.84,vy:.60},
+  {id:'willow',label:'The Willow',        short:'Willow',     col:'#28a038',dark:'#186028',
+   items:['willowleaf'],                                      vx:.11,vy:.50},
+  {id:'moon',  label:'The Moon',          short:'Moon',       col:'#d8d060',dark:'#a0a030',
+   items:['moonhalo'],                                        vx:.20,vy:.12},
+  {id:'fairy', label:'The Fairy',         short:'Fairy',      col:'#60c898',dark:'#307858',
+   items:['fairysparkle'],                                    vx:.22,vy:.34},
 ];
 
-// Character portrait colors (for VN scene backgrounds)
-const CHAR_THEMES = {
-  boy:    {bg:['#0a1828','#0d2040','#101428'], accent:'#4a78c0'},
-  opshop: {bg:['#180a20','#200a28','#140818'], accent:'#b04890'},
-  tall:   {bg:['#081814','#0a2018','#061410'], accent:'#38907a'},
-  wise:   {bg:['#141008','#181408','#100e06'], accent:'#888030'},
-  dj:     {bg:['#141008','#1c1408','#100c04'], accent:'#c09020'},
-  willow: {bg:['#080f08','#0a1408','#060a06'], accent:'#28882a'},
-  moon:   {bg:['#0c1020','#141828','#0a0e1c'], accent:'#c0c060'},
-  fairy:  {bg:['#081410','#0a1c14','#060e0c'], accent:'#48b080'},
+/* Portrait background themes */
+const THEMES={
+  boy:    {bg:['#091828','#0c2040','#101828'],acc:'#4070c0',em:'👦'},
+  opshop: {bg:['#180a20','#201030','#180820'],acc:'#b04090',em:'🛍️'},
+  tall:   {bg:['#081818','#0a2018','#081410'],acc:'#309870',em:'🌿'},
+  wise:   {bg:['#141008','#1a1408','#100e06'],acc:'#888030',em:'🤲'},
+  dj:     {bg:['#0a0c14','#101420','#0c1018'],acc:'#c0a828',em:'🎛️'},
+  willow: {bg:['#060f06','#081408','#060a06'],acc:'#28882a',em:'🌳'},
+  moon:   {bg:['#0c1020','#121828','#0a0e1c'],acc:'#c0c060',em:'🌕'},
+  fairy:  {bg:['#061410','#0a1c14','#060e0a'],acc:'#48b080',em:'🧚'},
 };
 
-// ════════════════════════════════════════
-//  GAME STATE
-// ════════════════════════════════════════
-let inventory=[], unlocked=[], chapIdx=0;
-let storyOpen=false, cardOpen=false, invOpen=false;
+/* ═══════════════════════════════════════════
+   GAME STATE
+═══════════════════════════════════════════ */
+let inventory=[],unlocked=[],chapIdx=0;
+let storyOpen=false,cardOpen=false,invOpen=false;
+let vnPages=[],vnIdx=0,vnItem=null,vnChar=null;
+let vnTyping=false,vnTimer=null,vnShown=0;
+let T=0,stars=[],fireflies=[],dustP=[];
+let _pressed=null;
 
-// Player walk state
-let player = {x:0.5, y:0.62, tx:0.5, ty:0.62, walking:false, facing:1, bobT:0};
+// Player state — DJ Daddy Cool
+const PL={x:.5,y:.68,tx:.5,ty:.68,walk:false,face:1,bob:0,bobT:0};
 
-// Stars + particles
-let stars=[], dust=[], T=0;
-let pressed=null;
+// Scene positions
+const POS={};
+function buildWorld(){
+  CHARS.forEach(c=>{
+    let vx=c.vx,vy=c.vy;
+    if(PORT) vy=c.vy*.74+.04;
+    POS[c.id]={x:vx*W,y:vy*H};
+  });
+  if(PORT){
+    POS.moon={x:W*.82,y:H*.10};
+    POS.fairy={x:W*.18,y:H*.27};
+  }
+  PL.y=PORT?.70:.68; PL.ty=PL.y;
+}
+buildWorld();
 
 function makeStars(){
-  const skyH = portrait ? .45 : .50;
-  stars = Array.from({length:100},()=>({
-    px:Math.random(), py:Math.random()*skyH,
-    r:.3+Math.random()*1.5, ph:Math.random()*Math.PI*2,
-    sp:.4+Math.random()*1.3, warm:Math.random()<.12
+  stars=Array.from({length:95},()=>({
+    px:Math.random(),py:Math.random()*(PORT?.44:.50),
+    r:.3+Math.random()*1.5,ph:Math.random()*Math.PI*2,
+    sp:.45+Math.random()*1.2,warm:Math.random()<.13
   }));
 }
 makeStars();
-window.addEventListener('resize',()=>{makeStars(); resolvePos();});
+window.addEventListener('resize',makeStars);
 
-// Resolved pixel positions
-const POS={};
-function resolvePos(){
-  CHARS.forEach(c=>{
-    let vx=c.vx, vy=c.vy;
-    if(portrait){
-      vy = c.vy*.74+.04;
-    }
-    POS[c.id]={x:vx*W, y:vy*H};
-  });
-  if(portrait){
-    POS.moon  = {x:W*.84, y:H*.10};
-    POS.fairy = {x:W*.18, y:H*.27};
-  }
-}
-resolvePos();
-
-// Player pixel pos
-function playerPx(){ return {x:player.x*W, y:player.y*H}; }
-
-// ════════════════════════════════════════
-//  SCENE DRAWING
-// ════════════════════════════════════════
+/* ═══════════════════════════════════════════
+   SCENE DRAWING
+═══════════════════════════════════════════ */
 function drawSky(){
-  // Deep night gradient
-  const g=gx.createLinearGradient(0,0,0,H*.65);
-  g.addColorStop(0,'#01050f');
-  g.addColorStop(.35,'#060e24');
-  g.addColorStop(.7,'#091828');
-  g.addColorStop(1,'#0a1f1a');
-  gx.fillStyle=g; gx.fillRect(0,0,W,H*.65);
+  const sky=g.createLinearGradient(0,0,0,H*.7);
+  sky.addColorStop(0,'#010508');
+  sky.addColorStop(.3,'#050d22');
+  sky.addColorStop(.65,'#07182a');
+  sky.addColorStop(1,'#091e18');
+  g.fillStyle=sky; g.fillRect(0,0,W,H*.7);
   // Aurora wisps
-  const t2=T*.18;
   for(let i=0;i<3;i++){
-    const ax=W*(.2+i*.28+Math.sin(t2+i*2.1)*.06);
-    const ay=H*(.08+i*.04+Math.cos(t2*1.3+i)*.03);
-    const gA=gx.createRadialGradient(ax,ay,0,ax,ay,W*.18);
-    const cols=['rgba(20,80,120,.04)','rgba(30,100,60,.03)','rgba(80,50,120,.03)'];
-    gA.addColorStop(0,cols[i]); gA.addColorStop(1,'rgba(0,0,0,0)');
-    gx.fillStyle=gA; gx.fillRect(0,0,W,H*.5);
+    const ax=W*(.18+i*.3+Math.sin(T*.15+i*2)*.07);
+    const ay=H*(.06+i*.03);
+    const aur=g.createRadialGradient(ax,ay,0,ax,ay,W*.2);
+    aur.addColorStop(0,['rgba(15,70,110,.05)','rgba(20,90,55,.04)','rgba(60,30,110,.04)'][i]);
+    aur.addColorStop(1,'rgba(0,0,0,0)');
+    g.fillStyle=aur; g.fillRect(0,0,W,H*.5);
   }
 }
 
 function drawStars(){
   stars.forEach(s=>{
-    const a=.12+.78*(.5+.5*Math.sin(T*s.sp+s.ph));
-    gx.globalAlpha=a;
-    gx.fillStyle=s.warm?'#ffe090':'#e8e8ff';
-    gx.beginPath(); gx.arc(s.px*W,s.py*H,s.r,0,Math.PI*2); gx.fill();
+    const a=.1+.78*(.5+.5*Math.sin(T*s.sp+s.ph));
+    g.globalAlpha=a; g.fillStyle=s.warm?'#ffe090':'#dde8ff';
+    g.beginPath(); g.arc(s.px*W,s.py*H,s.r,0,Math.PI*2); g.fill();
   });
-  gx.globalAlpha=1;
-  // Soft Milky Way band
-  const mw=gx.createLinearGradient(W*.1,H*.05,W*.9,H*.38);
-  mw.addColorStop(0,'rgba(180,200,255,0)');
-  mw.addColorStop(.3,'rgba(180,200,255,.015)');
-  mw.addColorStop(.5,'rgba(200,220,255,.022)');
-  mw.addColorStop(.7,'rgba(180,200,255,.015)');
-  mw.addColorStop(1,'rgba(180,200,255,0)');
-  gx.fillStyle=mw; gx.fillRect(0,0,W,H*.5);
+  g.globalAlpha=1;
+  // Faint Milky Way
+  const mw=g.createLinearGradient(W*.05,H*.03,W*.9,H*.42);
+  mw.addColorStop(0,'rgba(200,215,255,0)');
+  mw.addColorStop(.4,'rgba(200,215,255,.018)');
+  mw.addColorStop(.6,'rgba(215,225,255,.025)');
+  mw.addColorStop(1,'rgba(200,215,255,0)');
+  g.fillStyle=mw; g.fillRect(0,0,W,H*.48);
 }
 
 function drawMoon(){
   const mp=POS.moon; if(!mp) return;
-  const mr=Math.min(W,H)*(portrait?.056:.062);
-  const pulse=.5+.5*Math.sin(T*.6);
-  // Outer halo
-  const halos=inventory.includes('moonhalo')?1:.2;
-  for(let layer=0;layer<3;layer++){
-    const lr=mr*(2.2+layer*.6);
-    gx.globalAlpha=(.04+pulse*.025)*halos*(3-layer)*.4;
-    const hg=gx.createRadialGradient(mp.x,mp.y,mr*.9,mp.x,mp.y,lr);
-    hg.addColorStop(0,'rgba(255,255,200,0)'); hg.addColorStop(1,'rgba(255,248,170,.8)');
-    gx.fillStyle=hg; gx.beginPath(); gx.arc(mp.x,mp.y,lr,0,Math.PI*2); gx.fill();
+  const mr=Math.min(W,H)*(PORT?.055:.062);
+  const pulse=.5+.5*Math.sin(T*.55);
+  const halos=inventory.includes('moonhalo')?1:.18;
+  // Multi-layer halo
+  for(let i=0;i<4;i++){
+    g.globalAlpha=(.03+pulse*.02)*halos*(4-i)*.3;
+    const hr=mr*(2+i*.7);
+    const hg=g.createRadialGradient(mp.x,mp.y,mr*.85,mp.x,mp.y,hr);
+    hg.addColorStop(0,'rgba(255,255,200,0)'); hg.addColorStop(1,'rgba(255,248,165,.9)');
+    g.fillStyle=hg; g.beginPath(); g.arc(mp.x,mp.y,hr,0,Math.PI*2); g.fill();
   }
-  gx.globalAlpha=1;
-  // Glow bloom
-  gx.globalAlpha=.20+pulse*.08;
-  const bg=gx.createRadialGradient(mp.x,mp.y,0,mp.x,mp.y,mr*1.9);
-  bg.addColorStop(0,'#fffde0'); bg.addColorStop(1,'rgba(240,220,80,0)');
-  gx.fillStyle=bg; gx.beginPath(); gx.arc(mp.x,mp.y,mr*1.9,0,Math.PI*2); gx.fill();
-  gx.globalAlpha=1;
-  // Moon disc
-  const mg=gx.createRadialGradient(mp.x-mr*.25,mp.y-mr*.25,0,mp.x,mp.y,mr);
-  mg.addColorStop(0,'#fffef2'); mg.addColorStop(.5,'#f8eebc'); mg.addColorStop(1,'#d8c860');
-  gx.fillStyle=mg; gx.beginPath(); gx.arc(mp.x,mp.y,mr,0,Math.PI*2); gx.fill();
-  // Subtle surface texture
-  gx.globalAlpha=.1;
+  g.globalAlpha=1;
+  // Bloom
+  g.globalAlpha=.18+pulse*.07;
+  const bl=g.createRadialGradient(mp.x,mp.y,0,mp.x,mp.y,mr*2);
+  bl.addColorStop(0,'#fffde0'); bl.addColorStop(1,'rgba(240,218,70,0)');
+  g.fillStyle=bl; g.beginPath(); g.arc(mp.x,mp.y,mr*2,0,Math.PI*2); g.fill();
+  g.globalAlpha=1;
+  // Disc
+  const disc=g.createRadialGradient(mp.x-mr*.28,mp.y-mr*.28,0,mp.x,mp.y,mr);
+  disc.addColorStop(0,'#fffef2'); disc.addColorStop(.55,'#f8eeba'); disc.addColorStop(1,'#d4c055');
+  g.fillStyle=disc; g.beginPath(); g.arc(mp.x,mp.y,mr,0,Math.PI*2); g.fill();
+  // Craters
+  g.globalAlpha=.11;
   [[-.26,-.2,.14],[.2,.22,.09],[-.08,.3,.06]].forEach(([dx,dy,dr])=>{
-    const cg=gx.createRadialGradient(mp.x+dx*mr*2,mp.y+dy*mr*2,0,mp.x+dx*mr*2,mp.y+dy*mr*2,dr*mr*2);
-    cg.addColorStop(0,'rgba(150,120,20,.8)'); cg.addColorStop(1,'rgba(150,120,20,0)');
-    gx.fillStyle=cg; gx.beginPath(); gx.arc(mp.x+dx*mr*2,mp.y+dy*mr*2,dr*mr*2,0,Math.PI*2); gx.fill();
+    const cg=g.createRadialGradient(mp.x+dx*mr*2,mp.y+dy*mr*2,0,mp.x+dx*mr*2,mp.y+dy*mr*2,dr*mr*2);
+    cg.addColorStop(0,'rgba(140,110,20,.9)'); cg.addColorStop(1,'rgba(140,110,20,0)');
+    g.fillStyle=cg; g.beginPath(); g.arc(mp.x+dx*mr*2,mp.y+dy*mr*2,dr*mr*2,0,Math.PI*2); g.fill();
   });
-  gx.globalAlpha=1;
+  g.globalAlpha=1;
 }
 
 function drawLandscape(){
-  // Far hills (desaturated, dark)
-  [
-    {cx:.15, cy:.72, rx:.24, ry:.10, col:'#06100a'},
-    {cx:.50, cy:.74, rx:.32, ry:.08, col:'#050d07'},
-    {cx:.82, cy:.71, rx:.26, ry:.10, col:'#06100a'},
-  ].forEach(h=>{
-    gx.fillStyle=h.col;
-    gx.beginPath(); gx.ellipse(h.cx*W,(portrait?H*.68:H*.72)+h.cy*H*.03,h.rx*W,h.ry*H,0,0,Math.PI*2); gx.fill();
+  const gy=PORT?H*.62:H*.66;
+  // Distant hills — 3 layers of depth
+  [[.14,.73,.25,.11,'#050e07'],[.50,.75,.34,.09,'#040c06'],[.84,.72,.27,.11,'#050e07']].forEach(([cx,cy,rx,ry,c])=>{
+    g.fillStyle=c; g.beginPath(); g.ellipse(cx*W,cy*H,rx*W,ry*H,0,0,Math.PI*2); g.fill();
   });
-  // Ground — layered
-  const gy = portrait ? H*.62 : H*.66;
-  const grg=gx.createLinearGradient(0,gy,0,H);
-  grg.addColorStop(0,'#0d1e0e'); grg.addColorStop(.4,'#091408'); grg.addColorStop(1,'#030804');
-  gx.fillStyle=grg; gx.fillRect(0,gy,W,H-gy);
-  // Ground ambient — faint green glow from damp earth
-  gx.globalAlpha=.06;
-  const gg=gx.createLinearGradient(0,gy,0,gy+H*.12);
-  gg.addColorStop(0,'#40a840'); gg.addColorStop(1,'rgba(40,100,40,0)');
-  gx.fillStyle=gg; gx.fillRect(0,gy,W,H*.15);
-  gx.globalAlpha=1;
-  // Grass tufts
-  gx.strokeStyle='#1a3c1a'; gx.lineWidth=1.5; gx.lineCap='round';
-  for(let i=0;i<30;i++){
-    const gx2=W*(.04+i*.032), gy2=gy+H*.01+Math.sin(i*1.7)*H*.008;
-    const gh=H*(.012+Math.sin(i*2.3)*.006);
-    const sw=Math.sin(T*.3+i*.5)*.02;
-    gx.globalAlpha=.4+Math.sin(i*.8)*.15;
-    gx.beginPath(); gx.moveTo(gx2,gy2); gx.quadraticCurveTo(gx2+sw*W,gy2-gh*.5,gx2+sw*W*.5,gy2-gh); gx.stroke();
+  // Ground plane
+  const gr=g.createLinearGradient(0,gy,0,H);
+  gr.addColorStop(0,'#0d1e0e'); gr.addColorStop(.5,'#08120a'); gr.addColorStop(1,'#030705');
+  g.fillStyle=gr; g.fillRect(0,gy,W,H-gy);
+  // Ground ambient glow
+  g.globalAlpha=.055;
+  const ga=g.createLinearGradient(0,gy,0,gy+H*.14);
+  ga.addColorStop(0,'#40a840'); ga.addColorStop(1,'rgba(30,80,30,0)');
+  g.fillStyle=ga; g.fillRect(0,gy,W,H*.16);
+  g.globalAlpha=1;
+  // Grass tufts along ground edge
+  g.strokeStyle='#1a3c18'; g.lineWidth=1.4; g.lineCap='round';
+  for(let i=0;i<34;i++){
+    const gx2=W*(.02+i*.029);
+    const gy2=gy+H*.008+Math.sin(i*1.9)*H*.006;
+    const gh=H*(.011+Math.sin(i*2.7)*.005);
+    const sw=Math.sin(T*.28+i*.6)*.018;
+    g.globalAlpha=.35+Math.sin(i*.9)*.12;
+    g.beginPath(); g.moveTo(gx2,gy2); g.quadraticCurveTo(gx2+sw*W,gy2-gh*.5,gx2+sw*W*.4,gy2-gh); g.stroke();
   }
-  gx.globalAlpha=1;
+  g.globalAlpha=1;
 }
 
 function drawRiver(){
-  const ry = portrait ? H*.83 : H*.87;
-  const rh=H*.1;
-  // Water body
-  const rwg=gx.createLinearGradient(0,ry,0,ry+rh);
-  rwg.addColorStop(0,'#1a4878'); rwg.addColorStop(.5,'#103060'); rwg.addColorStop(1,'#061428');
-  gx.fillStyle=rwg;
-  gx.beginPath(); gx.ellipse(W*.5,ry+rh*.35,W*.58,rh*.65,0,0,Math.PI*2); gx.fill();
-  // Moon reflection
-  const rp=.5+.5*Math.sin(T*.7);
-  gx.globalAlpha=(.05+rp*.04);
-  const mr2=gx.createRadialGradient(W*.20,ry+rh*.3,0,W*.20,ry+rh*.3,W*.04);
-  mr2.addColorStop(0,'#fffde0'); mr2.addColorStop(1,'rgba(255,253,200,0)');
-  gx.fillStyle=mr2; gx.beginPath(); gx.arc(W*.20,ry+rh*.3,W*.04,0,Math.PI*2); gx.fill();
-  gx.globalAlpha=1;
-  // Shimmer
-  [[.12,.02,.38,.03],[.44,-.01,.68,.01],[.62,.03,.86,.04]].forEach(([x1,d1,x2,d2],i)=>{
-    gx.globalAlpha=.08+.14*Math.sin(T*.85+i*1.5);
-    gx.strokeStyle='rgba(120,210,255,.95)'; gx.lineWidth=1.2;
-    gx.beginPath(); gx.moveTo(x1*W,ry+d1*rh); gx.lineTo(x2*W,ry+d2*rh); gx.stroke();
+  const ry=PORT?H*.83:H*.87;
+  const rh=H*.11;
+  const rg=g.createLinearGradient(0,ry,0,ry+rh);
+  rg.addColorStop(0,'#1a4878'); rg.addColorStop(.5,'#103060'); rg.addColorStop(1,'#061428');
+  g.fillStyle=rg;
+  g.beginPath(); g.ellipse(W*.5,ry+rh*.35,W*.58,rh*.65,0,0,Math.PI*2); g.fill();
+  // Moon reflection on river
+  g.globalAlpha=.04+.04*Math.sin(T*.7);
+  const mr2=g.createRadialGradient(W*.20,ry+rh*.3,0,W*.20,ry+rh*.3,W*.04);
+  mr2.addColorStop(0,'#fffde0'); mr2.addColorStop(1,'rgba(255,250,190,0)');
+  g.fillStyle=mr2; g.beginPath(); g.arc(W*.20,ry+rh*.3,W*.04,0,Math.PI*2); g.fill();
+  g.globalAlpha=1;
+  // Shimmer lines
+  [[.12,.01,.40,.025],[.44,-.01,.68,.015],[.62,.03,.86,.04]].forEach(([x1,d1,x2,d2],i)=>{
+    g.globalAlpha=.07+.14*Math.sin(T*.82+i*1.6);
+    g.strokeStyle='rgba(110,205,255,.95)'; g.lineWidth=1.2;
+    g.beginPath(); g.moveTo(x1*W,ry+d1*rh); g.lineTo(x2*W,ry+d2*rh); g.stroke();
   });
-  gx.globalAlpha=1;
+  g.globalAlpha=1;
 }
 
 function drawWillow(){
   const wp=POS.willow; if(!wp) return;
-  const wx=wp.x, wy=wp.y;
-  const sway=Math.sin(T*.26)*.018;
-  const sc=Math.min(W,H)/600;
-  gx.save();
-  gx.translate(wx,wy+90*sc); gx.rotate(sway); gx.translate(-wx,-(wy+90*sc));
+  const wx=wp.x,wy=wp.y,sc=Math.min(W,H)/600;
+  const sw=Math.sin(T*.25)*.018;
+  g.save();
+  g.translate(wx,wy+85*sc); g.rotate(sw); g.translate(-wx,-(wy+85*sc));
   // Roots
-  gx.strokeStyle='#0f0804'; gx.lineWidth=3*sc; gx.lineCap='round';
-  [-.08,.08].forEach(d=>{
-    gx.beginPath(); gx.moveTo(wx,wy+100*sc); gx.quadraticCurveTo(wx+d*80*sc,wy+105*sc,wx+d*120*sc,wy+108*sc); gx.stroke();
+  g.strokeStyle='#0e0804'; g.lineWidth=3*sc; g.lineCap='round';
+  [-.1,.1].forEach(d=>{
+    g.beginPath(); g.moveTo(wx,wy+105*sc); g.quadraticCurveTo(wx+d*90*sc,wy+110*sc,wx+d*130*sc,wy+114*sc); g.stroke();
   });
   // Trunk
-  gx.lineWidth=9*sc; gx.strokeStyle='#180c04';
-  gx.beginPath(); gx.moveTo(wx,wy+100*sc);
-  gx.bezierCurveTo(wx+6*sc,wy+60*sc,wx-4*sc,wy+28*sc,wx,wy); gx.stroke();
-  // Inner trunk highlight
-  gx.lineWidth=2*sc; gx.strokeStyle='rgba(80,50,20,.25)';
-  gx.beginPath(); gx.moveTo(wx+2*sc,wy+90*sc); gx.bezierCurveTo(wx+5*sc,wy+55*sc,wx,wy+28*sc,wx+1*sc,wy+8*sc); gx.stroke();
-  // Branch skeleton
-  [[-30*sc,-20*sc,-55*sc,-10*sc],[30*sc,-18*sc,55*sc,-8*sc],[0,-8*sc,-18*sc,-30*sc],[0,-8*sc,18*sc,-30*sc]].forEach(([x1,y1,x2,y2])=>{
-    gx.lineWidth=3.5*sc; gx.strokeStyle='#140a02';
-    gx.beginPath(); gx.moveTo(wx+x1,wy+y1); gx.lineTo(wx+x2,wy+y2); gx.stroke();
+  g.lineWidth=10*sc; g.strokeStyle='#170b03';
+  g.beginPath(); g.moveTo(wx,wy+105*sc);
+  g.bezierCurveTo(wx+7*sc,wy+62*sc,wx-5*sc,wy+30*sc,wx,wy); g.stroke();
+  // Bark highlight
+  g.lineWidth=2.2*sc; g.strokeStyle='rgba(70,40,12,.22)';
+  g.beginPath(); g.moveTo(wx+3*sc,wy+92*sc); g.bezierCurveTo(wx+5*sc,wy+55*sc,wx,wy+28*sc,wx+2*sc,wy+10*sc); g.stroke();
+  // Branches
+  [[-30*sc,-22*sc,-58*sc,-10*sc],[30*sc,-20*sc,56*sc,-9*sc],[0,-10*sc,-20*sc,-32*sc],[0,-10*sc,20*sc,-32*sc]].forEach(([x1,y1,x2,y2])=>{
+    g.lineWidth=3.5*sc; g.strokeStyle='#130902';
+    g.beginPath(); g.moveTo(wx+x1,wy+y1); g.lineTo(wx+x2,wy+y2); g.stroke();
   });
-  // Leaf canopy — layered ellipses with depth
-  [[0,0,48*sc,40*sc,.88,'#0b2a0b'],[-.28*50*sc,.14*50*sc,34*sc,30*sc,.80,'#0d300d'],[.26*50*sc,.12*50*sc,34*sc,30*sc,.80,'#0c2c0c'],[.05*50*sc,-.18*50*sc,28*sc,22*sc,.72,'#0f340f']].forEach(([ox,oy,rx2,ry2,a,col])=>{
-    gx.globalAlpha=a; gx.fillStyle=col;
-    gx.beginPath(); gx.ellipse(wx+ox,wy+oy,rx2,ry2,sway,0,Math.PI*2); gx.fill();
+  // Canopy layers
+  [[0,0,50*sc,42*sc,.88,'#0b2a0b'],[-.28*52*sc,.14*52*sc,35*sc,31*sc,.80,'#0d300d'],[.26*52*sc,.12*52*sc,35*sc,31*sc,.80,'#0c2c0c'],[.06*52*sc,-.2*52*sc,28*sc,22*sc,.72,'#103410']].forEach(([ox,oy,rx,ry2,a,c])=>{
+    g.globalAlpha=a; g.fillStyle=c;
+    g.beginPath(); g.ellipse(wx+ox,wy+oy,rx,ry2,sw,0,Math.PI*2); g.fill();
   });
-  gx.globalAlpha=1;
+  g.globalAlpha=1;
   // Drooping fronds
-  const frondAnchs=[[-50*sc,-8*sc],[-28*sc,-4*sc],[-8*sc,4*sc],[14*sc,-4*sc],[36*sc,-8*sc],[0,4*sc],[-18*sc,-22*sc],[16*sc,-22*sc]];
-  gx.lineCap='round';
-  frondAnchs.forEach(([dx,dy])=>{
+  g.lineCap='round';
+  [[-52*sc,-9*sc],[-30*sc,-5*sc],[-10*sc,5*sc],[14*sc,-5*sc],[36*sc,-9*sc],[0,4*sc],[-20*sc,-24*sc],[18*sc,-24*sc]].forEach(([dx,dy])=>{
     for(let f=0;f<5;f++){
-      const angle=sway+(f-2)*.14+dx*.002;
-      const len=(50+f*14)*sc;
-      gx.lineWidth=(1.2+f*.08)*sc;
-      gx.strokeStyle=f%2===0?'#0e2e0e':'#122e12';
-      gx.globalAlpha=.58+f*.05;
-      gx.beginPath(); gx.moveTo(wx+dx,wy+dy);
-      gx.bezierCurveTo(wx+dx+Math.sin(angle)*len*.26,wy+dy+len*.38,wx+dx+Math.sin(angle+sway)*.48*len,wy+dy+len*.72,wx+dx+Math.sin(angle+sway*1.4)*.36*len,wy+dy+len);
-      gx.stroke();
+      const ang=sw+(f-2)*.15+dx*.002;
+      const len=(52+f*13)*sc;
+      g.lineWidth=(1.1+f*.08)*sc;
+      g.strokeStyle=f%2?'#0e2e0e':'#123012';
+      g.globalAlpha=.56+f*.06;
+      g.beginPath(); g.moveTo(wx+dx,wy+dy);
+      g.bezierCurveTo(wx+dx+Math.sin(ang)*len*.26,wy+dy+len*.38,wx+dx+Math.sin(ang+sw)*.46*len,wy+dy+len*.72,wx+dx+Math.sin(ang+sw*1.5)*.35*len,wy+dy+len);
+      g.stroke();
     }
   });
-  gx.globalAlpha=1;
-  // Bioluminescent glow when leaf collected
+  g.globalAlpha=1;
+  // Bioluminescent glow if leaf collected
   if(inventory.includes('willowleaf')){
-    const gp=.08+.06*Math.sin(T*1.4);
-    gx.globalAlpha=gp; gx.strokeStyle='#50d060'; gx.lineWidth=1.5;
-    gx.beginPath(); gx.ellipse(wx,wy+20*sc,55*sc,95*sc,0,0,Math.PI*2); gx.stroke();
-    gx.globalAlpha=gp*.5; gx.fillStyle='rgba(60,200,80,.3)';
-    gx.beginPath(); gx.ellipse(wx,wy+20*sc,55*sc,95*sc,0,0,Math.PI*2); gx.fill();
-    gx.globalAlpha=1;
+    const gp=.07+.055*Math.sin(T*1.4);
+    g.globalAlpha=gp; g.strokeStyle='#50d060'; g.lineWidth=1.5;
+    g.beginPath(); g.ellipse(wx,wy+22*sc,58*sc,100*sc,0,0,Math.PI*2); g.stroke();
+    g.globalAlpha=gp*.45; g.fillStyle='rgba(55,190,75,.3)';
+    g.beginPath(); g.ellipse(wx,wy+22*sc,58*sc,100*sc,0,0,Math.PI*2); g.fill();
+    g.globalAlpha=1;
   }
-  gx.restore();
+  g.restore();
 }
 
 function drawFairy(){
   const fp=POS.fairy; if(!fp) return;
-  const bob=Math.sin(T*2.4)*H*.018;
-  const fx=fp.x, fy=fp.y+bob;
-  const fr=Math.min(W,H)*.018;
+  const bob=Math.sin(T*2.3)*H*.018;
+  const fx=fp.x,fy=fp.y+bob;
+  const fr=Math.min(W,H)*.017;
   // Wing glow
-  gx.globalAlpha=.35+.2*Math.sin(T*4);
-  const wg=gx.createRadialGradient(fx,fy,0,fx,fy,fr*3);
-  wg.addColorStop(0,'rgba(140,255,200,.8)'); wg.addColorStop(1,'rgba(140,255,200,0)');
-  gx.fillStyle=wg; gx.beginPath(); gx.arc(fx,fy,fr*3,0,Math.PI*2); gx.fill();
-  gx.globalAlpha=1;
+  g.globalAlpha=.3+.18*Math.sin(T*4.2);
+  const wg=g.createRadialGradient(fx,fy,0,fx,fy,fr*3.2);
+  wg.addColorStop(0,'rgba(130,255,195,.85)'); wg.addColorStop(1,'rgba(130,255,195,0)');
+  g.fillStyle=wg; g.beginPath(); g.arc(fx,fy,fr*3.2,0,Math.PI*2); g.fill();
+  g.globalAlpha=1;
   // Wings
-  gx.globalAlpha=.55+.1*Math.sin(T*6);
-  [[-1,1],[1,1]].forEach(([sx,sy])=>{
-    gx.fillStyle='rgba(180,240,220,.55)';
-    gx.beginPath(); gx.ellipse(fx+sx*fr*1.6,fy-fr*.3,fr*1.4,fr*.9,sx*.5,0,Math.PI*2); gx.fill();
+  g.globalAlpha=.5+.1*Math.sin(T*6);
+  [[-1.6,-.3,1.5,.95,.5],[1.6,-.3,1.5,.95,-.5]].forEach(([ox,oy,rx,ry,ang])=>{
+    g.fillStyle='rgba(170,245,215,.5)';
+    g.beginPath(); g.ellipse(fx+ox*fr,fy+oy*fr,rx*fr,ry*fr,ang,0,Math.PI*2); g.fill();
   });
-  gx.globalAlpha=1;
-  // Body
-  gx.fillStyle='#f0d0b8';
-  gx.beginPath(); gx.arc(fx,fy,fr,0,Math.PI*2); gx.fill();
+  g.globalAlpha=1;
+  // Body (head)
+  g.fillStyle='#f0d0b8';
+  g.beginPath(); g.arc(fx,fy,fr,0,Math.PI*2); g.fill();
   // Wand sparkle
-  const ws=.5+.5*Math.sin(T*3);
-  gx.globalAlpha=.6+ws*.3;
-  const wsg=gx.createRadialGradient(fx+fr*1.4,fy-fr*1.4,0,fx+fr*1.4,fy-fr*1.4,fr);
-  wsg.addColorStop(0,'#ffe840'); wsg.addColorStop(1,'rgba(255,230,40,0)');
-  gx.fillStyle=wsg; gx.beginPath(); gx.arc(fx+fr*1.4,fy-fr*1.4,fr,0,Math.PI*2); gx.fill();
-  gx.globalAlpha=1;
-  // Sparkle trail
+  const ws=.5+.5*Math.sin(T*3.2);
+  g.globalAlpha=.55+ws*.3;
+  const wsg=g.createRadialGradient(fx+fr*1.5,fy-fr*1.5,0,fx+fr*1.5,fy-fr*1.5,fr*1.1);
+  wsg.addColorStop(0,'#ffe840'); wsg.addColorStop(1,'rgba(255,232,40,0)');
+  g.fillStyle=wsg; g.beginPath(); g.arc(fx+fr*1.5,fy-fr*1.5,fr*1.1,0,Math.PI*2); g.fill();
+  g.globalAlpha=1;
   if(inventory.includes('fairysparkle')){
-    for(let i=0;i<5;i++){
-      const sa=T*2+i*.8, sr=fr*(1.8+i*.4);
-      gx.globalAlpha=.3+.2*Math.sin(T*2+i);
-      gx.fillStyle='#ffe840';
-      gx.beginPath(); gx.arc(fx+Math.cos(sa)*sr,fy+Math.sin(sa)*sr*.5,fr*.18,0,Math.PI*2); gx.fill();
+    for(let i=0;i<6;i++){
+      const sa=T*2.2+i*.9;
+      g.globalAlpha=.25+.2*Math.sin(T*2+i);
+      g.fillStyle='#ffe840';
+      g.beginPath(); g.arc(fx+Math.cos(sa)*fr*(2+i*.4),fy+Math.sin(sa)*fr*(1+i*.2),fr*.18,0,Math.PI*2); g.fill();
     }
-    gx.globalAlpha=1;
+    g.globalAlpha=1;
   }
 }
 
-// Character portrait emojis drawn with canvas
+/* ── CHARACTER SPRITES ─────────────────── */
 function drawCharSprite(c){
   const p=POS[c.id]; if(!p) return;
+  if(c.id==='willow'||c.id==='fairy') return;
   const {x,y}=p;
-  const r=Math.min(W,H)*(portrait?.046:.038);
+  const r=Math.min(W,H)*(PORT?.048:.040);
   const hasLeft=c.items.some(id=>!inventory.includes(id));
   const t3=T*2.2+c.vx*9;
-  // Available glow ring
+  // Glow rings
   if(hasLeft){
     const gp=.5+.5*Math.sin(t3);
     for(let ring=0;ring<2;ring++){
-      gx.globalAlpha=(isPressed(c.id)?.22:(.04+gp*.06))*(1-ring*.5);
-      const rg2=gx.createRadialGradient(x,y,r*(1+ring*.4),x,y,r*(2.6+ring*.4));
-      rg2.addColorStop(0,c.col+'88'); rg2.addColorStop(1,'rgba(0,0,0,0)');
-      gx.fillStyle=rg2; gx.beginPath(); gx.arc(x,y,r*(2.6+ring*.4),0,Math.PI*2); gx.fill();
+      const rg=g.createRadialGradient(x,y,r*(1+ring*.5),x,y,r*(2.8+ring*.5));
+      rg.addColorStop(0,c.col+'66'); rg.addColorStop(1,'rgba(0,0,0,0)');
+      g.globalAlpha=(_pressed===c.id?.22:(.038+gp*.058))*(1-ring*.5);
+      g.fillStyle=rg; g.beginPath(); g.arc(x,y,r*(2.8+ring*.5),0,Math.PI*2); g.fill();
     }
-    gx.globalAlpha=1;
-    // Pulsing outer ring
-    gx.globalAlpha=.12+gp*.12;
-    gx.strokeStyle=c.col; gx.lineWidth=1.5;
-    gx.beginPath(); gx.arc(x,y,r*(1.6+Math.sin(t3)*.08),0,Math.PI*2); gx.stroke();
-    gx.globalAlpha=1;
+    g.globalAlpha=.10+.12*Math.sin(t3);
+    g.strokeStyle=c.col; g.lineWidth=1.6;
+    g.beginPath(); g.arc(x,y,r*(1.7+Math.sin(t3)*.07),0,Math.PI*2); g.stroke();
+    g.globalAlpha=1;
   }
-  // Completed soft ring
   if(!hasLeft){
-    gx.globalAlpha=.18; gx.strokeStyle='#50c060'; gx.lineWidth=1.2;
-    gx.beginPath(); gx.arc(x,y,r*1.5,0,Math.PI*2); gx.stroke();
-    gx.globalAlpha=1;
+    g.globalAlpha=.16; g.strokeStyle='#50c060'; g.lineWidth=1.2;
+    g.beginPath(); g.arc(x,y,r*1.5,0,Math.PI*2); g.stroke();
+    g.globalAlpha=1;
   }
-  // Character disc
-  const bg=gx.createRadialGradient(x-r*.2,y-r*.2,0,x,y,r);
-  bg.addColorStop(0,isPressed(c.id)?c.col+'88':c.gCol+'44');
-  bg.addColorStop(1,'rgba(4,14,30,.6)');
-  gx.fillStyle=bg; gx.beginPath(); gx.arc(x,y,r,0,Math.PI*2); gx.fill();
-  if(isPressed(c.id)){
-    gx.strokeStyle=c.col; gx.lineWidth=2; gx.globalAlpha=.7;
-    gx.beginPath(); gx.arc(x,y,r,0,Math.PI*2); gx.stroke();
-    gx.globalAlpha=1;
+  // Disc
+  const bg=g.createRadialGradient(x-r*.2,y-r*.2,0,x,y,r);
+  bg.addColorStop(0,(_pressed===c.id?c.col+'88':c.dark+'55'));
+  bg.addColorStop(1,'rgba(3,10,24,.6)');
+  g.fillStyle=bg; g.beginPath(); g.arc(x,y,r,0,Math.PI*2); g.fill();
+  if(_pressed===c.id){
+    g.strokeStyle=c.col; g.lineWidth=2; g.globalAlpha=.7;
+    g.beginPath(); g.arc(x,y,r,0,Math.PI*2); g.stroke();
+    g.globalAlpha=1;
   }
-  // Skip willow (drawn separately) and fairy
-  if(c.id==='willow'||c.id==='fairy') return;
   // Emoji
-  const fs=r*1.22;
-  const charEmojis={boy:'👦',opshop:'🛍️',tall:'🌿',wise:'🤲',dj:'🕺',moon:'🌕'};
-  const em=charEmojis[c.id]||'?';
-  gx.font=`${fs}px serif`; gx.textAlign='center'; gx.textBaseline='middle';
-  if(c.id==='dj'&&inventory.includes('djspintable')){
-    const bob=Math.sin(T*4.5)*2.5; gx.fillText(em,x,y+bob);
-  } else { gx.fillText(em,x,y); }
+  const EMOJIS={boy:'👦',opshop:'🛍️',tall:'🌿',wise:'🤲',moon:'🌕'};
+  if(c.id==='moon'){
+    // Moon is drawn separately
+    return;
+  }
+  const em=EMOJIS[c.id]||'✦';
+  g.font=`${r*1.22}px serif`; g.textAlign='center'; g.textBaseline='middle';
+  if(c.id==='dj') return; // DJ drawn as full portrait
+  g.fillText(em,x,y);
+  // Name
+  const lfs=Math.max(8,Math.min(W,H)*.016);
+  g.font=`${lfs}px 'Cormorant Garamond',serif`;
+  g.fillStyle=hasLeft?c.col+'cc':'#307038aa';
+  g.textAlign='center'; g.textBaseline='top';
+  g.fillText(PORT?c.short:c.label,x,y+r*1.3);
+  // Badge
+  if(hasLeft){
+    const lft=c.items.filter(id=>!inventory.includes(id)).length;
+    const bx=x+r*.82,by=y-r*.82,br=r*.32;
+    g.fillStyle=c.col; g.globalAlpha=.88;
+    g.beginPath(); g.arc(bx,by,br,0,Math.PI*2); g.fill();
+    g.globalAlpha=1;
+    g.font=`bold ${br*1.6}px sans-serif`;
+    g.fillStyle='#fff'; g.textAlign='center'; g.textBaseline='middle';
+    g.fillText(lft,bx,by);
+  }
+}
+
+/* ── DJ DADDY COOL PORTRAIT SPRITE ──────
+   Silver/white hair, dark brows, light beard,
+   warm skin, navy top — based on reference photo */
+function drawDJ(){
+  const p=POS.dj; if(!p) return;
+  const r=Math.min(W,H)*(PORT?.048:.040);
+  const {x,y}=p;
+  const hasLeft=CHARS.find(c=>c.id==='dj').items.some(id=>!inventory.includes(id));
+  // Glow
+  if(hasLeft){
+    const gp=.5+.5*Math.sin(T*2.2+CHARS.find(c=>c.id==='dj').vx*9);
+    const rg=g.createRadialGradient(x,y,r,x,y,r*3);
+    rg.addColorStop(0,'rgba(208,160,32,.55)'); rg.addColorStop(1,'rgba(0,0,0,0)');
+    g.globalAlpha=.04+gp*.07;
+    g.fillStyle=rg; g.beginPath(); g.arc(x,y,r*3,0,Math.PI*2); g.fill();
+    g.globalAlpha=.08+.1*gp;
+    g.strokeStyle='#d0a020'; g.lineWidth=1.6;
+    g.beginPath(); g.arc(x,y,r*1.75,0,Math.PI*2); g.stroke();
+    g.globalAlpha=1;
+  }
+  if(!hasLeft){
+    g.globalAlpha=.16; g.strokeStyle='#50c060'; g.lineWidth=1.2;
+    g.beginPath(); g.arc(x,y,r*1.5,0,Math.PI*2); g.stroke();
+    g.globalAlpha=1;
+  }
+  // Badge
+  if(hasLeft){
+    const lft=CHARS.find(c=>c.id==='dj').items.filter(id=>!inventory.includes(id)).length;
+    const bx=x+r*.82,by=y-r*.82,br=r*.32;
+    g.fillStyle='#d0a020'; g.globalAlpha=.88;
+    g.beginPath(); g.arc(bx,by,br,0,Math.PI*2); g.fill();
+    g.globalAlpha=1;
+    g.font=`bold ${br*1.6}px sans-serif`;
+    g.fillStyle='#fff'; g.textAlign='center'; g.textBaseline='middle';
+    g.fillText(lft,bx,by);
+  }
+  // Draw face-accurate portrait of DJ Daddy Cool
+  g.save(); g.translate(x,y);
+  const rs=r/42; // scale unit
+  // Neck
+  g.fillStyle='#c8956a';
+  g.fillRect(-8*rs,14*rs,16*rs,16*rs);
+  // Navy top (shirt)
+  g.fillStyle='#1e2038';
+  const shirt=g.createLinearGradient(-24*rs,18*rs,24*rs,42*rs);
+  shirt.addColorStop(0,'#252540'); shirt.addColorStop(1,'#161828');
+  g.fillStyle=shirt;
+  g.beginPath(); g.moveTo(-24*rs,30*rs); g.lineTo(-28*rs,42*rs); g.lineTo(28*rs,42*rs); g.lineTo(24*rs,30*rs);
+  g.quadraticCurveTo(0,36*rs,0,30*rs); g.closePath(); g.fill();
+  // Collar shadow
+  g.fillStyle='rgba(0,0,0,.25)';
+  g.beginPath(); g.arc(0,30*rs,8*rs,0,Math.PI); g.fill();
+  // Face — warm skin, oval
+  const face=g.createRadialGradient(-3*rs,-5*rs,0,0,0,24*rs);
+  face.addColorStop(0,'#e0a878'); face.addColorStop(.6,'#d09060'); face.addColorStop(1,'#b87848');
+  g.fillStyle=face;
+  g.beginPath(); g.ellipse(0,0,20*rs,24*rs,0,0,Math.PI*2); g.fill();
+  // Ears
+  g.fillStyle='#c88858';
+  g.beginPath(); g.ellipse(-21*rs,2*rs,4*rs,5*rs,-.1,0,Math.PI*2); g.fill();
+  g.beginPath(); g.ellipse(21*rs,2*rs,4*rs,5*rs,.1,0,Math.PI*2); g.fill();
+  // Silver/white hair — voluminous, swept, slight wave at top
+  // Hair mass (back/sides)
+  const hair=g.createRadialGradient(0,-22*rs,4*rs,0,-18*rs,22*rs);
+  hair.addColorStop(0,'#e8e8e8'); hair.addColorStop(.5,'#d0d0d2'); hair.addColorStop(1,'#b8b8bc');
+  g.fillStyle=hair;
+  g.beginPath();
+  g.moveTo(-22*rs,8*rs);
+  g.quadraticCurveTo(-26*rs,-8*rs,-20*rs,-22*rs);
+  g.quadraticCurveTo(-10*rs,-34*rs,0,-36*rs);
+  g.quadraticCurveTo(10*rs,-34*rs,22*rs,-22*rs);
+  g.quadraticCurveTo(26*rs,-8*rs,22*rs,8*rs);
+  g.quadraticCurveTo(12*rs,6*rs,0,4*rs);
+  g.quadraticCurveTo(-12*rs,6*rs,-22*rs,8*rs);
+  g.closePath(); g.fill();
+  // Hair volume on top — swept upward with slight green tint (as in photo)
+  const topHair=g.createLinearGradient(-12*rs,-34*rs,12*rs,-20*rs);
+  topHair.addColorStop(0,'#dcdce0'); topHair.addColorStop(.5,'#c8d0cc'); topHair.addColorStop(1,'#d0d0d4');
+  g.fillStyle=topHair;
+  g.beginPath();
+  g.moveTo(-16*rs,-14*rs);
+  g.quadraticCurveTo(-18*rs,-30*rs,-6*rs,-36*rs);
+  g.quadraticCurveTo(2*rs,-38*rs,14*rs,-32*rs);
+  g.quadraticCurveTo(20*rs,-24*rs,16*rs,-14*rs);
+  g.quadraticCurveTo(6*rs,-18*rs,-16*rs,-14*rs);
+  g.closePath(); g.fill();
+  // Hair strand detail
+  g.strokeStyle='rgba(180,185,188,.5)'; g.lineWidth=rs*.8; g.lineCap='round';
+  [[-8,-35,-4,-18],[0,-37,2,-20],[7,-36,6,-19],[-14,-28,-10,-16],[12,-26,10,-15]].forEach(([x1,y1,x2,y2])=>{
+    g.beginPath(); g.moveTo(x1*rs,y1*rs); g.quadraticCurveTo((x1+x2)/2*rs+2*rs,(y1+y2)/2*rs,x2*rs,y2*rs); g.stroke();
+  });
+  // Dark eyebrows (prominent, darker than hair)
+  g.fillStyle='#3a2a18';
+  g.beginPath(); g.ellipse(-9*rs,-11*rs,7*rs,2.2*rs,.12,0,Math.PI*2); g.fill();
+  g.beginPath(); g.ellipse(9*rs,-11*rs,7*rs,2.2*rs,-.12,0,Math.PI*2); g.fill();
+  // Eyes — dark, slightly deep-set
+  g.fillStyle='#f8f0e8';
+  g.beginPath(); g.ellipse(-9*rs,-5*rs,5.5*rs,3.5*rs,0,0,Math.PI*2); g.fill();
+  g.beginPath(); g.ellipse(9*rs,-5*rs,5.5*rs,3.5*rs,0,0,Math.PI*2); g.fill();
+  // Irises
+  g.fillStyle='#3a2a18';
+  g.beginPath(); g.arc(-9*rs,-5*rs,3*rs,0,Math.PI*2); g.fill();
+  g.beginPath(); g.arc(9*rs,-5*rs,3*rs,0,Math.PI*2); g.fill();
+  // Pupils
+  g.fillStyle='#0a0604';
+  g.beginPath(); g.arc(-9*rs,-5*rs,1.6*rs,0,Math.PI*2); g.fill();
+  g.beginPath(); g.arc(9*rs,-5*rs,1.6*rs,0,Math.PI*2); g.fill();
+  // Eye shine
+  g.fillStyle='rgba(255,255,255,.7)';
+  g.beginPath(); g.arc(-7.5*rs,-6.2*rs,.9*rs,0,Math.PI*2); g.fill();
+  g.beginPath(); g.arc(10.5*rs,-6.2*rs,.9*rs,0,Math.PI*2); g.fill();
+  // Eye shadow/lids
+  g.fillStyle='rgba(100,60,30,.18)';
+  g.beginPath(); g.ellipse(-9*rs,-5*rs,5.5*rs,2*rs,-.1,Math.PI,Math.PI*2); g.fill();
+  g.beginPath(); g.ellipse(9*rs,-5*rs,5.5*rs,2*rs,.1,Math.PI,Math.PI*2); g.fill();
+  // Nose
+  g.strokeStyle='rgba(140,80,40,.45)'; g.lineWidth=1.5*rs; g.lineCap='round';
+  g.beginPath(); g.moveTo(-3*rs,2*rs); g.quadraticCurveTo(-5*rs,8*rs,-3*rs,10*rs); g.stroke();
+  g.beginPath(); g.moveTo(3*rs,2*rs); g.quadraticCurveTo(5*rs,8*rs,3*rs,10*rs); g.stroke();
+  g.beginPath(); g.moveTo(-3*rs,10*rs); g.quadraticCurveTo(0,12*rs,3*rs,10*rs); g.stroke();
+  // Smile — slight, warm
+  g.strokeStyle='rgba(120,70,35,.55)'; g.lineWidth=1.8*rs;
+  g.beginPath(); g.moveTo(-8*rs,16*rs); g.quadraticCurveTo(0,21*rs,8*rs,16*rs); g.stroke();
+  // Light beard — stubble, same silver-white as hair
+  g.fillStyle='rgba(200,200,205,.38)';
+  // Chin beard patch
+  g.beginPath(); g.ellipse(0,20*rs,7*rs,4*rs,0,0,Math.PI*2); g.fill();
+  // Sideburn stubble
+  g.fillStyle='rgba(190,190,195,.22)';
+  g.beginPath(); g.ellipse(-16*rs,12*rs,4*rs,7*rs,.2,0,Math.PI*2); g.fill();
+  g.beginPath(); g.ellipse(16*rs,12*rs,4*rs,7*rs,-.2,0,Math.PI*2); g.fill();
+  // Upper lip shadow
+  g.fillStyle='rgba(140,80,40,.2)';
+  g.beginPath(); g.ellipse(0,14*rs,6*rs,2.5*rs,0,0,Math.PI*2); g.fill();
+  // Subtle skin tone variation (cheek warmth)
+  g.globalAlpha=.15;
+  g.fillStyle='#e06850';
+  g.beginPath(); g.ellipse(-14*rs,3*rs,5*rs,4*rs,0,0,Math.PI*2); g.fill();
+  g.beginPath(); g.ellipse(14*rs,3*rs,5*rs,4*rs,0,0,Math.PI*2); g.fill();
+  g.globalAlpha=1;
+  g.restore();
   // Name label
   const lfs=Math.max(8,Math.min(W,H)*.016);
-  gx.font=`${lfs}px 'Cormorant Garamond',serif`;
-  gx.fillStyle=hasLeft?c.col+'bb':'#30703888';
-  gx.textAlign='center'; gx.textBaseline='top';
-  gx.fillText(portrait?c.short:c.label, x, y+r*1.3);
-  // Item count badge
-  if(hasLeft){
-    const left=c.items.filter(id=>!inventory.includes(id)).length;
-    const bx=x+r*.8, by=y-r*.8, br=r*.32;
-    gx.fillStyle=c.col; gx.globalAlpha=.85;
-    gx.beginPath(); gx.arc(bx,by,br,0,Math.PI*2); gx.fill();
-    gx.globalAlpha=1;
-    gx.font=`bold ${br*1.5}px sans-serif`;
-    gx.fillStyle='#fff'; gx.textAlign='center'; gx.textBaseline='middle';
-    gx.fillText(left,bx,by);
-  }
+  g.font=`${lfs}px 'Cormorant Garamond',serif`;
+  g.fillStyle=hasLeft?'#d0a020cc':'#307038aa';
+  g.textAlign='center'; g.textBaseline='top';
+  g.fillText(PORT?'DJ Daddy Cool':'DJ Daddy Cool',x,y+r*1.3);
 }
 
-// Player character (DJ Daddy Cool walking)
+/* ── PLAYER WALK SPRITE (mini walking DJ) */
 function drawPlayer(){
-  const pp=playerPx();
-  const r=Math.min(W,H)*(portrait?.035:.028);
-  // Walk bob
-  player.bobT = player.walking ? player.bobT+0.18 : 0;
-  const bob=player.walking?Math.sin(player.bobT)*3:0;
-  const px=pp.x, py=pp.y;
+  const px=PL.x*W, py=PL.y*H;
+  const r=Math.min(W,H)*(PORT?.030:.025);
+  const rs=r/38;
+  PL.bobT+=PL.walk?.19:0;
+  const bob=PL.walk?Math.sin(PL.bobT)*2.5:0;
   // Shadow
-  gx.globalAlpha=.3; gx.fillStyle='#000';
-  gx.beginPath(); gx.ellipse(px,py+r+2,r*.7,r*.2,0,0,Math.PI*2); gx.fill();
-  gx.globalAlpha=1;
+  g.globalAlpha=.25; g.fillStyle='#000';
+  g.beginPath(); g.ellipse(px,py+r+1,r*.65,r*.18,0,0,Math.PI*2); g.fill();
+  g.globalAlpha=1;
+  g.save(); g.translate(px,py+bob);
   // Body glow
-  const pg=gx.createRadialGradient(px,py,0,px,py,r*2);
-  pg.addColorStop(0,'rgba(200,160,30,.12)'); pg.addColorStop(1,'rgba(0,0,0,0)');
-  gx.fillStyle=pg; gx.beginPath(); gx.arc(px,py,r*2,0,Math.PI*2); gx.fill();
-  // Silhouette — stylised DJ figure
-  gx.save(); gx.translate(px,py+bob);
-  // Head
-  gx.fillStyle='#a87848';
-  gx.beginPath(); gx.arc(0,-r*.8,r*.52,0,Math.PI*2); gx.fill();
-  // Headphones arc
-  gx.strokeStyle='#111'; gx.lineWidth=r*.2; gx.lineCap='round';
-  gx.beginPath(); gx.arc(0,-r*.82,r*.44,Math.PI,0); gx.stroke();
-  gx.fillStyle='#111';
-  gx.beginPath(); gx.arc(-r*.44,-r*.82,r*.16,0,Math.PI*2); gx.fill();
-  gx.beginPath(); gx.arc(r*.44,-r*.82,r*.16,0,Math.PI*2); gx.fill();
-  // Body
-  const dir=player.facing;
-  gx.fillStyle='#1a1a2a';
-  gx.beginPath();
-  gx.moveTo(-r*.38,-r*.28); gx.lineTo(r*.38,-r*.28);
-  gx.lineTo(r*.32,r*.5); gx.lineTo(-r*.32,r*.5); gx.closePath(); gx.fill();
-  // Chain
-  gx.strokeStyle='#c8a030'; gx.lineWidth=r*.08;
-  gx.beginPath(); gx.arc(0,r*.05,r*.2,-.4,Math.PI+.4); gx.stroke();
-  // Arms
-  const armSwing=player.walking?Math.sin(player.bobT)*0.4:0;
-  gx.strokeStyle='#a87848'; gx.lineWidth=r*.28; gx.lineCap='round';
-  gx.beginPath(); gx.moveTo(-r*.38,-r*.1);
-  gx.lineTo(-r*.7+armSwing*r*.3, r*.2+Math.cos(player.bobT)*r*.1); gx.stroke();
-  gx.beginPath(); gx.moveTo(r*.38,-r*.1);
-  gx.lineTo(r*.7-armSwing*r*.3, r*.2-Math.cos(player.bobT)*r*.1); gx.stroke();
+  g.globalAlpha=.08;
+  const pg=g.createRadialGradient(0,0,0,0,0,r*2.2);
+  pg.addColorStop(0,'rgba(200,160,30,.5)'); pg.addColorStop(1,'rgba(0,0,0,0)');
+  g.fillStyle=pg; g.beginPath(); g.arc(0,0,r*2.2,0,Math.PI*2); g.fill();
+  g.globalAlpha=1;
+  // Neck + shirt
+  g.fillStyle='#c8956a'; g.fillRect(-4*rs,10*rs,8*rs,8*rs);
+  g.fillStyle='#1e2038';
+  g.beginPath(); g.moveTo(-14*rs,18*rs); g.lineTo(-16*rs,35*rs); g.lineTo(16*rs,35*rs); g.lineTo(14*rs,18*rs); g.quadraticCurveTo(0,22*rs,0,18*rs); g.closePath(); g.fill();
+  // Face
+  const fc=g.createRadialGradient(-2*rs,-3*rs,0,0,0,13*rs);
+  fc.addColorStop(0,'#e0a878'); fc.addColorStop(1,'#b87848');
+  g.fillStyle=fc; g.beginPath(); g.ellipse(0,0,11*rs,13*rs,0,0,Math.PI*2); g.fill();
+  // Silver hair
+  const wh=g.createRadialGradient(0,-12*rs,2*rs,0,-9*rs,13*rs);
+  wh.addColorStop(0,'#e8e8e8'); wh.addColorStop(1,'#c0c0c4');
+  g.fillStyle=wh;
+  g.beginPath(); g.moveTo(-12*rs,4*rs); g.quadraticCurveTo(-14*rs,-8*rs,-7*rs,-16*rs); g.quadraticCurveTo(0,-20*rs,8*rs,-16*rs); g.quadraticCurveTo(14*rs,-8*rs,12*rs,4*rs); g.quadraticCurveTo(0,2*rs,-12*rs,4*rs); g.closePath(); g.fill();
+  // Dark brows
+  g.fillStyle='#3a2a18';
+  g.beginPath(); g.ellipse(-5*rs,-5*rs,4*rs,1.3*rs,.1,0,Math.PI*2); g.fill();
+  g.beginPath(); g.ellipse(5*rs,-5*rs,4*rs,1.3*rs,-.1,0,Math.PI*2); g.fill();
+  // Eyes
+  g.fillStyle='#3a2a18';
+  g.beginPath(); g.arc(-5*rs,-1*rs,1.8*rs,0,Math.PI*2); g.fill();
+  g.beginPath(); g.arc(5*rs,-1*rs,1.8*rs,0,Math.PI*2); g.fill();
+  // Arms (swing while walking)
+  const aSwing=PL.walk?Math.sin(PL.bobT)*.35:0;
+  g.strokeStyle='#c8956a'; g.lineWidth=3.5*rs; g.lineCap='round';
+  g.beginPath(); g.moveTo(-10*rs,4*rs); g.lineTo(-14*rs+aSwing*6*rs,20*rs+Math.cos(PL.bobT)*2*rs); g.stroke();
+  g.beginPath(); g.moveTo(10*rs,4*rs); g.lineTo(14*rs-aSwing*6*rs,20*rs-Math.cos(PL.bobT)*2*rs); g.stroke();
   // Legs
-  if(player.walking){
-    const ls=Math.sin(player.bobT);
-    gx.strokeStyle='#1a1a2a'; gx.lineWidth=r*.3;
-    gx.beginPath(); gx.moveTo(-r*.18,r*.5); gx.lineTo(-r*.24+ls*r*.2,r*.95); gx.stroke();
-    gx.beginPath(); gx.moveTo(r*.18,r*.5); gx.lineTo(r*.24-ls*r*.2,r*.95); gx.stroke();
-  } else {
-    gx.strokeStyle='#1a1a2a'; gx.lineWidth=r*.3;
-    gx.beginPath(); gx.moveTo(-r*.18,r*.5); gx.lineTo(-r*.22,r*.95); gx.stroke();
-    gx.beginPath(); gx.moveTo(r*.18,r*.5); gx.lineTo(r*.22,r*.95); gx.stroke();
+  g.strokeStyle='#1e2038'; g.lineWidth=4*rs;
+  const ls=PL.walk?Math.sin(PL.bobT):.0;
+  g.beginPath(); g.moveTo(-4*rs,35*rs); g.lineTo(-5*rs+ls*5*rs,50*rs); g.stroke();
+  g.beginPath(); g.moveTo(4*rs,35*rs); g.lineTo(5*rs-ls*5*rs,50*rs); g.stroke();
+  // Shoes (gold)
+  g.fillStyle='#e8a010';
+  g.beginPath(); g.ellipse(PL.walk?-5*rs+ls*5*rs:-5*rs,52*rs,5*rs,2.2*rs,.1,0,Math.PI*2); g.fill();
+  g.beginPath(); g.ellipse(PL.walk?5*rs-ls*5*rs:5*rs,52*rs,5*rs,2.2*rs,-.1,0,Math.PI*2); g.fill();
+  g.restore();
+  // Walk dust
+  if(PL.walk&&Math.random()<.1){
+    dustP.push({x:px+(Math.random()-.5)*8,y:py+r,vx:(Math.random()-.5)*.5,vy:-Math.random()*.3,l:1,r:1+Math.random()*1.5});
   }
-  // Shoes
-  gx.fillStyle='#f0a000';
-  gx.beginPath(); gx.ellipse(player.walking?(-r*.24+Math.sin(player.bobT)*r*.2):(-r*.22),r*.98,r*.22,r*.1,0,0,Math.PI*2); gx.fill();
-  gx.beginPath(); gx.ellipse(player.walking?(r*.24-Math.sin(player.bobT)*r*.2):(r*.22),r*.98,r*.22,r*.1,0,0,Math.PI*2); gx.fill();
-  gx.restore();
-}
-
-function drawDust(){
-  if(player.walking&&Math.random()<.12){
-    dust.push({x:player.x*W+(Math.random()-.5)*10,y:player.y*H+Math.min(W,H)*.04,
-      vx:(Math.random()-.5)*.6,vy:-Math.random()*.4,life:1,r:1+Math.random()*2});
-  }
-  dust=dust.filter(d=>d.life>0);
-  dust.forEach(d=>{
-    d.x+=d.vx; d.y+=d.vy; d.life-=.04;
-    gx.globalAlpha=d.life*.22; gx.fillStyle='#8a7050';
-    gx.beginPath(); gx.arc(d.x,d.y,d.r,0,Math.PI*2); gx.fill();
+  dustP=dustP.filter(d=>d.l>0);
+  dustP.forEach(d=>{
+    d.x+=d.vx; d.y+=d.vy; d.l-=.04;
+    g.globalAlpha=d.l*.18; g.fillStyle='#8a7050';
+    g.beginPath(); g.arc(d.x,d.y,d.r,0,Math.PI*2); g.fill();
   });
-  gx.globalAlpha=1;
+  g.globalAlpha=1;
 }
 
-// Fireflies
-let fireflies=[];
 function drawFireflies(){
-  if(Math.random()<.03){
-    fireflies.push({x:Math.random()*W,y:H*.25+Math.random()*H*.5,
-      vx:(Math.random()-.5)*.5,vy:-Math.random()*.3-.06,life:1,decay:.002+Math.random()*.004,r:.8+Math.random()*1.8});
+  if(Math.random()<.028){
+    fireflies.push({x:Math.random()*W,y:H*.25+Math.random()*H*.5,vx:(Math.random()-.5)*.5,vy:-Math.random()*.28-.06,l:1,d:.002+Math.random()*.004,r:.8+Math.random()*1.8});
   }
-  fireflies=fireflies.filter(f=>f.life>0);
+  fireflies=fireflies.filter(f=>f.l>0);
   fireflies.forEach(f=>{
-    f.x+=f.vx; f.y+=f.vy; f.life-=f.decay;
-    const fg=gx.createRadialGradient(f.x,f.y,0,f.x,f.y,f.r*2.5);
-    fg.addColorStop(0,'rgba(150,240,80,.8)'); fg.addColorStop(1,'rgba(100,200,50,0)');
-    gx.globalAlpha=f.life*.5; gx.fillStyle=fg;
-    gx.beginPath(); gx.arc(f.x,f.y,f.r*2.5,0,Math.PI*2); gx.fill();
+    f.x+=f.vx; f.y+=f.vy; f.l-=f.d;
+    const fg=g.createRadialGradient(f.x,f.y,0,f.x,f.y,f.r*2.8);
+    fg.addColorStop(0,'rgba(145,240,80,.9)'); fg.addColorStop(1,'rgba(100,200,50,0)');
+    g.globalAlpha=f.l*.48; g.fillStyle=fg;
+    g.beginPath(); g.arc(f.x,f.y,f.r*2.8,0,Math.PI*2); g.fill();
   });
-  gx.globalAlpha=1;
+  g.globalAlpha=1;
 }
 
-// ════════════════════════════════════════
-//  VN PORTRAIT DRAWING
-// ════════════════════════════════════════
-let currentGiver=null;
-function drawVNPortrait(giver){
-  if(!VW||!VH) return;
-  vpx.clearRect(0,0,VW,VH);
-  const th=CHAR_THEMES[giver]||CHAR_THEMES.boy;
-  // Background gradient
-  const bg=vpx.createLinearGradient(0,0,0,VH);
-  bg.addColorStop(0,th.bg[0]); bg.addColorStop(.5,th.bg[1]); bg.addColorStop(1,th.bg[2]);
-  vpx.fillStyle=bg; vpx.fillRect(0,0,VW,VH);
-  // Stars in portrait
-  vpx.globalAlpha=.4;
-  for(let i=0;i<30;i++){
-    const sx=(i*137.5)%1*VW, sy=(i*97.3)%1*VH*.7;
-    vpx.fillStyle='#ffffff'; vpx.globalAlpha=.1+Math.random()*.2;
-    vpx.beginPath(); vpx.arc(sx,sy,Math.random()*1.2+.2,0,Math.PI*2); vpx.fill();
-  }
-  vpx.globalAlpha=1;
-  // Central accent glow
-  const cg=vpx.createRadialGradient(VW*.5,VH*.4,0,VW*.5,VH*.4,VW*.45);
-  cg.addColorStop(0,th.accent+'22'); cg.addColorStop(1,'rgba(0,0,0,0)');
-  vpx.fillStyle=cg; vpx.fillRect(0,0,VW,VH);
-  // Large character emoji
-  const charEmojis={boy:'👦',opshop:'🛍️',tall:'🌿',wise:'🤲',dj:'🎛️',willow:'🌳',moon:'🌕',fairy:'🧚'};
-  const em=charEmojis[giver]||'✦';
-  const efs=Math.min(VW,VH)*.38;
-  vpx.font=`${efs}px serif`; vpx.textAlign='center'; vpx.textBaseline='middle';
-  vpx.globalAlpha=.35;
-  vpx.fillText(em, VW*.5, VH*.42);
-  vpx.globalAlpha=1;
-  // Decorative rings
-  vpx.strokeStyle=th.accent+'30'; vpx.lineWidth=1;
-  [1.2,1.6,2.0].forEach(rm=>{
-    vpx.beginPath(); vpx.arc(VW*.5,VH*.42,efs*rm*.52,0,Math.PI*2); vpx.stroke();
+/* ── MINIMAP ──────────────────────────── */
+function drawMinimap(){
+  const mx=76,my=76;
+  mm.clearRect(0,0,mx,my);
+  // BG
+  mm.fillStyle='rgba(1,5,14,.0)'; mm.fillRect(0,0,mx,my);
+  CHARS.forEach(c=>{
+    const hasLeft=c.items.some(id=>!inventory.includes(id));
+    const nx=c.vx*(PORT?mx:mx), ny=(PORT?c.vy*.74+.04:c.vy)*my;
+    mm.globalAlpha=hasLeft?.8:.28;
+    mm.fillStyle=hasLeft?c.col:'#30703888';
+    mm.beginPath(); mm.arc(nx,ny,hasLeft?3.5:2.5,0,Math.PI*2); mm.fill();
   });
+  // Player dot
+  const ppx=PL.x*mx, ppy=PL.y*my;
+  mm.globalAlpha=1; mm.fillStyle='#e8c040';
+  mm.beginPath(); mm.arc(ppx,ppy,3,0,Math.PI*2); mm.fill();
+  mm.globalAlpha=1;
 }
 
-// ════════════════════════════════════════
-//  MAIN GAME LOOP
-// ════════════════════════════════════════
+/* ═══════════════════════════════════════════
+   MAIN LOOP
+═══════════════════════════════════════════ */
 function loop(ts){
   T=ts/1000;
-  gx.clearRect(0,0,W,H);
-  resolvePos();
+  g.clearRect(0,0,W,H);
   drawSky(); drawStars(); drawMoon();
   drawLandscape(); drawRiver(); drawWillow();
-  CHARS.forEach(c=>{
-    if(c.id!=='willow'&&c.id!=='fairy') drawCharSprite(c);
-  });
-  drawFairy();
-  // Draw willow char badge separately
-  const wc=CHARS.find(c=>c.id==='willow');
-  if(wc){
-    const p=POS.willow;
-    const r=Math.min(W,H)*(portrait?.046:.038);
-    const hasLeft=wc.items.some(id=>!inventory.includes(id));
-    if(hasLeft){
-      const left=wc.items.filter(id=>!inventory.includes(id)).length;
-      const bx=p.x+r*.8, by=p.y-r*.8, br=r*.32;
-      gx.fillStyle=wc.col; gx.globalAlpha=.85;
-      gx.beginPath(); gx.arc(bx,by,br,0,Math.PI*2); gx.fill();
-      gx.globalAlpha=1;
-      gx.font=`bold ${br*1.5}px sans-serif`;
-      gx.fillStyle='#fff'; gx.textAlign='center'; gx.textBaseline='middle';
-      gx.fillText(left,bx,by);
-    }
-  }
-  drawDust();
-  drawPlayer();
-  drawFireflies();
-  // Update player walk
+  CHARS.forEach(c=>drawCharSprite(c));
+  drawFairy(); drawDJ();
+  drawPlayer(); drawFireflies();
   updatePlayer();
+  drawMinimap();
   requestAnimationFrame(loop);
 }
 
 function updatePlayer(){
-  const tx=player.tx*W, ty=player.ty*H;
-  const cx2=player.x*W, cy2=player.y*H;
-  const dx=tx-cx2, dy=ty-cy2;
+  const tx=PL.tx*W,ty=PL.ty*H;
+  const cx2=PL.x*W,cy2=PL.y*H;
+  const dx=tx-cx2,dy=ty-cy2;
   const dist=Math.sqrt(dx*dx+dy*dy);
-  if(dist>3){
-    const spd=Math.min(dist*.06, 6);
-    player.x+=(dx/dist)*spd/W;
-    player.y+=(dy/dist)*spd/H;
-    player.walking=true;
-    player.facing=dx>0?1:-1;
-  } else {
-    player.walking=false;
-  }
+  if(dist>4){
+    const spd=Math.min(dist*.065,6.5);
+    PL.x+=(dx/dist)*spd/W; PL.y+=(dy/dist)*spd/H;
+    PL.walk=true; PL.face=dx>0?1:-1;
+  } else { PL.walk=false; }
 }
 
-// ════════════════════════════════════════
-//  INPUT
-// ════════════════════════════════════════
-let _pressed=null;
-function isPressed(id){ return _pressed===id; }
+requestAnimationFrame(loop);
 
-function getXY(e){
-  if(e.changedTouches) return [e.changedTouches[0].clientX,e.changedTouches[0].clientY];
-  return [e.clientX,e.clientY];
-}
+/* ═══════════════════════════════════════════
+   INPUT
+═══════════════════════════════════════════ */
+function getXY(e){ return e.changedTouches?[e.changedTouches[0].clientX,e.changedTouches[0].clientY]:[e.clientX,e.clientY]; }
 function charAt(px,py){
-  const hitR=Math.min(W,H)*(portrait?.068:.055);
-  let best=null, bestD=Infinity;
-  CHARS.forEach(c=>{
-    const p=POS[c.id]; if(!p) return;
-    const dx=px-p.x, dy=py-p.y, d=Math.sqrt(dx*dx+dy*dy);
-    if(d<hitR*1.5&&d<bestD){bestD=d;best=c;}
-  });
+  const hr=Math.min(W,H)*(PORT?.072:.058);
+  let best=null,bd=Infinity;
+  CHARS.forEach(c=>{ const p=POS[c.id]; if(!p) return; const dx=px-p.x,dy=py-p.y,d=Math.sqrt(dx*dx+dy*dy); if(d<hr*1.6&&d<bd){bd=d;best=c;} });
   return best;
 }
+gc.addEventListener('touchstart',e=>{if(storyOpen||cardOpen||invOpen)return;e.preventDefault();const[px,py]=getXY(e);const c=charAt(px,py);_pressed=c?c.id:null;},{passive:false});
+gc.addEventListener('touchend',e=>{if(storyOpen||cardOpen||invOpen)return;e.preventDefault();const[px,py]=getXY(e);const c=charAt(px,py);if(c&&c.id===_pressed)tapChar(c);else tapGround(px,py);_pressed=null;document.getElementById('taphint').style.display='none';},{passive:false});
+gc.addEventListener('click',e=>{if(storyOpen||cardOpen||invOpen)return;const[px,py]=getXY(e);const c=charAt(px,py);if(c)tapChar(c);else tapGround(px,py);document.getElementById('taphint').style.display='none';});
 
-gc.addEventListener('touchstart',e=>{
-  if(storyOpen||cardOpen||invOpen) return;
-  e.preventDefault();
-  const [px,py]=getXY(e);
-  const c=charAt(px,py);
-  _pressed=c?c.id:null;
-},{passive:false});
-
-gc.addEventListener('touchend',e=>{
-  if(storyOpen||cardOpen||invOpen){return;}
-  e.preventDefault();
-  const [px,py]=getXY(e);
-  const c=charAt(px,py);
-  if(c&&c.id===_pressed) onTapChar(c,px,py);
-  else onTapGround(px,py);
-  _pressed=null;
-  document.getElementById('tap-label').style.display='none';
-},{passive:false});
-
-gc.addEventListener('click',e=>{
-  if(storyOpen||cardOpen||invOpen) return;
-  const [px,py]=getXY(e);
-  const c=charAt(px,py);
-  if(c) onTapChar(c,px,py);
-  else onTapGround(px,py);
-  document.getElementById('tap-label').style.display='none';
-});
-
-function onTapGround(px,py){
-  // Walk player toward tapped spot
-  const gy = portrait ? H*.62 : H*.66;
-  if(py<gy*.85) return; // don't walk into sky
-  player.tx=px/W; player.ty=Math.min(py/H,.88);
+function tapGround(px,py){
+  const gy=PORT?H*.62:H*.66;
+  if(py<gy*.82)return;
+  PL.tx=px/W; PL.ty=Math.min(py/H,.9);
+}
+function tapChar(c){
+  PL.tx=POS[c.id].x/W; PL.ty=POS[c.id].y/H;
+  setTimeout(()=>openVN(c),280);
 }
 
-function onTapChar(c,px,py){
-  // Walk toward character first, then open scene
-  player.tx=POS[c.id].x/W; player.ty=POS[c.id].y/H;
-  setTimeout(()=>openVNScene(c), 300);
-}
+/* ═══════════════════════════════════════════
+   VISUAL NOVEL ENGINE
+═══════════════════════════════════════════ */
+let currentGiver=null;
 
-// ════════════════════════════════════════
-//  VN SCENE  (Visual Novel story flow)
-// ════════════════════════════════════════
-let vnPages=[], vnPageIdx=0, vnCurrentItem=null, vnCurrentChar=null;
-let vnTyping=false, vnTypeTimer=null, vnCharsShown=0;
-
-function openVNScene(c){
+function openVN(c){
   const nextId=c.items.find(id=>!inventory.includes(id));
   if(!nextId){
-    // All done — show outro
-    vnPages=[
-      {speaker:c.label, text:'You\'ve received everything I had for you.'},
-      {speaker:c.label, text:'My hands are empty now — but warmer.'},
-    ];
-    vnCurrentItem=null; vnCurrentChar=c;
-    startVN();
-    return;
+    vnPages=[{who:c.label,txt:'You\'ve received everything I had for you.'},{who:c.label,txt:'My hands are empty now. But warmer.'}];
+    vnItem=null; vnChar=c;
+  } else {
+    const item=ITEMS.find(i=>i.id===nextId);
+    vnPages=[...item.pages,{who:'hidden',txt:item.hidden,meaning:item.meaning,isHidden:true}];
+    vnItem=item; vnChar=c;
   }
-  const item=ITEMS.find(i=>i.id===nextId);
-  vnPages=[...item.pages, {speaker:'hidden', text:item.hidden, reveal:true, meaning:item.meaning}];
-  vnCurrentItem=item; vnCurrentChar=c;
-  startVN();
-}
-
-function startVN(){
-  vnPageIdx=0; currentGiver=vnCurrentChar.id;
-  // Resize portrait canvas
+  currentGiver=c.id;
+  vnIdx=0;
+  // Setup portrait canvas
   setTimeout(()=>{
-    VW=vpc.offsetWidth; VH=vpc.offsetHeight;
+    VW=vpc.offsetWidth||W; VH=vpc.offsetHeight||(H*.5);
     vpc.width=VW*dpr; vpc.height=VH*dpr;
-    vpx.setTransform(dpr,0,0,dpr,0,0);
-    drawVNPortrait(vnCurrentChar.id);
-  },50);
-  // Item float
-  const icon=document.getElementById('vn-item-icon');
-  if(vnCurrentItem){ icon.textContent=vnCurrentItem.emoji; icon.style.display='block';}
-  else { icon.style.display='none'; }
-  document.getElementById('vn-hidden').classList.remove('show');
-  buildDots();
-  document.getElementById('vn-scene').classList.add('open');
+    vp.setTransform(dpr,0,0,dpr,0,0);
+    drawPortrait(c.id);
+  },30);
+  // Floating item
+  const fi=document.getElementById('vn-float-icon');
+  fi.textContent=vnItem?vnItem.e:''; fi.style.display=vnItem?'block':'none';
+  document.getElementById('vn-hmsg').classList.remove('show');
+  buildVNDots();
+  document.getElementById('vn').classList.add('open');
   storyOpen=true;
   showVNPage(0);
 }
 
-function buildDots(){
-  const wrap=document.getElementById('vn-progress-dots');
-  wrap.innerHTML=vnPages.map((_,i)=>`<div class="vn-dot" id="vndot${i}"></div>`).join('');
-  updateDots();
+function drawPortrait(giver){
+  if(!VW||!VH) return;
+  const th=THEMES[giver]||THEMES.boy;
+  // Background
+  const bg=vp.createLinearGradient(0,0,0,VH);
+  bg.addColorStop(0,th.bg[0]); bg.addColorStop(.55,th.bg[1]); bg.addColorStop(1,th.bg[2]);
+  vp.fillStyle=bg; vp.fillRect(0,0,VW,VH);
+  // Stars
+  for(let i=0;i<28;i++){
+    const sx=(i*139)%VW,sy=(i*97)%VH*.65;
+    vp.globalAlpha=.08+Math.random()*.15; vp.fillStyle='#fff';
+    vp.beginPath(); vp.arc(sx,sy,.4+Math.random()*1.1,0,Math.PI*2); vp.fill();
+  }
+  vp.globalAlpha=1;
+  // Accent glow
+  const ag=vp.createRadialGradient(VW*.5,VH*.42,0,VW*.5,VH*.42,VW*.5);
+  ag.addColorStop(0,th.acc+'28'); ag.addColorStop(1,'rgba(0,0,0,0)');
+  vp.fillStyle=ag; vp.fillRect(0,0,VW,VH);
+  // Large character emoji as atmosphere
+  vp.font=`${Math.min(VW,VH)*.34}px serif`; vp.textAlign='center'; vp.textBaseline='middle';
+  vp.globalAlpha=.22; vp.fillText(th.em,VW*.5,VH*.42); vp.globalAlpha=1;
+  // Decorative rings
+  vp.strokeStyle=th.acc+'28'; vp.lineWidth=1;
+  [1.1,1.55,2.0].forEach(rm=>{vp.beginPath();vp.arc(VW*.5,VH*.42,Math.min(VW,VH)*rm*.17,0,Math.PI*2);vp.stroke();});
+  // Bottom fade
+  const fade=vp.createLinearGradient(0,VH*.55,0,VH);
+  fade.addColorStop(0,'rgba(1,5,14,0)'); fade.addColorStop(1,'rgba(1,5,14,.9)');
+  vp.fillStyle=fade; vp.fillRect(0,VH*.55,VW,VH*.45);
 }
-function updateDots(){
-  vnPages.forEach((_,i)=>{
-    const d=document.getElementById('vndot'+i);
-    if(!d) return;
-    d.className='vn-dot'+(i<vnPageIdx?' done':i===vnPageIdx?' active':'');
-  });
+
+function buildVNDots(){
+  const wrap=document.getElementById('vn-dots');
+  wrap.innerHTML=vnPages.map((_,i)=>`<div class="vdot" id="vd${i}"></div>`).join('');
+}
+function refreshDots(){
+  vnPages.forEach((_,i)=>{const d=document.getElementById('vd'+i);if(d)d.className='vdot'+(i<vnIdx?' done':i===vnIdx?' active':'');});
 }
 
 function showVNPage(idx){
-  const page=vnPages[idx];
-  if(!page) return;
-  document.getElementById('vn-speaker-name').textContent=page.reveal?'✦ HIDDEN MESSAGE':page.speaker;
-  document.getElementById('vn-words').textContent='';
-  document.getElementById('vn-hidden').classList.remove('show');
-  if(page.reveal){
-    // Hidden message page
-    document.getElementById('vn-hidden-msg').textContent='"'+page.text+'"';
-    document.getElementById('vn-hidden').classList.add('show');
-    typeText('', false);
-    if(vnCurrentItem) typeText(vnCurrentItem.meaning, true, '#vn-words');
+  const pg=vnPages[idx]; if(!pg) return;
+  document.getElementById('vn-speaker').textContent=pg.isHidden?'✦ HIDDEN MESSAGE':pg.who;
+  document.getElementById('vn-hmsg').classList.remove('show');
+  refreshDots();
+  if(pg.isHidden){
+    document.getElementById('vn-htext').textContent='"'+pg.txt+'"';
+    document.getElementById('vn-hmean').textContent=pg.meaning||'';
+    document.getElementById('vn-hmsg').classList.add('show');
+    typeText('',true);
   } else {
-    typeText(page.text);
+    typeText(pg.txt);
   }
-  document.getElementById('vn-next').textContent = idx>=vnPages.length-1 ? (vnCurrentItem?'Collect Item ✦':'Close') : 'Continue →';
-  updateDots();
+  document.getElementById('vn-btn').textContent=idx>=vnPages.length-1?(vnItem?'Collect ✦':'Close'):'Continue →';
 }
 
-function typeText(text, slow=false, targetId='#vn-words'){
-  clearTimeout(vnTypeTimer);
-  vnTyping=true; vnCharsShown=0;
-  const el=document.querySelector(targetId);
-  if(!el) return;
-  if(!slow){
-    el.textContent='';
-    function tick(){
-      if(vnCharsShown>=text.length){vnTyping=false;return;}
-      el.textContent=text.slice(0,++vnCharsShown);
-      vnTypeTimer=setTimeout(tick, text[vnCharsShown-1]==='.'||text[vnCharsShown-1]==='!'||text[vnCharsShown-1]==='?'?80:28);
-    }
-    tick();
-  } else {
-    el.textContent=text;
+function typeText(txt,skip=false){
+  clearTimeout(vnTimer); vnTyping=true; vnShown=0;
+  const el=document.getElementById('vn-txt');
+  el.textContent='';
+  if(skip){el.textContent=txt;vnTyping=false;return;}
+  function tick(){
+    if(vnShown>=txt.length){vnTyping=false;return;}
+    el.textContent=txt.slice(0,++vnShown);
+    const delay='.!?'.includes(txt[vnShown-1])?85:26;
+    vnTimer=setTimeout(tick,delay);
   }
+  tick();
 }
 
-function vnNext(){
-  if(vnTyping){ // skip to end
-    clearTimeout(vnTypeTimer); vnTyping=false;
-    document.getElementById('vn-words').textContent=vnPages[vnPageIdx]?.text||'';
+function vnAdvance(){
+  if(vnTyping){
+    clearTimeout(vnTimer); vnTyping=false;
+    document.getElementById('vn-txt').textContent=vnPages[vnIdx]?.txt||'';
     return;
   }
-  if(vnPageIdx>=vnPages.length-1){
-    // Final page — collect and close
-    if(vnCurrentItem) doCollect(vnCurrentItem);
-    closeVNScene();
-    return;
+  if(vnIdx>=vnPages.length-1){
+    if(vnItem) doCollect(vnItem);
+    closeVN(); return;
   }
-  vnPageIdx++;
-  showVNPage(vnPageIdx);
+  vnIdx++; showVNPage(vnIdx);
 }
 
-function closeVNScene(){
-  document.getElementById('vn-scene').classList.remove('open');
-  storyOpen=false; vnCurrentItem=null;
+function closeVN(){
+  document.getElementById('vn').classList.remove('open');
+  storyOpen=false; vnItem=null;
 }
 
-// ════════════════════════════════════════
-//  COLLECT + CHAPTER
-// ════════════════════════════════════════
+/* ═══════════════════════════════════════════
+   COLLECT + CHAPTER
+═══════════════════════════════════════════ */
 function doCollect(item){
   inventory.push(item.id);
   unlocked.push(item.unlocks);
   if(item.id==='computer'&&inventory.includes('key')) unlocked.push('Final Hidden Message: "I\'m not going anywhere."');
   if(item.id==='fairysparkle') doSparkles();
-  document.getElementById('hud-count').textContent=inventory.length+' / '+ITEMS.length;
+  document.getElementById('hud-ct').textContent=inventory.length+' / 21';
   checkChapter();
 }
-
 function checkChapter(){
   if(chapIdx>=CHAPTERS.length-1) return;
-  const next=CHAPTERS[chapIdx+1];
-  if(!next.requires||inventory.includes(next.requires)){
-    chapIdx++;
-    document.getElementById('hud-cname').textContent=CHAPTERS[chapIdx].name;
-    showChapterCard(CHAPTERS[chapIdx]);
-  }
+  const nx=CHAPTERS[chapIdx+1];
+  if(!nx.req||inventory.includes(nx.req)){ chapIdx++; document.getElementById('hud-cname').textContent=CHAPTERS[chapIdx].name; showChapterCard(CHAPTERS[chapIdx]); }
 }
 
-// ════════════════════════════════════════
-//  CHAPTER CARD
-// ════════════════════════════════════════
+/* ═══════════════════════════════════════════
+   CHAPTER CARD
+═══════════════════════════════════════════ */
+const ROMANS=['I','II','III','IV','V','VI','VII','VIII'];
 function showChapterCard(ch){
-  document.getElementById('cc-eye').textContent=ch.eye;
-  document.getElementById('cc-num').textContent='Chapter '+['I','II','III','IV','V','VI','VII','VIII'][ch.n-1];
-  document.getElementById('cc-title').textContent=ch.name;
+  document.getElementById('cc-icon').textContent=ch.icon;
+  document.getElementById('cc-roman').textContent='Chapter '+ROMANS[ch.n-1];
+  document.getElementById('cc-name').textContent=ch.name;
   document.getElementById('cc-sub').textContent=ch.sub;
   const card=document.getElementById('chapter-card');
   card.classList.add('show'); cardOpen=true;
-  card.onclick=()=>{card.classList.remove('show'); cardOpen=false;};
+  card.onclick=()=>{card.classList.remove('show');cardOpen=false;};
 }
 
-// ════════════════════════════════════════
-//  INVENTORY
-// ════════════════════════════════════════
+/* ═══════════════════════════════════════════
+   INVENTORY
+═══════════════════════════════════════════ */
 function openInv(){
-  const scroll=document.getElementById('inv-scroll');
-  if(inventory.length===0){
-    scroll.innerHTML='<div class="inv-empty">Nothing collected yet.<br><br>Walk up to the glowing characters in the scene and tap them.</div>';
+  const body=document.getElementById('inv-body');
+  if(!inventory.length){
+    body.innerHTML='<div class="inv-empty">Nothing collected yet.<br><br>Walk up to the glowing characters and tap them to discover what they\'re holding for you.</div>';
   } else {
-    // Group by giver
     const givers=[
-      {key:'boy',    label:'From The Little Boy'},
-      {key:'opshop', label:'From The Op-Shop Woman'},
-      {key:'tall',   label:'From The Tall Woman'},
-      {key:'wise',   label:'From The Nine-Finger Wise Woman'},
-      {key:'dj',     label:'From DJ Daddy Cool'},
-      {key:'willow', label:'From The Willow Tree'},
-      {key:'moon',   label:'From The Moon'},
-      {key:'fairy',  label:'From The Fairy'},
+      {k:'boy',   l:'From The Little Boy'},
+      {k:'opshop',l:'From The Op-Shop Woman'},
+      {k:'tall',  l:'From The Tall Woman'},
+      {k:'wise',  l:'From The Nine-Finger Wise Woman'},
+      {k:'dj',    l:'From DJ Daddy Cool'},
+      {k:'willow',l:'From The Willow Tree'},
+      {k:'moon',  l:'From The Moon'},
+      {k:'fairy', l:'From The Fairy'},
     ];
     let html='';
-    givers.forEach(g=>{
-      const gItems=inventory.map(id=>ITEMS.find(i=>i.id===id)).filter(i=>i&&i.giver===g.key);
-      if(!gItems.length) return;
-      html+=`<div class="inv-section-label">${g.label}</div>`;
-      gItems.forEach(it=>{
+    givers.forEach(gv=>{
+      const its=inventory.map(id=>ITEMS.find(i=>i.id===id)).filter(i=>i&&i.giver===gv.k);
+      if(!its.length) return;
+      html+=`<div class="inv-sec">${gv.l}</div>`;
+      its.forEach(it=>{
         html+=`<div class="icard" onclick="examineItem('${it.id}')">
-          <div class="ic-icon">${it.emoji}</div>
-          <div style="flex:1;min-width:0">
+          <div class="ic-em">${it.e}</div>
+          <div>
             <div class="ic-name">${it.name}</div>
             <div class="ic-from">Tap to examine</div>
+            <div class="ic-unlocks">↳ Unlocks: ${it.unlocks}</div>
           </div>
         </div>`;
       });
     });
     if(unlocked.length){
-      html+=`<div id="inv-events-section">
-        <h3>Scenes Unlocked</h3>
-        <div>${unlocked.map(e=>`<span class="epill">↳ ${e}</span>`).join('')}</div>
-      </div>`;
+      html+=`<div id="inv-scenes"><h3>Scenes Unlocked</h3><div>${unlocked.map(e=>`<span class="epill">↳ ${e}</span>`).join('')}</div></div>`;
     }
-    scroll.innerHTML=html;
+    body.innerHTML=html;
   }
-  document.getElementById('inv-overlay').classList.add('open');
-  invOpen=true;
+  document.getElementById('inv').classList.add('open'); invOpen=true;
 }
-function closeInv(){ document.getElementById('inv-overlay').classList.remove('open'); invOpen=false; }
+function closeInv(){ document.getElementById('inv').classList.remove('open'); invOpen=false; }
 
-// ════════════════════════════════════════
-//  ITEM EXAMINE
-// ════════════════════════════════════════
+/* ═══════════════════════════════════════════
+   EXAMINE ITEM
+═══════════════════════════════════════════ */
 function examineItem(id){
   const it=ITEMS.find(i=>i.id===id); if(!it) return;
-  document.getElementById('ex-icon').textContent=it.emoji;
+  document.getElementById('ex-em').textContent=it.e;
   document.getElementById('ex-name').textContent=it.name;
   document.getElementById('ex-from').textContent='from '+it.from;
   document.getElementById('ex-meaning').textContent=it.meaning;
@@ -1329,35 +1367,27 @@ function examineItem(id){
 }
 function closeExamine(){ document.getElementById('examine').classList.remove('open'); }
 
-// ════════════════════════════════════════
-//  SPARKLES
-// ════════════════════════════════════════
+/* ═══════════════════════════════════════════
+   SPARKLES
+═══════════════════════════════════════════ */
 function doSparkles(){
   const gs=['✨','⭐','💫','🌟','·','✦','★'];
   for(let i=0;i<22;i++){
     setTimeout(()=>{
       const el=document.createElement('div'); el.className='sp';
-      const sz=.7+Math.random()*.8;
-      el.style.cssText=`left:${6+Math.random()*80}%;top:${8+Math.random()*68}%;font-size:${sz}rem;animation-delay:${Math.random()*.5}s`;
+      const sz=.65+Math.random()*.9;
+      el.style.cssText=`left:${5+Math.random()*84}%;top:${7+Math.random()*70}%;font-size:${sz}rem;animation-delay:${Math.random()*.5}s`;
       el.textContent=gs[Math.floor(Math.random()*gs.length)];
-      document.body.appendChild(el); setTimeout(()=>el.remove(),1900);
+      document.body.appendChild(el); setTimeout(()=>el.remove(),2000);
     },i*55);
   }
 }
 
-// ════════════════════════════════════════
-//  BOOT
-// ════════════════════════════════════════
-// Set player start near centre
-player.x=.5; player.y=portrait?.68:.70;
-player.tx=player.x; player.ty=player.y;
-
-requestAnimationFrame(loop);
-
-// Opening chapter card after brief fade in
-setTimeout(()=>{
-  showChapterCard(CHAPTERS[0]);
-},800);
+/* ═══════════════════════════════════════════
+   BOOT
+═══════════════════════════════════════════ */
+PL.x=.5; PL.y=PORT?.70:.68; PL.tx=PL.x; PL.ty=PL.y;
+setTimeout(()=>showChapterCard(CHAPTERS[0]),900);
 </script>
 </body>
 </html>
