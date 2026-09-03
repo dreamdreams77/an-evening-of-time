@@ -217,7 +217,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#020810;
 <!-- HUD -->
 <div id="hud">
   <div id="hud-ch">Chapter: <em id="hud-cname">Moonlit Arrival</em></div>
-  <div id="hud-ct">0 / 21</div>
+  <div id="hud-ct">0 / 30</div>
 </div>
 <button id="inv-btn" onclick="openInv()">✦ Collection</button>
 
@@ -477,8 +477,82 @@ const ITEMS=[
      {who:'THE FAIRY',    txt:'"You didn\'t even need to ask."'},
      {who:'DJ DADDY COOL',txt:'The trail leads somewhere you\'ve always been heading.'},
    ]},
+  // ── FAIRYLAND  (arrive once the Fairy Sparkle is found)
+  {id:'crownlight',e:'👑',name:'Crown of Light',    from:'Princess Lauren',      giver:'lauren',
+   meaning:'Being chosen — the hand someone always reaches for, without even thinking about it.',
+   hidden:"You are someone's always.",         unlocks:"Princess Lauren's Meadow",
+   pages:[
+     {who:'PRINCESS LAUREN',txt:'She holds it out like it costs her nothing — because to her, it doesn\'t.'},
+     {who:'PRINCESS LAUREN',txt:'"I found this on a path once," she says. "Someone gentle told me to give it to whoever needed it next."'},
+     {who:'DJ DADDY COOL',  txt:'A crown that isn\'t about ruling anything. Just about being someone\'s favorite person to hold hands with.'},
+   ]},
+  {id:'turtleshell', e:'🐢',name:'Turtle Shell Piece', from:'Madge the Turtle',    giver:'madge',
+   meaning:'Ancient patience — the wisdom that doesn\'t need to speak to be understood.',
+   hidden:'Slow is not the same as lost.',     unlocks:"Madge's Pond",
+   pages:[
+     {who:'MADGE',txt:'She blinks once. Twice. Says nothing at all.'},
+     {who:'MADGE',txt:'Somehow that\'s exactly what you needed — someone who doesn\'t rush you toward an answer.'},
+     {who:'DJ DADDY COOL',txt:'Some friends speak in stillness. You\'re learning to listen that way too.'},
+   ]},
+  {id:'gem',        e:'💎',name:'Uncut Gem',         from:'DanDan',               giver:'dandan',
+   meaning:'The parts of you nobody sees but that still catch the light.',
+   hidden:"I'm here. You just can't see me.",  unlocks:"DanDan's Cave",
+   pages:[
+     {who:'DANDAN',txt:'You don\'t see him. You never do. But the ground glitters a little brighter, right where he\'s standing.'},
+     {who:'DANDAN',txt:'A gem presses into your palm from nowhere you can name.'},
+     {who:'DJ DADDY COOL',txt:'Invisible doesn\'t mean absent. Some of the realest things you\'ve loved, you\'ve never seen at all.'},
+   ]},
+  {id:'purplecalc', e:'🧮',name:'Purple Calculator', from:'LittleLove',           giver:'littlelove',
+   meaning:'Small joys, so easily lost — and the courage it takes to come out from behind the tree to reclaim them.',
+   hidden:"You already know this one. You've held it before.",  unlocks:"LittleLove's Oak",
+   pages:[
+     {who:'LITTLELOVE',txt:'He peeks out from behind the tree first. Then, slowly, all the way out.'},
+     {who:'LITTLELOVE',txt:'"It\'s not the only one," he says, looking at it oddly, like it\'s a memory instead of a gift. "I heard you\'ve got one of these already. Funny how that works."'},
+     {who:'DJ DADDY COOL',txt:'Two calculators. Two versions of you, still trying to make the numbers add up to something like peace.'},
+   ]},
+  {id:'wish',       e:'🌟',name:'Emerald Wish',      from:'Esma',                 giver:'esma',
+   meaning:'Hope that finds you even at the edge of the dark — a small good thing to wish for.',
+   hidden:'Even in shadow, something gentle stays close.', unlocks:"Esma's Wishing Path",
+   pages:[
+     {who:'ESMA',txt:'Her ears swivel toward you before you\'ve even said a word.'},
+     {who:'ESMA',txt:'Emerald eyes, steady and certain. "I live near the shadow on purpose," she says. "Someone gentle should be nearby."'},
+     {who:'DJ DADDY COOL',txt:'You didn\'t know you needed a rabbit with emerald eyes. Turns out you did.'},
+   ]},
+  {id:'quietsecret',e:'🌈',name:'Rainbow Shell Sliver', from:'Euna',              giver:'euna',
+   meaning:'A quiet secret, and the slow magic of an ordinary afternoon.',
+   hidden:"Not everything has to be fast to be real.", unlocks:"Euna's Teacup Window",
+   pages:[
+     {who:'EUNA',txt:'Tucked in tight, small and slow, perfectly content to stay that way.'},
+     {who:'EUNA',txt:'She gives the smallest shiver of a laugh — the kind only the people paying close attention ever notice.'},
+     {who:'DJ DADDY COOL',txt:'You\'re learning to notice the small laughs now. That\'s new. That\'s good.'},
+   ]},
+  {id:'lantern',    e:'🏮',name:'Steady Lantern',    from:'Locks',                giver:'locks',
+   meaning:"Steadiness — the light someone keeps lit for you, without ever asking to be thanked.",
+   hidden:"I'll keep it burning as long as you need it.", unlocks:"Locks' Watch",
+   pages:[
+     {who:'LOCKS',txt:'She doesn\'t say much. She just keeps the flame from going out.'},
+     {who:'LOCKS',txt:'Steady hands, steady light — the kind of beautiful that doesn\'t need announcing.'},
+     {who:'DJ DADDY COOL',txt:'Some people are the lantern. Not the fire, not the storm. Just the light that stays.'},
+   ]},
+  {id:'teacup',     e:'🍵',name:'Dancing Teacup',    from:'Seita',                giver:'seita',
+   meaning:'Playfulness, silliness — the enthusiasm that keeps you afloat when nothing is graceful.',
+   hidden:'Dance badly. Dance anyway.',        unlocks:"Seita's Splash",
+   pages:[
+     {who:'SEITA',txt:'He does a dramatic flip. Half the tea ends up on the ground. He doesn\'t care even a little.'},
+     {who:'SEITA',txt:'Not graceful. Never graceful. Enthusiastic, though — always enthusiastic.'},
+     {who:'DJ DADDY COOL',txt:'You laugh before you decide to. That\'s the whole point of him.'},
+   ]},
+  {id:'compass',    e:'🧭',name:'Old Compass',       from:'Boat Momma',           giver:'boatmomma',
+   meaning:"Distance that doesn't undo love — the ones who sailed far and are still, somehow, still yours.",
+   hidden:"Far away isn't the same as gone.",  unlocks:"Boat Momma's Harbor",
+   pages:[
+     {who:'BOAT MOMMA',txt:'She sailed far once. Everyone remembers that part.'},
+     {who:'BOAT MOMMA',txt:'What they forget to mention: she came back with a compass, and gave it to the first person who looked like they were also finding their way home.'},
+     {who:'DJ DADDY COOL',txt:'Still loved. Even from far away. Especially from far away.'},
+   ]},
 ];
 
+const FAIRYLAND_ITEMS=['crownlight','turtleshell','gem','purplecalc','wish','quietsecret','lantern','teacup','compass'];
 const CHAPTERS=[
   {n:1,name:'Moonlit Arrival',      icon:'🌙',sub:'The evening opens.',               req:null,        who:'THE NARRATOR',
    open:'You are DJ Daddy Cool.\n\nThe evening is yours. Walk the world — each glowing character is holding something for you. Tap them to find out what.'},
@@ -496,6 +570,8 @@ const CHAPTERS=[
    open:'The music was playing before you arrived.\n\nHe\'s been keeping it going.'},
   {n:8,name:'The Final Chapter',    icon:'✨',sub:'It was always enough.',            req:'key',       who:'THE EVENING',
    open:'Every item. Every message. Every person.\n\nThey were all here for you. They still are. That is enough.'},
+  {n:9,name:'The Fairyland Gate',   icon:'🚪',sub:'A door that was always half-open.', req:FAIRYLAND_ITEMS,who:'THE GATE',
+   open:'Somewhere past the willow, a door you never noticed opens without a sound.\n\nEveryone the Fairy ever loved is standing on the other side of it. They came to meet you too.'},
 ];
 
 /* ═══════════════════════════════════════════
@@ -518,6 +594,25 @@ const CHARS=[
    items:['moonhalo'],                                        vx:.20,vy:.12},
   {id:'fairy', label:'The Fairy',         short:'Fairy',      col:'#60c898',dark:'#307858',
    items:['fairysparkle'],                                    vx:.22,vy:.34},
+  // ── FAIRYLAND FRIENDS  (arrive once the Fairy Sparkle is found)
+  {id:'lauren',    label:'Princess Lauren',   short:'Lauren',   col:'#e070a0',dark:'#a04070',
+   items:['crownlight'],  vx:.62,vy:.16, fairyland:true},
+  {id:'madge',     label:'Madge the Turtle',  short:'Madge',    col:'#4a8858',dark:'#2a5838',
+   items:['turtleshell'], vx:.44,vy:.78, fairyland:true},
+  {id:'dandan',    label:'DanDan',            short:'DanDan',   col:'#7060d8',dark:'#4038a0',
+   items:['gem'],         vx:.92,vy:.30, fairyland:true},
+  {id:'littlelove',label:'LittleLove',        short:'LittleLove',col:'#9868d0',dark:'#684098',
+   items:['purplecalc'],  vx:.75,vy:.78, fairyland:true},
+  {id:'esma',      label:'Esma',              short:'Esma',     col:'#38c878',dark:'#208848',
+   items:['wish'],        vx:.30,vy:.80, fairyland:true},
+  {id:'euna',      label:'Euna',              short:'Euna',     col:'#48b8b0',dark:'#287868',
+   items:['quietsecret'], vx:.58,vy:.83, fairyland:true},
+  {id:'locks',     label:'Locks',             short:'Locks',    col:'#e8b840',dark:'#a07820',
+   items:['lantern'],     vx:.08,vy:.22, fairyland:true},
+  {id:'seita',     label:'Seita',             short:'Seita',    col:'#e88060',dark:'#a85838',
+   items:['teacup'],      vx:.90,vy:.78, fairyland:true},
+  {id:'boatmomma', label:'Boat Momma',        short:'Boat Momma',col:'#5090c0',dark:'#306090',
+   items:['compass'],     vx:.97,vy:.90, fairyland:true},
 ];
 
 /* Portrait background themes */
@@ -530,6 +625,15 @@ const THEMES={
   willow: {bg:['#060f06','#081408','#060a06'],acc:'#28882a',em:'🌳'},
   moon:   {bg:['#0c1020','#121828','#0a0e1c'],acc:'#c0c060',em:'🌕'},
   fairy:  {bg:['#061410','#0a1c14','#060e0a'],acc:'#48b080',em:'🧚'},
+  lauren:    {bg:['#1c0e18','#241224','#180c1c'],acc:'#e070a0',em:'👑'},
+  madge:     {bg:['#081810','#0c2016','#08140c'],acc:'#4a8858',em:'🐢'},
+  dandan:    {bg:['#0c0a1c','#141028','#0a081a'],acc:'#7060d8',em:'💎'},
+  littlelove:{bg:['#140a1c','#1c1028','#120818'],acc:'#9868d0',em:'✨'},
+  esma:      {bg:['#0a1810','#0e2016','#081208'],acc:'#38c878',em:'🐇'},
+  euna:      {bg:['#081818','#0c2020','#061414'],acc:'#48b8b0',em:'🐌'},
+  locks:     {bg:['#1c1408','#241a0a','#161006'],acc:'#e8b840',em:'💫'},
+  seita:     {bg:['#1c0e08','#241408','#160a04'],acc:'#e88060',em:'🦐'},
+  boatmomma: {bg:['#0a141c','#0e1c28','#081018'],acc:'#5090c0',em:'⛵'},
 };
 
 /* ═══════════════════════════════════════════
@@ -792,6 +896,7 @@ function drawFairy(){
 function drawCharSprite(c){
   const p=POS[c.id]; if(!p) return;
   if(c.id==='willow'||c.id==='fairy') return;
+  if(c.fairyland&&!inventory.includes('fairysparkle')) return;
   const {x,y}=p;
   const r=Math.min(W,H)*(PORT?.048:.040);
   const hasLeft=c.items.some(id=>!inventory.includes(id));
@@ -815,6 +920,25 @@ function drawCharSprite(c){
     g.beginPath(); g.arc(x,y,r*1.5,0,Math.PI*2); g.stroke();
     g.globalAlpha=1;
   }
+  if(c.id==='dandan'){
+    // DanDan is invisible — only the glow, name, and badge ever show
+    const lfs2=Math.max(8,Math.min(W,H)*.016);
+    g.font=`${lfs2}px 'Cormorant Garamond',serif`;
+    g.fillStyle=hasLeft?c.col+'cc':'#307038aa';
+    g.textAlign='center'; g.textBaseline='top';
+    g.fillText(PORT?c.short:c.label,x,y+r*1.3);
+    if(hasLeft){
+      const lft2=c.items.filter(id=>!inventory.includes(id)).length;
+      const bx2=x+r*.82,by2=y-r*.82,br2=r*.32;
+      g.fillStyle=c.col; g.globalAlpha=.88;
+      g.beginPath(); g.arc(bx2,by2,br2,0,Math.PI*2); g.fill();
+      g.globalAlpha=1;
+      g.font=`bold ${br2*1.6}px sans-serif`;
+      g.fillStyle='#fff'; g.textAlign='center'; g.textBaseline='middle';
+      g.fillText(lft2,bx2,by2);
+    }
+    return;
+  }
   // Disc
   const bg=g.createRadialGradient(x-r*.2,y-r*.2,0,x,y,r);
   bg.addColorStop(0,(_pressed===c.id?c.col+'88':c.dark+'55'));
@@ -826,7 +950,8 @@ function drawCharSprite(c){
     g.globalAlpha=1;
   }
   // Emoji
-  const EMOJIS={boy:'👦',opshop:'🛍️',tall:'🌿',wise:'🤲',moon:'🌕'};
+  const EMOJIS={boy:'👦',opshop:'🛍️',tall:'🌿',wise:'🤲',moon:'🌕',
+    lauren:'👑',madge:'🐢',littlelove:'✨',esma:'🐇',euna:'🐌',locks:'💫',seita:'🦐',boatmomma:'⛵'};
   if(c.id==='moon'){
     // Moon is drawn separately
     return;
@@ -1092,6 +1217,7 @@ function drawMinimap(){
   // BG
   mm.fillStyle='rgba(1,5,14,.0)'; mm.fillRect(0,0,mx,my);
   CHARS.forEach(c=>{
+    if(c.fairyland&&!inventory.includes('fairysparkle')) return;
     const hasLeft=c.items.some(id=>!inventory.includes(id));
     const nx=c.vx*(PORT?mx:mx), ny=(PORT?c.vy*.74+.04:c.vy)*my;
     mm.globalAlpha=hasLeft?.8:.28;
@@ -1142,7 +1268,7 @@ function getXY(e){ return e.changedTouches?[e.changedTouches[0].clientX,e.change
 function charAt(px,py){
   const hr=Math.min(W,H)*(PORT?.072:.058);
   let best=null,bd=Infinity;
-  CHARS.forEach(c=>{ const p=POS[c.id]; if(!p) return; const dx=px-p.x,dy=py-p.y,d=Math.sqrt(dx*dx+dy*dy); if(d<hr*1.6&&d<bd){bd=d;best=c;} });
+  CHARS.forEach(c=>{ if(c.fairyland&&!inventory.includes('fairysparkle')) return; const p=POS[c.id]; if(!p) return; const dx=px-p.x,dy=py-p.y,d=Math.sqrt(dx*dx+dy*dy); if(d<hr*1.6&&d<bd){bd=d;best=c;} });
   return best;
 }
 gc.addEventListener('touchstart',e=>{if(storyOpen||cardOpen||invOpen)return;e.preventDefault();const[px,py]=getXY(e);const c=charAt(px,py);_pressed=c?c.id:null;},{passive:false});
@@ -1287,19 +1413,22 @@ function doCollect(item){
   unlocked.push(item.unlocks);
   if(item.id==='computer'&&inventory.includes('key')) unlocked.push('Final Hidden Message: "I\'m not going anywhere."');
   if(item.id==='fairysparkle') doSparkles();
-  document.getElementById('hud-ct').textContent=inventory.length+' / 21';
+  document.getElementById('hud-ct').textContent=inventory.length+' / 30';
   checkChapter();
 }
 function checkChapter(){
-  if(chapIdx>=CHAPTERS.length-1) return;
-  const nx=CHAPTERS[chapIdx+1];
-  if(!nx.req||inventory.includes(nx.req)){ chapIdx++; document.getElementById('hud-cname').textContent=CHAPTERS[chapIdx].name; showChapterCard(CHAPTERS[chapIdx]); }
+  while(chapIdx<CHAPTERS.length-1){
+    const nx=CHAPTERS[chapIdx+1];
+    const met=!nx.req||(Array.isArray(nx.req)?nx.req.every(id=>inventory.includes(id)):inventory.includes(nx.req));
+    if(!met) break;
+    chapIdx++; document.getElementById('hud-cname').textContent=CHAPTERS[chapIdx].name; showChapterCard(CHAPTERS[chapIdx]);
+  }
 }
 
 /* ═══════════════════════════════════════════
    CHAPTER CARD
 ═══════════════════════════════════════════ */
-const ROMANS=['I','II','III','IV','V','VI','VII','VIII'];
+const ROMANS=['I','II','III','IV','V','VI','VII','VIII','IX'];
 function showChapterCard(ch){
   document.getElementById('cc-icon').textContent=ch.icon;
   document.getElementById('cc-roman').textContent='Chapter '+ROMANS[ch.n-1];
@@ -1327,6 +1456,15 @@ function openInv(){
       {k:'willow',l:'From The Willow Tree'},
       {k:'moon',  l:'From The Moon'},
       {k:'fairy', l:'From The Fairy'},
+      {k:'lauren',    l:'From Princess Lauren'},
+      {k:'madge',     l:'From Madge the Turtle'},
+      {k:'dandan',    l:'From DanDan'},
+      {k:'littlelove',l:'From LittleLove'},
+      {k:'esma',      l:'From Esma'},
+      {k:'euna',      l:'From Euna'},
+      {k:'locks',     l:'From Locks'},
+      {k:'seita',     l:'From Seita'},
+      {k:'boatmomma', l:'From Boat Momma'},
     ];
     let html='';
     givers.forEach(gv=>{

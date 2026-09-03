@@ -23,4 +23,6 @@ If you see an old cached version: add `?v=2` to the URL, or open in a private/in
 
 ## Characters & Items
 
-See `docs/items.md` for the full reference.
+30 items across 17 characters. See `docs/items.md` for the full reference.
+
+Nine of those characters — Princess Lauren, Madge the Turtle, DanDan, LittleLove, Esma, Euna, Locks, Seita, and Boat Momma — are guests from *Fairyland*, the storybook world of the companion project [FairyQueenTales](https://github.com/dreamdreams77/FairyQueenTales). They stay out of sight until you've collected the Fairy's own gift; after that, they're scattered through the evening world like everyone else, each holding something for you.
