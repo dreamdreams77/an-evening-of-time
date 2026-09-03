@@ -20,6 +20,7 @@ If you see an old cached version: add `?v=2` to the URL, or open in a private/in
 - **Tap a glowing character** to approach them and discover what they're holding
 - **Tap through pages** in the visual novel scenes
 - **✦ Collection** button to review everything you've found
+- **🎁 Memory Box** button to place collected tokens inside, and to write down real memories of your own — this is the one thing in the game that's saved (in the browser's local storage) between visits. Everything else — your position, your inventory, your chapter — resets when you reload, by design.
 
 ## Characters & Items
 

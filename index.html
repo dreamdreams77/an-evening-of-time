@@ -53,13 +53,63 @@ html,body{width:100%;height:100%;overflow:hidden;background:#020810;
 #hud-ch em{color:#c8b070;font-style:italic;font-family:'Cormorant Garamond',serif;font-size:.68rem}
 #hud-ct{font-size:.62rem;color:#1e3a52;letter-spacing:.04em}
 
-/* ── COLLECTION BTN ──────────────── */
-#inv-btn{position:fixed;top:8px;right:14px;z-index:60;
-  background:rgba(2,10,24,.92);border:1px solid rgba(100,160,220,.2);
-  border-radius:20px;padding:8px 16px;
+/* ── HUD BUTTONS ──────────────── */
+#hud-buttons{position:fixed;top:8px;right:14px;z-index:60;
+  display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;max-width:calc(100% - 28px)}
+#inv-btn,#mem-btn{background:rgba(2,10,24,.92);border:1px solid rgba(100,160,220,.2);
+  border-radius:20px;padding:8px 16px;white-space:nowrap;
   color:#5888b0;font-family:'Cinzel',serif;font-size:.65rem;
   cursor:pointer;letter-spacing:.08em;transition:all .25s}
-#inv-btn:hover,#inv-btn:active{color:#c8b070;border-color:rgba(200,176,112,.35)}
+#inv-btn:hover,#inv-btn:active,#mem-btn:hover,#mem-btn:active{color:#c8b070;border-color:rgba(200,176,112,.35)}
+
+/* ── MEMORY BOX ───────────────────── */
+#membox{position:fixed;inset:0;z-index:400;background:rgba(1,5,14,.97);
+  display:none;flex-direction:column;overflow:hidden}
+#membox.open{display:flex}
+#mb-hdr{flex-shrink:0;padding:16px 18px 12px;
+  border-bottom:1px solid rgba(100,150,220,.09);
+  display:flex;justify-content:space-between;align-items:center}
+#mb-hdr h2{font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:.18em;
+  text-transform:uppercase;color:#c8b070}
+#mb-x{background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:6px;
+  color:#4a7090;padding:7px 15px;font-family:'Cinzel',serif;font-size:.65rem;
+  cursor:pointer;letter-spacing:.06em;transition:all .2s}
+#mb-x:hover{color:#c8b070;border-color:rgba(200,176,112,.3)}
+#mb-body{flex:1;overflow-y:auto;padding:14px 18px 40px}
+#mb-intro{font-size:.86rem;font-style:italic;color:#8a8060;line-height:1.7;margin-bottom:16px}
+.mb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:10px;margin-bottom:8px}
+.mb-token{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border-radius:10px;cursor:pointer;transition:all .2s;padding:6px 3px;text-align:center}
+.mb-token .mt-em{font-size:1.5rem;margin-bottom:2px;line-height:1}
+.mb-token .mt-name{font-size:.52rem;line-height:1.25}
+.mb-token.placed{background:rgba(200,176,112,.12);border:1px solid rgba(200,176,112,.4);
+  box-shadow:0 0 14px rgba(200,176,112,.18)}
+.mb-token.placed .mt-name{color:#e8c850}
+.mb-token.waiting{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}
+.mb-token.waiting .mt-name{color:#3a6888}
+.mb-token:active{transform:scale(.94)}
+.mb-hint{font-size:.72rem;color:#2e5870;margin:2px 0 4px;font-style:italic}
+.mb-form{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;padding:14px;margin-bottom:14px}
+.mb-form input,.mb-form textarea{display:block;width:100%;background:rgba(0,0,0,.3);
+  border:1px solid rgba(255,255,255,.12);border-radius:6px;color:#e8e0cc;
+  font-family:'Cormorant Garamond',serif;font-size:.9rem;padding:8px 10px;margin-bottom:8px}
+.mb-form textarea{min-height:64px;resize:vertical}
+.mb-form button{background:rgba(200,176,112,.14);border:1px solid rgba(200,176,112,.3);
+  border-radius:16px;color:#e8c850;font-family:'Cinzel',serif;font-size:.62rem;
+  letter-spacing:.08em;padding:8px 18px;cursor:pointer;transition:all .2s}
+.mb-form button:hover{background:rgba(200,176,112,.22)}
+.mem-card{background:rgba(255,255,255,.028);border:1px solid rgba(255,255,255,.06);
+  border-radius:9px;padding:12px 40px 12px 14px;margin-bottom:9px;position:relative}
+.mem-card .mc-title{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.06em;
+  color:#c8b070;margin-bottom:4px}
+.mem-card .mc-date{font-size:.6rem;color:#2e5870;margin-bottom:6px;
+  font-family:'Cinzel',serif;letter-spacing:.06em}
+.mem-card .mc-text{font-size:.86rem;color:#c8bfa8;line-height:1.6;white-space:pre-wrap}
+.mem-card .mc-del{position:absolute;top:10px;right:10px;background:transparent;border:none;
+  color:#3a5060;font-size:.9rem;cursor:pointer;line-height:1}
+.mem-card .mc-del:hover{color:#c85050}
+.mb-empty{color:#1e3a52;font-style:italic;font-size:.86rem;padding:18px 0;text-align:center;line-height:1.7}
 
 /* ── VISUAL NOVEL SCENE ──────────── */
 #vn{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;
@@ -219,7 +269,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:#020810;
   <div id="hud-ch">Chapter: <em id="hud-cname">Moonlit Arrival</em></div>
   <div id="hud-ct">0 / 30</div>
 </div>
-<button id="inv-btn" onclick="openInv()">✦ Collection</button>
+<div id="hud-buttons">
+  <button id="mem-btn" onclick="openMemoryBox()">🎁 Memory Box</button>
+  <button id="inv-btn" onclick="openInv()">✦ Collection</button>
+</div>
 
 <!-- Minimap -->
 <div id="minimap">
@@ -255,6 +308,15 @@ html,body{width:100%;height:100%;overflow:hidden;background:#020810;
     <button id="inv-x" onclick="closeInv()">✕ Close</button>
   </div>
   <div id="inv-body" id="inv-body"></div>
+</div>
+
+<!-- Memory Box -->
+<div id="membox">
+  <div id="mb-hdr">
+    <h2>🎁 The Memory Box</h2>
+    <button id="mb-x" onclick="closeMemoryBox()">✕ Close</button>
+  </div>
+  <div id="mb-body"></div>
 </div>
 
 <!-- Examine item -->
@@ -640,7 +702,7 @@ const THEMES={
    GAME STATE
 ═══════════════════════════════════════════ */
 let inventory=[],unlocked=[],chapIdx=0;
-let storyOpen=false,cardOpen=false,invOpen=false;
+let storyOpen=false,cardOpen=false,invOpen=false,memboxOpen=false;
 let vnPages=[],vnIdx=0,vnItem=null,vnChar=null;
 let vnTyping=false,vnTimer=null,vnShown=0;
 let T=0,stars=[],fireflies=[],dustP=[];
@@ -1271,9 +1333,9 @@ function charAt(px,py){
   CHARS.forEach(c=>{ if(c.fairyland&&!inventory.includes('fairysparkle')) return; const p=POS[c.id]; if(!p) return; const dx=px-p.x,dy=py-p.y,d=Math.sqrt(dx*dx+dy*dy); if(d<hr*1.6&&d<bd){bd=d;best=c;} });
   return best;
 }
-gc.addEventListener('touchstart',e=>{if(storyOpen||cardOpen||invOpen)return;e.preventDefault();const[px,py]=getXY(e);const c=charAt(px,py);_pressed=c?c.id:null;},{passive:false});
-gc.addEventListener('touchend',e=>{if(storyOpen||cardOpen||invOpen)return;e.preventDefault();const[px,py]=getXY(e);const c=charAt(px,py);if(c&&c.id===_pressed)tapChar(c);else tapGround(px,py);_pressed=null;document.getElementById('taphint').style.display='none';},{passive:false});
-gc.addEventListener('click',e=>{if(storyOpen||cardOpen||invOpen)return;const[px,py]=getXY(e);const c=charAt(px,py);if(c)tapChar(c);else tapGround(px,py);document.getElementById('taphint').style.display='none';});
+gc.addEventListener('touchstart',e=>{if(storyOpen||cardOpen||invOpen||memboxOpen)return;e.preventDefault();const[px,py]=getXY(e);const c=charAt(px,py);_pressed=c?c.id:null;},{passive:false});
+gc.addEventListener('touchend',e=>{if(storyOpen||cardOpen||invOpen||memboxOpen)return;e.preventDefault();const[px,py]=getXY(e);const c=charAt(px,py);if(c&&c.id===_pressed)tapChar(c);else tapGround(px,py);_pressed=null;document.getElementById('taphint').style.display='none';},{passive:false});
+gc.addEventListener('click',e=>{if(storyOpen||cardOpen||invOpen||memboxOpen)return;const[px,py]=getXY(e);const c=charAt(px,py);if(c)tapChar(c);else tapGround(px,py);document.getElementById('taphint').style.display='none';});
 
 function tapGround(px,py){
   const gy=PORT?H*.62:H*.66;
@@ -1490,6 +1552,102 @@ function openInv(){
   document.getElementById('inv').classList.add('open'); invOpen=true;
 }
 function closeInv(){ document.getElementById('inv').classList.remove('open'); invOpen=false; }
+
+/* ═══════════════════════════════════════════
+   MEMORY BOX
+   Tokens from the game (tap to place/remove) +
+   true memories the player writes themselves.
+   Persisted in localStorage — this is the one
+   piece of state in the game meant to survive
+   a reload.
+═══════════════════════════════════════════ */
+let memTokens=[],trueMemories=[];
+function loadMemoryBox(){
+  try{
+    memTokens=JSON.parse(localStorage.getItem('eot_memTokens')||'[]');
+    trueMemories=JSON.parse(localStorage.getItem('eot_trueMemories')||'[]');
+  }catch(e){ memTokens=[]; trueMemories=[]; }
+}
+function saveMemoryBox(){
+  try{
+    localStorage.setItem('eot_memTokens',JSON.stringify(memTokens));
+    localStorage.setItem('eot_trueMemories',JSON.stringify(trueMemories));
+  }catch(e){ /* storage unavailable — box just won't remember between visits */ }
+}
+loadMemoryBox();
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function toggleToken(id){
+  const i=memTokens.indexOf(id);
+  if(i>=0) memTokens.splice(i,1); else memTokens.push(id);
+  saveMemoryBox(); renderMemoryBox();
+}
+
+function addTrueMemory(){
+  const titleEl=document.getElementById('mb-title'), textEl=document.getElementById('mb-text');
+  const title=titleEl.value.trim(), text=textEl.value.trim();
+  if(!text) return;
+  trueMemories.unshift({
+    id:'m'+Date.now()+Math.random().toString(36).slice(2,6),
+    title:title||'Untitled Memory', text,
+    date:new Date().toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'})
+  });
+  titleEl.value=''; textEl.value='';
+  saveMemoryBox(); renderMemoryBox();
+}
+function deleteTrueMemory(id){
+  trueMemories=trueMemories.filter(m=>m.id!==id);
+  saveMemoryBox(); renderMemoryBox();
+}
+
+function renderMemoryBox(){
+  const body=document.getElementById('mb-body');
+  let html='<div id="mb-intro">A place to keep things. Tap a token you\'ve found to set it inside — and write down whatever\'s true, whenever it\'s true.</div>';
+
+  html+='<div class="inv-sec">✦ Tokens From the Evening</div>';
+  if(!inventory.length){
+    html+='<div class="mb-empty">Nothing collected yet.<br>Walk out and find someone glowing — what they give you can live here too.</div>';
+  } else {
+    html+='<div class="mb-hint">Tap a token to place it in the box, or tap it again to take it back out.</div>';
+    html+='<div class="mb-grid">';
+    inventory.forEach(id=>{
+      const it=ITEMS.find(i=>i.id===id); if(!it) return;
+      const placed=memTokens.includes(id);
+      html+=`<div class="mb-token ${placed?'placed':'waiting'}" onclick="toggleToken('${id}')" title="${it.name} — ${placed?'in the box':'tap to place in the box'}">
+        <div class="mt-em">${it.e}</div><div class="mt-name">${escapeHtml(it.name)}</div>
+      </div>`;
+    });
+    html+='</div>';
+  }
+
+  html+='<div class="inv-sec" style="margin-top:24px">🖋 True Memories</div>';
+  html+=`<div class="mb-form">
+    <input id="mb-title" type="text" placeholder="Give it a name (optional)" maxlength="60">
+    <textarea id="mb-text" placeholder="Write something true. A memory, a moment, a thing you don't want to forget." maxlength="2000"></textarea>
+    <button onclick="addTrueMemory()">✦ Place in the Box</button>
+  </div>`;
+  if(!trueMemories.length){
+    html+='<div class="mb-empty">No memories written yet.<br>This part of the box is waiting for you.</div>';
+  } else {
+    trueMemories.forEach(m=>{
+      html+=`<div class="mem-card">
+        <button class="mc-del" onclick="deleteTrueMemory('${m.id}')" title="Remove this memory">✕</button>
+        <div class="mc-title">${escapeHtml(m.title)}</div>
+        <div class="mc-date">${escapeHtml(m.date)}</div>
+        <div class="mc-text">${escapeHtml(m.text)}</div>
+      </div>`;
+    });
+  }
+  body.innerHTML=html;
+}
+function openMemoryBox(){
+  renderMemoryBox();
+  document.getElementById('membox').classList.add('open'); memboxOpen=true;
+}
+function closeMemoryBox(){ document.getElementById('membox').classList.remove('open'); memboxOpen=false; }
 
 /* ═══════════════════════════════════════════
    EXAMINE ITEM
