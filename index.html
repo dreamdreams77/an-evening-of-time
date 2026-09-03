@@ -447,6 +447,77 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .pl-d::after{content:'';position:absolute;top:10px;left:50%;transform:translateX(-50%);width:14px;height:3px;background:rgba(255,255,255,.25);border-radius:2px}
 .pl-glow{position:absolute;inset:-15px;border-radius:50%;background:radial-gradient(circle,rgba(255,180,220,.12),transparent 70%);animation:fglow 3s ease-in-out infinite}
 
+/* ── ESMA NPC (wishing rabbit) ────── */
+#npc-esma{position:absolute;left:2200px;top:250px;z-index:6;cursor:pointer;display:flex;flex-direction:column;align-items:center}
+.esma-ear-l,.esma-ear-r{position:absolute;top:-22px;width:7px;height:26px;border-radius:50% 50% 20% 20%;
+  background:linear-gradient(180deg,#d8d0c8,#b8a898);border:1px solid rgba(255,255,255,.15)}
+.esma-ear-l{left:6px;transform:rotate(-8deg)}
+.esma-ear-r{right:6px;transform:rotate(8deg)}
+.esma-head{width:26px;height:22px;border-radius:60% 60% 55% 55%;
+  background:radial-gradient(ellipse at 45% 35%,#e8e0d8,#c8bcae);
+  position:relative;margin:0 auto;box-shadow:0 0 10px rgba(80,220,120,.12)}
+.esma-eye-l,.esma-eye-r{position:absolute;top:9px;width:5px;height:5px;border-radius:50%;
+  background:radial-gradient(circle,#a8f0a0 30%,#38c060 65%,#0a3010);
+  box-shadow:0 0 6px rgba(60,220,90,.6)}
+.esma-eye-l{left:4px}.esma-eye-r{right:4px}
+.esma-body{width:24px;height:20px;border-radius:50% 50% 45% 45%;
+  background:linear-gradient(180deg,#d0c6b8,#b0a294);margin:0 auto}
+
+/* ── EUNA NPC (magic snail) ───────── */
+#npc-euna{position:absolute;left:2320px;top:520px;z-index:6;cursor:pointer;display:flex;flex-direction:column;align-items:center}
+.euna-shell{width:22px;height:22px;border-radius:50%;
+  background:conic-gradient(from 200deg,#e85020,#ffd860,#60c878,#60a0e8,#a868d8,#f080b0,#e85020);
+  border:1.5px solid rgba(255,255,255,.25);position:relative;
+  box-shadow:0 0 10px rgba(120,180,255,.15);animation:eunaglow 4s ease-in-out infinite}
+@keyframes eunaglow{0%,100%{filter:brightness(.85)}50%{filter:brightness(1.1)}}
+.euna-body{width:20px;height:8px;border-radius:0 0 60% 60%;
+  background:linear-gradient(180deg,#c8b8a0,#a89880);margin:-2px auto 0}
+.euna-eye-l,.euna-eye-r{position:absolute;top:-6px;width:2px;height:6px;background:#a89880;border-radius:1px}
+.euna-eye-l{left:2px;transform:rotate(-10deg)}.euna-eye-r{right:2px;transform:rotate(10deg)}
+
+/* ── LOCKS NPC (keeps the lantern lit) ── */
+#npc-locks{position:absolute;left:2540px;top:280px;z-index:6;cursor:pointer;display:flex;flex-direction:column;align-items:center}
+.locks-glow{position:absolute;inset:-14px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,210,120,.22),transparent 70%);
+  animation:locksglow 2.6s ease-in-out infinite}
+@keyframes locksglow{0%,100%{opacity:.5}50%{opacity:1}}
+.locks-lantern{width:16px;height:20px;border-radius:30% 30% 50% 50%;
+  background:linear-gradient(180deg,#ffe9a0,#e8a840);
+  border:1.5px solid #a06818;position:relative;margin:0 auto;
+  box-shadow:0 0 16px rgba(255,200,100,.55)}
+.locks-lantern::before{content:'';position:absolute;top:-6px;left:50%;transform:translateX(-50%);
+  width:10px;height:4px;border:1.5px solid #a06818;border-bottom:none;border-radius:6px 6px 0 0}
+.locks-flame{position:absolute;top:5px;left:50%;transform:translateX(-50%);
+  width:5px;height:8px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+  background:radial-gradient(ellipse,#fff8d0,#ffb020 70%);animation:flick 1.4s ease-in-out infinite}
+@keyframes flick{0%,100%{transform:translateX(-50%) scaleY(1)}50%{transform:translateX(-50%) scaleY(.82)}}
+
+/* ── SEITA NPC (pet prawn, dances in teacups) ── */
+#npc-seita{position:absolute;left:2250px;top:620px;z-index:6;cursor:pointer;display:flex;flex-direction:column;align-items:center}
+.seita-cup{width:24px;height:14px;border-radius:0 0 12px 12px;
+  background:linear-gradient(180deg,#f0ece0,#d8d0c0);border:1.5px solid rgba(200,180,140,.5);
+  position:relative;margin-top:10px}
+.seita-body{position:absolute;bottom:6px;left:50%;transform:translateX(-50%) rotate(-12deg);
+  width:16px;height:7px;border-radius:50% 50% 40% 40%;
+  background:linear-gradient(90deg,#f89868,#e86040);
+  animation:seitadance 1.1s ease-in-out infinite}
+@keyframes seitadance{0%,100%{transform:translateX(-50%) rotate(-12deg)}50%{transform:translateX(-50%) rotate(12deg)}}
+.seita-tail{position:absolute;right:-4px;top:50%;transform:translateY(-50%);
+  width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;
+  border-left:6px solid #e86040}
+
+/* ── BOAT MOMMA NPC (sailed far, still loved) ── */
+#npc-boatmomma{position:absolute;left:2550px;top:550px;z-index:6;cursor:pointer;display:flex;flex-direction:column;align-items:center}
+.bm-sail{position:absolute;top:-24px;left:50%;transform:translateX(-50%);
+  width:0;height:0;border-left:14px solid transparent;border-bottom:20px solid rgba(240,236,224,.85);
+  filter:drop-shadow(0 0 6px rgba(200,220,255,.2))}
+.bm-h{width:22px;height:22px;border-radius:50% 50% 45% 45%;
+  background:radial-gradient(ellipse at 44% 38%,#e0b088,#c09068);position:relative;margin:0 auto}
+.bm-cap{position:absolute;top:-5px;left:-2px;right:-2px;height:11px;
+  background:linear-gradient(180deg,#3858a0,#284070);border-radius:50% 50% 10% 10%}
+.bm-d{width:22px;height:30px;border-radius:4px 4px 8px 8px;
+  background:linear-gradient(180deg,#4868a8,#325088);margin:0 auto}
+
 /* ── HUD ─────────────────────────── */
 #hud{position:fixed;top:0;left:0;right:0;z-index:100;
   background:linear-gradient(180deg,rgba(1,5,14,.9),transparent);
@@ -576,6 +647,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 #inv-hdr h2{font-family:'Cinzel',serif;font-size:.76rem;letter-spacing:.15em;text-transform:uppercase;color:#c8b070}
 #inv-close{border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#3a6080;padding:7px 14px;font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.06em;transition:all .2s}
 #inv-close:hover{color:#c8b070}
+#inv-reset{border:1px solid rgba(180,80,80,.18);border-radius:6px;color:#5a3838;padding:7px 12px;font-family:'Cinzel',serif;font-size:.56rem;letter-spacing:.06em;transition:all .2s;margin-right:8px}
+#inv-reset:hover{color:#c87070;border-color:rgba(200,100,100,.4)}
 #inv-body{flex:1;overflow-y:auto;padding:12px 18px}
 .isec{font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.2em;text-transform:uppercase;color:#1a3850;margin:12px 0 5px;padding-bottom:4px;border-bottom:1px solid rgba(255,255,255,.04)}
 .isec:first-child{margin-top:0}
@@ -1450,7 +1523,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   </div>
 
   <!-- Fairyland NPCs -->
-  <div id="npc-dandan" data-npc="dandan">
+  <div class="fairy-npc-hit" id="npc-dandan" data-npc="dandan">
     <div class="nr" style="--rc:rgba(180,220,255,.6)"></div>
     <div class="nl" style="--lc:rgba(180,220,255,.65)">Dan Dan</div>
     <div class="nc" style="position:relative">
@@ -1461,7 +1534,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     </div>
   </div>
 
-  <div id="npc-madge" data-npc="madge">
+  <div class="fairy-npc-hit" id="npc-madge" data-npc="madge">
     <div class="nr" style="--rc:rgba(80,200,70,.6)"></div>
     <div class="nl" style="--lc:rgba(80,220,80,.7)">Madge</div>
     <div class="nc" style="position:relative">
@@ -1472,7 +1545,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     </div>
   </div>
 
-  <div id="npc-lauren" data-npc="lauren">
+  <div class="fairy-npc-hit" id="npc-lauren" data-npc="lauren">
     <div class="nr" style="--rc:rgba(255,180,220,.6)"></div>
     <div class="nl" style="--lc:rgba(255,200,230,.8)">Princess Lauren</div>
     <div class="nc" style="position:relative">
@@ -1480,6 +1553,57 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
       <div class="pl-glow"></div>
       <div class="pl-h"><div class="pl-hair"></div><div class="pl-crown">👑</div><div class="pl-yes"><div class="pl-ye"></div><div class="pl-ye"></div></div><div class="pl-mo"></div></div>
       <div class="pl-d"></div>
+    </div>
+  </div>
+
+  <div class="fairy-npc-hit" id="npc-esma" data-npc="esma">
+    <div class="nr" style="--rc:rgba(100,220,140,.6)"></div>
+    <div class="nl" style="--lc:rgba(100,230,150,.75)">Esma</div>
+    <div class="nc" style="position:relative">
+      <div class="nb" style="background:#38c060">1</div><div class="nd">✓</div>
+      <div class="esma-ear-l"></div><div class="esma-ear-r"></div>
+      <div class="esma-head"><div class="esma-eye-l"></div><div class="esma-eye-r"></div></div>
+      <div class="esma-body"></div>
+    </div>
+  </div>
+
+  <div class="fairy-npc-hit" id="npc-euna" data-npc="euna">
+    <div class="nr" style="--rc:rgba(140,180,255,.6)"></div>
+    <div class="nl" style="--lc:rgba(160,200,255,.75)">Euna</div>
+    <div class="nc" style="position:relative">
+      <div class="nb" style="background:#6090d8">1</div><div class="nd">✓</div>
+      <div class="euna-shell"><div class="euna-eye-l"></div><div class="euna-eye-r"></div></div>
+      <div class="euna-body"></div>
+    </div>
+  </div>
+
+  <div class="fairy-npc-hit" id="npc-locks" data-npc="locks">
+    <div class="nr" style="--rc:rgba(255,200,100,.6)"></div>
+    <div class="nl" style="--lc:rgba(255,215,130,.8)">Locks</div>
+    <div class="nc" style="position:relative">
+      <div class="nb" style="background:#e0a030">1</div><div class="nd">✓</div>
+      <div class="locks-glow"></div>
+      <div class="locks-lantern"><div class="locks-flame"></div></div>
+    </div>
+  </div>
+
+  <div class="fairy-npc-hit" id="npc-seita" data-npc="seita">
+    <div class="nr" style="--rc:rgba(232,96,64,.6)"></div>
+    <div class="nl" style="--lc:rgba(240,120,90,.8)">Seita</div>
+    <div class="nc" style="position:relative">
+      <div class="nb" style="background:#e86040">1</div><div class="nd">✓</div>
+      <div class="seita-cup"><div class="seita-body"><div class="seita-tail"></div></div></div>
+    </div>
+  </div>
+
+  <div class="fairy-npc-hit" id="npc-boatmomma" data-npc="boatmomma">
+    <div class="nr" style="--rc:rgba(80,120,190,.6)"></div>
+    <div class="nl" style="--lc:rgba(110,150,220,.8)">Boat Momma</div>
+    <div class="nc" style="position:relative">
+      <div class="nb" style="background:#3858a0">1</div><div class="nd">✓</div>
+      <div class="bm-sail"></div>
+      <div class="bm-h"><div class="bm-cap"></div></div>
+      <div class="bm-d"></div>
     </div>
   </div>
 
@@ -1533,7 +1657,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 <!-- HUD -->
 <div id="hud">
   <div id="hud-ch">Chapter: <em id="hud-cname">Moonlit Arrival</em></div>
-  <div id="hud-ct">0 / 29</div>
+  <div id="hud-ct">0 / 34</div>
 </div>
 <button id="inv-btn" onclick="openInv()">✦ Collection</button>
 <button id="mem-btn" onclick="openMemoryBox()">🎁 Memory Box</button>
@@ -1665,7 +1789,7 @@ It has been waiting for you to be ready.</div>
 
 <!-- INVENTORY -->
 <div id="scr-inv">
-  <div id="inv-hdr"><h2>✦ DJ Daddy Cool's Collection</h2><button id="inv-close" onclick="closeInv()">✕ Close</button></div>
+  <div id="inv-hdr"><h2>✦ DJ Daddy Cool's Collection</h2><div><button id="inv-reset" onclick="confirmResetProgress()">↺ Start Over</button><button id="inv-close" onclick="closeInv()">✕ Close</button></div></div>
   <div id="inv-body"></div>
 </div>
 
@@ -2079,6 +2203,56 @@ const ITEMS=[
      {who:'BROSKI',txt:'"No plans," he shrugs.\n\n"Just us and the road. That\'s the whole plan, actually."'},
      {who:'DJ DADDY COOL',txt:'Some friendships don\'t need an agenda.\n\nJust a beer, a car, and someone who says "let\'s go" and means it.'},
    ]},
+  // ── Esma — WISH
+  {id:'wish',e:'🌟',name:'Emerald Wish',from:'Esma',giver:'esma',
+   meaning:'Hope that finds you even at the edge of the dark — a small good thing to wish for.',
+   hidden:'Even in shadow, something gentle stays close.',
+   unlocks:"Esma's Wishing Path",
+   pages:[
+     {who:'ESMA',txt:'Her ears swivel toward you before you\'ve even said a word.'},
+     {who:'ESMA',txt:'Emerald eyes, steady and certain. "I live near the shadow on purpose," she says. "Someone gentle should be nearby."'},
+     {who:'DJ DADDY COOL',txt:'You didn\'t know you needed a rabbit with emerald eyes. Turns out you did.'},
+   ]},
+  // ── Euna — QUIET SECRET
+  {id:'quietsecret',e:'🌈',name:'Rainbow Shell Sliver',from:'Euna',giver:'euna',
+   meaning:'A quiet secret, and the slow magic of an ordinary afternoon.',
+   hidden:"Not everything has to be fast to be real.",
+   unlocks:"Euna's Teacup Window",
+   pages:[
+     {who:'EUNA',txt:'Tucked in tight, small and slow, perfectly content to stay that way.'},
+     {who:'EUNA',txt:'She gives the smallest shiver of a laugh — the kind only the people paying close attention ever notice.'},
+     {who:'DJ DADDY COOL',txt:'You\'re learning to notice the small laughs now. That\'s new. That\'s good.'},
+   ]},
+  // ── Locks — LANTERN
+  {id:'lantern',e:'🏮',name:'Steady Lantern',from:'Locks',giver:'locks',
+   meaning:"Steadiness — the light someone keeps lit for you, without ever asking to be thanked.",
+   hidden:"I'll keep it burning as long as you need it.",
+   unlocks:"Locks' Watch",
+   pages:[
+     {who:'LOCKS',txt:'She doesn\'t say much. She just keeps the flame from going out.'},
+     {who:'LOCKS',txt:'Steady hands, steady light — the kind of beautiful that doesn\'t need announcing.'},
+     {who:'DJ DADDY COOL',txt:'Some people are the lantern. Not the fire, not the storm. Just the light that stays.'},
+   ]},
+  // ── Seita — TEACUP
+  {id:'teacup',e:'🍵',name:'Dancing Teacup',from:'Seita',giver:'seita',
+   meaning:'Playfulness, silliness — the enthusiasm that keeps you afloat when nothing is graceful.',
+   hidden:'Dance badly. Dance anyway.',
+   unlocks:"Seita's Splash",
+   pages:[
+     {who:'SEITA',txt:'He does a dramatic flip. Half the tea ends up on the ground. He doesn\'t care even a little.'},
+     {who:'SEITA',txt:'Not graceful. Never graceful. Enthusiastic, though — always enthusiastic.'},
+     {who:'DJ DADDY COOL',txt:'You laugh before you decide to. That\'s the whole point of him.'},
+   ]},
+  // ── Boat Momma — COMPASS
+  {id:'compass',e:'🧭',name:'Old Compass',from:'Boat Momma',giver:'boatmomma',
+   meaning:"Distance that doesn't undo love — the ones who sailed far and are still, somehow, still yours.",
+   hidden:"Far away isn't the same as gone.",
+   unlocks:"Boat Momma's Harbor",
+   pages:[
+     {who:'BOAT MOMMA',txt:'She sailed far once. Everyone remembers that part.'},
+     {who:'BOAT MOMMA',txt:'What they forget to mention: she came back with a compass, and gave it to the first person who looked like they were also finding their way home.'},
+     {who:'DJ DADDY COOL',txt:'Still loved. Even from far away. Especially from far away.'},
+   ]},
 ];
 
 /* ── FAIRYLAND NPCs ─── */
@@ -2118,6 +2292,58 @@ const FAIRY_NPCS={
       {who:'✦ FAIRYLAND',txt:'She never said a single thing she didn\'t mean.\n\nAnd Fairy believed her completely. Every time.',isHidden:true,
        hidden:'She said: "I know spells. Real ones. The kind only a princess is allowed to know. Sometimes they\'re in other languages. That\'s how you know they\'re strong."'}
     ]},
+  esma:{
+    name:'ESMA',
+    pages:[
+      {who:'ESMA',txt:'Soft grey fur. Two long ears that swivel toward you before you\'ve even said a word.\n\nAnd eyes the color of new spring leaves — a bright, certain emerald green.'},
+      {who:'ESMA',txt:'"You found the shadow\'s edge," she says. "Most people don\'t come this close on purpose."'},
+      {who:'ESMA',txt:'"I live here on purpose too," she tells you. "Someone gentle should be nearby — for anyone passing through who feels a little lost, or a little scared, or just wants one small good thing to wish for."'},
+      {who:'ESMA',txt:'A turtle once told her, without asking: "You are the wishing rabbit." She didn\'t argue. It was true.'},
+      {who:'DJ DADDY COOL',txt:'A rabbit who chose to live at the edge of the dark, on purpose, so no one would have to pass through it alone.'},
+      {who:'✦ FAIRYLAND',txt:'Esma never once made anyone feel silly for being afraid of the Shadow Woods.\n\nShe just sat close by, emerald-eyed and certain, until the fear got smaller.',isHidden:true,
+       hidden:'Even in shadow, something gentle stays close. That was always true. It still is.'}
+    ]},
+  euna:{
+    name:'EUNA',
+    pages:[
+      {who:'EUNA',txt:'Small and slow and perfectly content to stay that way.\n\nMost of the time you\'d only ever see the curve of her shell, tucked in tight, waiting patiently for whatever came next.'},
+      {who:'EUNA',txt:'She lives down by the teacup window, where a certain dancing prawn has lived for as long as anyone can remember.'},
+      {who:'EUNA',txt:'She keeps a quiet secret. She isn\'t telling you what it is. But she gives the smallest shiver of a laugh — the kind only someone paying very close attention would ever notice.'},
+      {who:'DJ DADDY COOL',txt:'You noticed. That\'s the whole trick with Euna — not being fast, just being close enough, and quiet enough, to catch it.'},
+      {who:'✦ FAIRYLAND',txt:'A quiet secret, and the slow magic of an ordinary afternoon.',isHidden:true,
+       hidden:'Not everything has to be fast to be real. Euna knew that before anyone had to tell her.'}
+    ]},
+  locks:{
+    name:'LOCKS',
+    pages:[
+      {who:'LOCKS',txt:'She doesn\'t say much. She never has to.\n\nShe just keeps the flame from going out — steady hands, steady light, the kind of beautiful that doesn\'t need announcing.'},
+      {who:'LOCKS',txt:'You\'ve walked past her lantern before without noticing it was ever lit by anyone in particular.'},
+      {who:'LOCKS',txt:'It was her. It was always her.'},
+      {who:'DJ DADDY COOL',txt:'Some people are the lantern. Not the fire, not the storm. Just the light that stays — long after everyone else has stopped watching for it.'},
+      {who:'✦ FAIRYLAND',txt:'Locks never asked to be thanked for the light. She just kept it burning anyway.',isHidden:true,
+       hidden:'I\'ll keep it burning as long as you need it. That was never a maybe.'}
+    ]},
+  seita:{
+    name:'SEITA',
+    pages:[
+      {who:'SEITA',txt:'He decides the teacup needs dancing in. So he dances in it.'},
+      {who:'SEITA',txt:'Not graceful, exactly — all quick little turns and one dramatic flip that splashes tea everywhere. He does not care even a little.'},
+      {who:'SEITA',txt:'Somewhere close by, tucked in her shell, Euna gives the smallest shiver of a laugh. He\'s the only one who ever notices it.'},
+      {who:'DJ DADDY COOL',txt:'Not graceful. Never graceful. Enthusiastic, though — always enthusiastic. You laugh before you decide to. That\'s the whole point of him.'},
+      {who:'✦ FAIRYLAND',txt:'A kookaburra laughing, a prawn dancing in a teacup — Seita never once let an afternoon stay quiet for long.',isHidden:true,
+       hidden:'Dance badly. Dance anyway. He never learned any other way to do it, and he was right not to.'}
+    ]},
+  boatmomma:{
+    name:'BOAT MOMMA',
+    pages:[
+      {who:'BOAT MOMMA',txt:'She sailed far once. Everyone remembers that part.'},
+      {who:'BOAT MOMMA',txt:'What they forget to mention: she came back. She always comes back.'},
+      {who:'BOAT MOMMA',txt:'She loves a princess who loves a fairy more than almost anything else in the world — and everyone agrees, without exception, never to mention her singing.'},
+      {who:'BOAT MOMMA',txt:'"Far away," she says, "isn\'t the same as gone." She hands you something small and worn, like she\'s been carrying it for exactly this moment.'},
+      {who:'DJ DADDY COOL',txt:'Still loved. Even from far away. Especially from far away — that\'s the whole shape of what she\'s telling you.'},
+      {who:'✦ FAIRYLAND',txt:'She sailed far, once. She still came home to the people who were waiting.',isHidden:true,
+       hidden:'Far away isn\'t the same as gone. She meant it every single time she said it.'}
+    ]},
 };
 
 const CHAPTERS=[
@@ -2136,7 +2362,7 @@ const CHAPTERS=[
   {n:7,icon:'🎛️',name:'DJ Daddy Cool',req:'djspintable',
    intro:'The music was playing before you arrived.\n\nThis has always been your chapter.\n\nYou are the fairy too.'},
   {n:8,icon:'🌿',name:'The Green Woods',req:'key',
-   intro:'Beyond the moonlit world lies another.\n\nFairyland is real.\n\nDanDan has been collecting a gem for you. Madge has been blinking. Princess Lauren has been waiting at the gate.\n\nWalk through.'},
+   intro:'Beyond the moonlit world lies another.\n\nFairyland is real.\n\nDanDan has been collecting a gem for you. Madge has been blinking. Princess Lauren has been waiting at the gate.\n\nSo has everyone else who ever loved a fairy.\n\nWalk through.'},
   {n:9,icon:'✨',name:'The Final Chapter',req:'fairysparkle',
    intro:'Every item. Every message. Every person.\n\nThey were all here for you.\n\nThey still are.\n\nThat is the whole point. That is enough.'},
 ];
@@ -2154,13 +2380,20 @@ const NPC_ITEMS={
   dandan:['fairydust'],
   lauren:['mirror'],
   broski:['beer'],
+  esma:['wish'],
+  euna:['quietsecret'],
+  locks:['lantern'],
+  seita:['teacup'],
+  boatmomma:['compass'],
 };
-const NPC_NAMES={boy:'LITTLELOVE',opshop:'THE OP-SHOP WOMAN',smile:'THE SMILE WOMAN',tall:'THE POETIC WOMAN',wise:'THE WISE WOMAN',dj:'DJ DADDY COOL',willow:'THE WILLOW',moon:'THE MOON',fairy:'THE FAIRY',dandan:'DAN DAN',madge:'MADGE',lauren:'PRINCESS LAUREN',broski:'BROSKI'};
+const NPC_NAMES={boy:'LITTLELOVE',opshop:'THE OP-SHOP WOMAN',smile:'THE SMILE WOMAN',tall:'THE POETIC WOMAN',wise:'THE WISE WOMAN',dj:'DJ DADDY COOL',willow:'THE WILLOW',moon:'THE MOON',fairy:'THE FAIRY',dandan:'DAN DAN',madge:'MADGE',lauren:'PRINCESS LAUREN',broski:'BROSKI',esma:'ESMA',euna:'EUNA',locks:'LOCKS',seita:'SEITA',boatmomma:'BOAT MOMMA'};
 const NPC_POS={
   boy:{x:410,y:390},opshop:{x:740,y:390},smile:{x:890,y:390},tall:{x:1110,y:390},
   wise:{x:1545,y:390},broski:{x:1690,y:420},dj:{x:1800,y:390},
   willow:{x:140,y:390},moon:{x:240,y:105},fairy:{x:236,y:250},
   dandan:{x:2285,y:380},madge:{x:2370,y:420},lauren:{x:2455,y:360},
+  esma:{x:2200,y:250},euna:{x:2320,y:520},locks:{x:2540,y:280},
+  seita:{x:2250,y:620},boatmomma:{x:2550,y:550},
 };
 
 /* ══ STATE ══════════════════════════════════════════════════ */
@@ -2174,6 +2407,55 @@ let curDX=0,curDY=0;
 const SPD=3.8;
 const KEYS={},JOY={dx:0,dy:0};
 let inFairyland=false;
+
+/* ══ SAVE / LOAD PROGRESS ══════════════════════════════════
+   The evening used to reset completely on every reload. This
+   keeps you where you left off — inventory, chapter, defeated
+   dragons, the café's one-time intro line, and roughly where
+   you were standing. The Memory Box (its own tokens + written
+   memories) already persisted on its own and is untouched by
+   this — a "Start Over" only clears the story progress below,
+   never what's in the box.
+════════════════════════════════════════════════════════════ */
+const SAVE_KEY='eot_progress';
+function saveProgress(){
+  try{
+    localStorage.setItem(SAVE_KEY,JSON.stringify({
+      inv,unlocked,chapIdx,PX,PY,
+      dragonsDefeated:DRAGONS.map(d=>d.defeated),
+      cafeEntered,
+    }));
+  }catch(e){ /* storage unavailable — progress just won't persist */ }
+}
+function loadProgress(){
+  try{
+    const raw=localStorage.getItem(SAVE_KEY);
+    if(!raw)return false;
+    const s=JSON.parse(raw);
+    if(!s||!Array.isArray(s.inv)||!s.inv.length)return false;
+    inv=s.inv;unlocked=Array.isArray(s.unlocked)?s.unlocked:[];
+    chapIdx=Number.isInteger(s.chapIdx)?s.chapIdx:0;
+    if(typeof s.PX==='number'){PX=PTX=s.PX;}
+    if(typeof s.PY==='number'){PY=PTY=s.PY;}
+    if(Array.isArray(s.dragonsDefeated)){
+      DRAGONS.forEach((d,i)=>{if(s.dragonsDefeated[i])d.defeated=true;});
+    }
+    cafeEntered=!!s.cafeEntered;
+    return true;
+  }catch(e){ return false; }
+}
+function confirmResetProgress(){
+  if(confirm("Start the evening over from the beginning?\n\nThis clears your collected items, chapter, and dragon progress. Everything in the Memory Box stays exactly as you left it.")){
+    // clear the live state too, not just storage — the beforeunload handler
+    // fires during this very reload, and would otherwise re-save the
+    // still-in-memory (pre-reset) progress right back over the clear
+    inv=[];unlocked=[];chapIdx=0;
+    DRAGONS.forEach(d=>{d.defeated=false;});
+    cafeEntered=false;
+    try{localStorage.removeItem(SAVE_KEY);}catch(e){}
+    location.reload();
+  }
+}
 
 /* ══ TITLE → GAME ══════════════════════════════════════════ */
 (function buildTitleStars(){
@@ -2190,8 +2472,14 @@ function gotoGame(){
   document.getElementById('scr-title').style.display='none';
   document.getElementById('scr-game').classList.add('show');
   buildWorldStars();buildFireflies();
+  const resumed=loadProgress();
+  updateBadges();
+  document.getElementById('hud-cname').textContent=CHAPTERS[chapIdx].name;
+  document.getElementById('hud-ct').textContent=inv.length+' / '+ITEMS.length;
   updateCam();requestAnimationFrame(loop);
-  setTimeout(()=>showChapterCard(CHAPTERS[0]),600);
+  setTimeout(()=>showChapterCard(CHAPTERS[resumed?chapIdx:0]),600);
+  setInterval(saveProgress,4000);
+  window.addEventListener('beforeunload',saveProgress);
 }
 
 function buildWorldStars(){
@@ -2326,7 +2614,7 @@ document.addEventListener('keyup',e=>{if(typingInField(e))return;delete KEYS[e.k
 
 function worldWalkTo(target,clientX,clientY){
   if(dlgOpen)return;
-  if(target.closest('.npc')||target.closest('#fairyland-portal')||target.closest('#npc-dandan')||target.closest('#npc-madge')||target.closest('#npc-lauren')||target.closest('.mbox-wrap')||target.closest('#joystick'))return;
+  if(target.closest('.npc')||target.closest('#fairyland-portal')||target.closest('.fairy-npc-hit')||target.closest('.mbox-wrap')||target.closest('#joystick'))return;
   const cx=Math.max(0,Math.min(2600-window.innerWidth,PX-window.innerWidth/2));
   const cy=Math.max(0,Math.min(900-window.innerHeight,PY-window.innerHeight/2));
   PATH_QUEUE=[];
@@ -2378,9 +2666,8 @@ document.querySelectorAll('.npc').forEach(el=>{
   });
 });
 
-['npc-dandan','npc-madge','npc-lauren'].forEach(id=>{
-  const el=document.getElementById(id);
-  if(el)el.addEventListener('click',e=>{
+document.querySelectorAll('.fairy-npc-hit').forEach(el=>{
+  el.addEventListener('click',e=>{
     e.stopPropagation();
     const npcid=el.dataset.npc;
     const p=NPC_POS[npcid];if(p){PTX=p.x;PTY=p.y;}
@@ -2538,7 +2825,7 @@ function dlgNext(){
   if(dlgIdx>=dlgPages.length-1){
     if(dlgItem){
       if(dlgItem.isFairy){
-        if(!inv.includes(dlgItem.id)){inv.push(dlgItem.id);updateBadges();}
+        if(!inv.includes(dlgItem.id)){inv.push(dlgItem.id);updateBadges();saveProgress();}
         const el=document.getElementById('npc-'+dlgItem.npcId);if(el)el.classList.add('done');
       } else {
         collectItem(dlgItem);
@@ -2558,8 +2845,8 @@ function collectItem(item){
   inv.push(item.id);
   unlocked.push(item.unlocks);
   if(item.id==='fairysparkle')doSparkles();
-  document.getElementById('hud-ct').textContent=inv.length+' / 29';
-  updateBadges();checkChap();
+  document.getElementById('hud-ct').textContent=inv.length+' / '+ITEMS.length;
+  updateBadges();checkChap();saveProgress();
 }
 function updateBadges(){
   for(const [id,items] of Object.entries(NPC_ITEMS)){
@@ -2619,6 +2906,11 @@ function openInv(){
       {k:'fairy',l:'From The Fairy'},
       {k:'dandan',l:'From Dan Dan'},
       {k:'lauren',l:'From Princess Lauren'},
+      {k:'esma',l:'From Esma'},
+      {k:'euna',l:'From Euna'},
+      {k:'locks',l:'From Locks'},
+      {k:'seita',l:'From Seita'},
+      {k:'boatmomma',l:'From Boat Momma'},
     ];
     let html='';
     givers.forEach(gv=>{
@@ -2751,7 +3043,7 @@ let cafeEntered=false;
 function openCafe(){
   document.getElementById('scr-cafe').classList.add('open');
   if(!dlgOpen&&!cafeEntered){
-    cafeEntered=true;
+    cafeEntered=true;saveProgress();
     dlgPages=[{who:'DJ DADDY COOL',txt:'The smell of coffee and warm butter hits him first.\n\n"I\'m getting the Baked Eggs," he says, already scanning for her at their table.'}];
     dlgItem=null;dlgIdx=0;buildDots();
     document.getElementById('dlg-hidden').classList.remove('show');
@@ -2956,6 +3248,7 @@ function dragonTurn(){
 function bVictory(){
   const dr=battleState.dragon;
   dr.defeated=true;
+  saveProgress();
   // remove zone marker
   const zn=document.getElementById('dzn-'+dr.id);
   if(zn)zn.style.display='none';
@@ -3004,6 +3297,11 @@ const FINALE_LINES=[
   {who:'DAN DAN',line:'"We love you, DJ Daddy Cool." Still invisible. Still here. Still meaning it.'},
   {who:'MADGE',line:'"We love you, DJ Daddy Cool." She blinks once, slowly. That\'s the whole sentence.'},
   {who:'PRINCESS LAUREN',line:'"We love you, DJ Daddy Cool." She says it like a spell — the real kind, the kind only a princess knows.'},
+  {who:'ESMA',line:'"We love you, DJ Daddy Cool." Ears swiveled toward you, emerald eyes steady, like she\'s been rehearsing it.'},
+  {who:'EUNA',line:'"We love you, DJ Daddy Cool." The smallest shiver of a laugh. You\'re the only one who ever catches it.'},
+  {who:'LOCKS',line:'"We love you, DJ Daddy Cool." Said quietly, the way she says everything — and meant all the way through.'},
+  {who:'SEITA',line:'"We love you, DJ Daddy Cool." Does a dramatic flip on the way out, just because he can.'},
+  {who:'BOAT MOMMA',line:'"We love you, DJ Daddy Cool." Far away isn\'t the same as gone. She\'s here. She stayed.'},
 ];
 function showFinale(){
   const el=document.getElementById('fin-lineup');

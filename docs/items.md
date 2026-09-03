@@ -1,6 +1,8 @@
 # Characters & Items — An Evening of Time
 
-29 items across the characters below, plus three more from Fairyland (DanDan, Madge, and Princess Lauren — reached through the portal at the far east edge of the world) who each give a short introduction before their gift. This file is a plain-text reference for everything `index.html` collects; the game itself is the source of truth if the two ever drift.
+34 items across the characters below, plus Madge, who is reached through the Fairyland portal like the rest but gives a moment rather than an item. This file is a plain-text reference for everything `index.html` collects; the game itself is the source of truth if the two ever drift.
+
+Eight characters — DanDan, Madge, Princess Lauren, Esma, Euna, Locks, Seita, and Boat Momma, marked **(Fairyland)** below — live past the portal at the far east edge of the world and each give a short introduction before their gift (a second visit is needed to actually receive it).
 
 ## LittleLove
 
@@ -164,6 +166,41 @@
 - **Hidden message:** "You're also the fairy. You always were. I just don't think anyone said it out loud before."
 - **Unlocks:** Lauren's Mirror
 
+## Esma (Fairyland)
+
+### 🌟 Emerald Wish
+- **Meaning:** Hope that finds you even at the edge of the dark — a small good thing to wish for.
+- **Hidden message:** "Even in shadow, something gentle stays close."
+- **Unlocks:** Esma's Wishing Path
+
+## Euna (Fairyland)
+
+### 🌈 Rainbow Shell Sliver
+- **Meaning:** A quiet secret, and the slow magic of an ordinary afternoon.
+- **Hidden message:** "Not everything has to be fast to be real."
+- **Unlocks:** Euna's Teacup Window
+
+## Locks (Fairyland)
+
+### 🏮 Steady Lantern
+- **Meaning:** Steadiness — the light someone keeps lit for you, without ever asking to be thanked.
+- **Hidden message:** "I'll keep it burning as long as you need it."
+- **Unlocks:** Locks' Watch
+
+## Seita (Fairyland)
+
+### 🍵 Dancing Teacup
+- **Meaning:** Playfulness, silliness — the enthusiasm that keeps you afloat when nothing is graceful.
+- **Hidden message:** "Dance badly. Dance anyway."
+- **Unlocks:** Seita's Splash
+
+## Boat Momma (Fairyland)
+
+### 🧭 Old Compass
+- **Meaning:** Distance that doesn't undo love — the ones who sailed far and are still, somehow, still yours.
+- **Hidden message:** "Far away isn't the same as gone."
+- **Unlocks:** Boat Momma's Harbor
+
 ## Broski
 
 ### 🍺 Cold Beer
@@ -173,7 +210,7 @@
 
 ## Madge (Fairyland)
 
-Madge doesn't give an item — she gives a moment. Reached through the fairyland portal, same as DanDan and Princess Lauren.
+Madge doesn't give an item — she gives a moment. Reached through the fairyland portal, same as the others.
 
 ## Chapters
 

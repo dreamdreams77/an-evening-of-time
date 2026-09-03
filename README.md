@@ -20,13 +20,17 @@ If you see an old cached version: add `?v=2` to the URL, or open in a private/in
 - On touch devices, a **joystick** (bottom-left) and a **✦ Talk** button (bottom-right) appear automatically
 - **Space / Enter**, or walking up to someone glowing, to speak with them
 - **Tap through pages** in the dialogue
-- **✦ Collection** button to review everything you've found
-- **🎁 Memory Box** — a chest sitting in the world (walk up and tap it, or use the HUD button). Place collected tokens inside, and write down real memories of your own. This is the one thing in the game that's saved (in the browser's local storage) between visits — everything else (your position, your inventory, your chapter, defeated dragons) resets on reload, by design.
+- **✦ Collection** button to review everything you've found — also has a **↺ Start Over** link if you want a clean slate
+- **🎁 Memory Box** — a chest sitting in the world (walk up and tap it, or use the HUD button). Place collected tokens inside, and write down real memories of your own.
+
+## Your progress is saved
+
+Your inventory, chapter, defeated dragons, and roughly where you were standing all persist in the browser's local storage — close the tab and come back, and you'll pick up right where you left off, chapter card and all. The Memory Box (its tokens and anything you've written) is saved separately and is untouched even if you use **↺ Start Over** in the Collection panel to reset the story itself. Progress is per-browser, not synced anywhere — clearing site data or switching browsers starts fresh.
 
 ## The world
 
-Walking east from the starting willow takes you past the Op-Shop and the Sunday Café (both enterable — tap their doors) and three dragon encounters, before reaching a portal into Fairyland, where DanDan, Madge, and Princess Lauren are waiting. Beat the third dragon to trigger the sunrise finale.
+Walking east from the starting willow takes you past the Op-Shop and the Sunday Café (both enterable — tap their doors) and three dragon encounters, before reaching a portal into Fairyland, where DanDan, Madge, Princess Lauren, Esma, Euna, Locks, Seita, and Boat Momma are all waiting. Beat the third dragon to trigger the sunrise finale.
 
 ## Characters & Items
 
-29 items across 12 characters (plus Madge, who gives a moment rather than an item). See `docs/items.md` for the full reference, including chapter unlock order and the three dragon encounters.
+34 items across 17 characters (plus Madge, who gives a moment rather than an item). See `docs/items.md` for the full reference, including chapter unlock order and the three dragon encounters.
