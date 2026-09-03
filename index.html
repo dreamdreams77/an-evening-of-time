@@ -512,7 +512,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 #dgate-hint.show{opacity:1}
 
 /* ── DIALOGUE ────────────────────── */
-#dlg{position:fixed;bottom:0;left:0;right:0;z-index:200;
+#dlg{position:fixed;bottom:0;left:0;right:0;z-index:860;
   background:linear-gradient(0deg,rgba(1,4,14,.99) 40%,rgba(2,7,22,.97) 80%,transparent);
   padding:18px 20px 16px;
   transform:translateY(102%);transition:transform .36s cubic-bezier(.22,.8,.25,1)}
@@ -556,7 +556,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
 /* ── JOYSTICK ─────────────────────── */
 #joystick{position:fixed;bottom:24px;left:22px;z-index:150;touch-action:none;display:none}
-@media(pointer:coarse){#joystick,#talkbtn{display:flex}}
 #joy-base{width:76px;height:76px;border-radius:50%;
   background:rgba(1,6,20,.55);border:2px solid rgba(100,160,220,.18);
   position:relative;display:flex;align-items:center;justify-content:center}
@@ -567,6 +566,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   background:rgba(200,176,112,.13);border:2px solid rgba(200,176,112,.32);
   color:#c8b070;font-family:'Cinzel',serif;font-size:.5rem;
   flex-direction:column;align-items:center;justify-content:center;display:none}
+/* must come after both base rules above so display:flex actually wins on coarse-pointer devices */
+@media(pointer:coarse){#joystick,#talkbtn{display:flex}}
 
 /* ── INVENTORY ───────────────────── */
 #scr-inv{position:fixed;inset:0;z-index:600;background:rgba(1,4,14,.98);display:none;flex-direction:column}
@@ -1539,15 +1540,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 <div id="prompt">Press Space or tap ✦ to speak</div>
 <div id="dgate-hint"></div>
 
-<!-- Dialogue -->
-<div id="dlg">
-  <div id="dlg-who"><div id="dlg-dot"></div><span id="dlg-speaker"></span></div>
-  <div id="dlg-txt"><span id="dlg-words"></span><span id="dlg-caret"></span></div>
-  <div id="dlg-hidden"><div id="dlg-hlbl">✦ Hidden Message</div><div id="dlg-htxt"></div><div id="dlg-hmean"></div></div>
-  <div id="dlg-item"><div id="dlg-item-icon"></div><div><div id="dlg-item-nm"></div><div id="dlg-item-fr"></div></div></div>
-  <div id="dlg-nav"><div id="dlg-dots"></div><button id="dlg-btn" onclick="dlgNext()">Continue →</button></div>
-</div>
-
 <!-- Mobile -->
 <div id="joystick"><div id="joy-base"><div id="joy-knob"></div></div></div>
 <button id="talkbtn" onclick="tryInteract()">✦<br>Talk</button>
@@ -1646,6 +1638,21 @@ It has been waiting for you to be ready.</div>
 </div>
 
 </div><!-- /scr-game -->
+
+<!-- Dialogue — deliberately a sibling of #scr-game, not nested inside it: #scr-game
+     is position:fixed (which always creates its own stacking context, even with
+     z-index:auto), so a #dlg nested inside it can never out-rank a root-level
+     sibling like #scr-cafe/#scr-opshop no matter how high #dlg's own z-index is
+     set. As a root-level sibling, #dlg's z-index (860) now compares directly
+     against theirs (850), so dialogue correctly shows above the café/shop scenes
+     that can open it (the café's entry line, talking to the Wise Woman there). -->
+<div id="dlg">
+  <div id="dlg-who"><div id="dlg-dot"></div><span id="dlg-speaker"></span></div>
+  <div id="dlg-txt"><span id="dlg-words"></span><span id="dlg-caret"></span></div>
+  <div id="dlg-hidden"><div id="dlg-hlbl">✦ Hidden Message</div><div id="dlg-htxt"></div><div id="dlg-hmean"></div></div>
+  <div id="dlg-item"><div id="dlg-item-icon"></div><div><div id="dlg-item-nm"></div><div id="dlg-item-fr"></div></div></div>
+  <div id="dlg-nav"><div id="dlg-dots"></div><button id="dlg-btn" onclick="dlgNext()">Continue →</button></div>
+</div>
 
 <!-- FINALE: SUNRISE LINE-UP -->
 <div id="scr-finale">
@@ -2278,8 +2285,10 @@ function checkNear(){
     if(nearNPC){const e=document.getElementById('npc-'+nearNPC);if(e)e.classList.remove('near');}
     nearNPC=found;
     if(nearNPC){const e=document.getElementById('npc-'+nearNPC);if(e)e.classList.add('near');}
-    document.getElementById('prompt').classList.toggle('show',!!nearNPC);
   }
+  // re-checked every frame (not just on change) so the prompt hides the instant
+  // a conversation opens, instead of lingering and overlapping the dialogue box
+  document.getElementById('prompt').classList.toggle('show',!!nearNPC&&!dlgOpen);
 }
 
 let dgateShownFor=null,dgateTimer=null;
@@ -2297,7 +2306,14 @@ function showDragonGateHint(dr){
 }
 
 /* ══ INPUT ═════════════════════════════════════════════════ */
+// while typing in a text field (Memory Box, etc.) keys should type normally —
+// not walk the player around or eat spacebar/enter as "advance dialogue"
+function typingInField(e){
+  const t=e.target;
+  return t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable);
+}
 document.addEventListener('keydown',e=>{
+  if(typingInField(e))return;
   KEYS[e.key]=true;
   if(e.key===' '||e.key==='Enter'){
     e.preventDefault();
@@ -2306,7 +2322,7 @@ document.addEventListener('keydown',e=>{
   }
   if(e.key==='Escape'&&dlgOpen)closeDlg();
 });
-document.addEventListener('keyup',e=>{delete KEYS[e.key];});
+document.addEventListener('keyup',e=>{if(typingInField(e))return;delete KEYS[e.key];});
 
 function worldWalkTo(target,clientX,clientY){
   if(dlgOpen)return;
@@ -2559,8 +2575,17 @@ function checkChap(){
   if(!nx.req||inv.includes(nx.req)){
     chapIdx++;
     document.getElementById('hud-cname').textContent=CHAPTERS[chapIdx].name;
-    setTimeout(()=>showChapterCard(CHAPTERS[chapIdx]),700);
+    queueChapterCard(CHAPTERS[chapIdx]);
   }
+}
+// waits for any open dialogue or battle to finish before showing the chapter
+// card, so it never silently covers (and blocks input to) something the
+// player is already in the middle of
+function queueChapterCard(ch){
+  setTimeout(function tryShow(){
+    if(dlgOpen||battleState.open){setTimeout(tryShow,300);return;}
+    showChapterCard(ch);
+  },700);
 }
 
 /* ══ CHAPTER CARD ══════════════════════════════════════════ */
