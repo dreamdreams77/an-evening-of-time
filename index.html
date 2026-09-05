@@ -76,11 +76,43 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 /* FFVII style: narrow tall viewport, 2D side-scrolling feel */
 #world{
   position:absolute;
-  width:2600px;height:900px;
+  width:2600px;height:900px;z-index:5;
+  will-change:transform;
   /* FFVII-style layered bg */
   background:
     /* sky gradient */
     linear-gradient(180deg,#01030e 0%,#050b1e 25%,#071520 40%,#071008 55%,#04080a 70%,#020608 100%);
+}
+/* ── PARALLAX DEPTH LAYERS ──────────
+   Children of #world (so they sit on top of its sky gradient, behind
+   the ground/characters), but given their own counter-transform in
+   updateCam() each frame so they visually scroll slower than the
+   foreground — the classic 2D depth-of-field trick. Tileable via
+   background-repeat so they never run out of hillside at any camera
+   position. */
+/* negative z-index guarantees these sit behind every other child of #world
+   (ground/path/trees/characters), regardless of those elements' own
+   z-index:auto vs explicit stacking — no need to audit every one of them */
+#parallax-far{
+  /* box bottom edge (top+height) lines up with #ground's top edge (580px) so
+     the ellipses, anchored "at 100%" of THIS box, peak right at the horizon
+     instead of down inside the ground plane where they'd be invisible */
+  position:absolute;left:0;top:390px;width:9000px;height:190px;z-index:-2;
+  pointer-events:none;will-change:transform;
+  background-image:
+    radial-gradient(ellipse 240px 160px at 20% 100%,rgba(70,105,158,.8),transparent 72%),
+    radial-gradient(ellipse 280px 175px at 65% 100%,rgba(58,88,138,.75),transparent 72%);
+  background-repeat:repeat-x;background-size:560px 100%;background-position:bottom left;
+}
+#parallax-mid{
+  /* sits a little lower / bolder than the far layer — closer hills, slightly
+     overlapping the ground's top edge for a natural blended horizon */
+  position:absolute;left:0;top:460px;width:9000px;height:150px;z-index:-1;
+  pointer-events:none;will-change:transform;
+  background-image:
+    radial-gradient(ellipse 210px 130px at 14% 100%,rgba(26,74,42,.88),transparent 72%),
+    radial-gradient(ellipse 250px 145px at 58% 100%,rgba(30,82,46,.82),transparent 72%);
+  background-repeat:repeat-x;background-size:440px 100%;background-position:bottom left;
 }
 /* Ground plane — FFVII style flat perspective */
 #ground{
@@ -198,7 +230,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
 /* ── DJ DADDY COOL ─────────────────── */
 /* Silver/white hair, dark brows, beard, navy, gold shoes */
-#player{position:absolute;z-index:9;display:flex;flex-direction:column;align-items:center;pointer-events:none}
+#player{position:absolute;left:0;top:0;z-index:9;display:flex;flex-direction:column;align-items:center;pointer-events:none;will-change:transform}
 .dj-label{font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.12em;text-transform:uppercase;
   color:#c8b070;background:rgba(1,5,14,.8);padding:2px 8px;border-radius:10px;margin-bottom:3px}
 
@@ -1224,6 +1256,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 <!-- GAME -->
 <div id="scr-game">
 <div id="world">
+  <div id="parallax-far"></div>
+  <div id="parallax-mid"></div>
   <div id="wmoon"></div>
   <div id="world-stars"></div>
   <div id="ground"></div>
@@ -2535,9 +2569,10 @@ function movePlayer(dt){
   if(Math.abs(curDY)<0.01)curDY=0;
   PX=Math.max(20,Math.min(2580,PX+curDX*SPD*dt));
   PY=Math.max(100,Math.min(820,PY+curDY*SPD*dt));
-  const pl=document.getElementById('player');
-  pl.style.left=PX+'px';pl.style.top=PY+'px';
-  pl.classList.toggle('walking',Math.hypot(curDX,curDY)>0.05);
+  // transform instead of left/top — GPU-composited, no per-frame layout/paint,
+  // which is what was making movement feel choppy
+  playerEl.style.transform=`translate3d(${PX}px,${PY}px,0)`;
+  playerEl.classList.toggle('walking',Math.hypot(curDX,curDY)>0.05);
   // enter fairyland zone
   inFairyland=PX>2180;
   // check dragon zones
@@ -2561,7 +2596,12 @@ function updateCam(){
   const vw=window.innerWidth,vh=window.innerHeight;
   const cx=Math.max(0,Math.min(2600-vw,PX-vw/2));
   const cy=Math.max(0,Math.min(900-vh,PY-vh/2));
-  document.getElementById('world').style.transform=`translate(${-cx}px,${-cy}px)`;
+  worldEl.style.transform=`translate3d(${-cx}px,${-cy}px,0)`;
+  // parallax: these are children of #world, so they already inherit its
+  // -cx translate 1:1; adding cx*(1-factor) here leaves a net apparent
+  // translate of -cx*factor, i.e. they scroll slower than the foreground
+  parallaxFarEl.style.transform=`translate3d(${cx*0.85}px,0,0)`;
+  parallaxMidEl.style.transform=`translate3d(${cx*0.6}px,0,0)`;
 }
 
 function checkNear(){
@@ -2621,6 +2661,9 @@ function worldWalkTo(target,clientX,clientY){
   PTX=clientX+cx;PTY=clientY+cy;
 }
 const worldEl=document.getElementById('world');
+const playerEl=document.getElementById('player');
+const parallaxFarEl=document.getElementById('parallax-far');
+const parallaxMidEl=document.getElementById('parallax-mid');
 worldEl.addEventListener('click',e=>worldWalkTo(e.target,e.clientX,e.clientY));
 // touchstart fires immediately on mobile (no ~300ms click delay), making tap-to-walk feel responsive
 let worldTouchMoved=false;
