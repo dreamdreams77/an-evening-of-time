@@ -782,6 +782,13 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   color:#3a5838;animation:gpulse 2.2s ease-in-out infinite}
 /* Wise Woman seated, smaller scale, doll reused */
 .cafe-wise-seated{transform:scale(.82)}
+/* LittleLove at the window — doll reused, small props added */
+.cafe-littlelove{transform:scale(.82);position:relative}
+.cafe-bug{position:absolute;top:-8px;right:-20px;font-size:.7rem;animation:bugcrawl 3.2s ease-in-out infinite}
+@keyframes bugcrawl{0%,100%{transform:translate(0,0) rotate(0deg)}50%{transform:translate(7px,-4px) rotate(12deg)}}
+.cafe-chips{position:absolute;bottom:0;left:-22px;font-size:.9rem;transform:rotate(-8deg)}
+.cafe-window{width:70px;height:50px;border-radius:4px;background:rgba(60,180,80,.08);
+  border:2px solid rgba(80,160,80,.25);margin-bottom:6px}
 
 
 /* ── BROSKI ─────────────────────────── */
@@ -1944,6 +1951,17 @@ It has been waiting for you to be ready.</div>
       </div>
       <div class="cafe-prompt">✦ Sit with her</div>
     </div>
+    <div class="cafe-scene" onclick="cafeTalkToLittleLove()">
+      <div class="cafe-window"></div>
+      <div class="cafe-littlelove">
+        <div class="cafe-bug">🐞</div>
+        <div class="llh"><div class="llhair"></div><div class="llyes"><div class="llye"></div><div class="llye"></div></div><div class="llmo"></div></div>
+        <div class="llb"></div>
+        <div class="lllegs"><div class="llleg"><div class="llshoe"></div></div><div class="llleg"><div class="llshoe"></div></div></div>
+        <div class="cafe-chips">🍟</div>
+      </div>
+      <div class="cafe-prompt">✦ Say hi to LittleLove</div>
+    </div>
   </div>
 </div>
 
@@ -3099,6 +3117,20 @@ function closeCafe(){document.getElementById('scr-cafe').classList.remove('open'
 function cafeTalkToWise(){
   if(dlgOpen)return;
   openConversation('wise');
+}
+function cafeTalkToLittleLove(){
+  if(dlgOpen)return;
+  dlgPages=[
+    {who:'LITTLELOVE',txt:'He\'s crouched by the café window, completely absorbed, watching something make its way across the glass.'},
+    {who:'LITTLELOVE',txt:'"A bug!" he announces, delighted, like this is the best possible news. "I love bugs. And chips. Bugs and chips are my favorite things."'},
+    {who:'LITTLELOVE',txt:'He tugs at your sleeve before you can even answer. "Can we go play? Just for a bit. Please."'},
+    {who:'DJ DADDY COOL',txt:'Bugs, chips, and wanting to go play — that\'s the whole list, really. It doesn\'t take much to be happy at that age. Maybe it never should have.'},
+  ];
+  dlgItem=null;dlgIdx=0;buildDots();
+  document.getElementById('dlg-hidden').classList.remove('show');
+  document.getElementById('dlg-item').classList.remove('show');
+  document.getElementById('dlg').classList.add('open');
+  dlgOpen=true;showPage(0);
 }
 
 /* ══ SPARKLES ══════════════════════════════════════════════ */
