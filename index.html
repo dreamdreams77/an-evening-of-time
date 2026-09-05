@@ -684,11 +684,18 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 #scr-inv.open{display:flex}
 #inv-hdr{flex-shrink:0;padding:13px 18px 11px;border-bottom:1px solid rgba(100,150,220,.07);display:flex;justify-content:space-between;align-items:center}
 #inv-hdr h2{font-family:'Cinzel',serif;font-size:.76rem;letter-spacing:.15em;text-transform:uppercase;color:#c8b070}
+.hdr-btns{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+/* every overlay header shares this flex row-of-title+buttons shape; on
+   narrow (Android-width) screens a long title and multiple buttons don't
+   fit side by side, and without wrap they'd sit vertically centered on
+   the same row as a wrapped 2-line title, overlapping it — wrapping to
+   its own row below instead keeps the title readable at any width */
+#mb-hdr,#inv-hdr,#recap-hdr,#opshop-hdr,#chess-hdr,#cafe-hdr{flex-wrap:wrap;row-gap:8px}
 #inv-close{border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#3a6080;padding:7px 14px;font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.06em;transition:all .2s}
 #inv-close:hover{color:#c8b070}
-#inv-reset{border:1px solid rgba(180,80,80,.18);border-radius:6px;color:#5a3838;padding:7px 12px;font-family:'Cinzel',serif;font-size:.56rem;letter-spacing:.06em;transition:all .2s;margin-right:8px}
+#inv-reset{border:1px solid rgba(180,80,80,.18);border-radius:6px;color:#5a3838;padding:7px 12px;font-family:'Cinzel',serif;font-size:.56rem;letter-spacing:.06em;transition:all .2s}
 #inv-reset:hover{color:#c87070;border-color:rgba(200,100,100,.4)}
-#inv-recap{border:1px solid rgba(200,176,112,.3);border-radius:6px;color:#a08850;padding:7px 12px;font-family:'Cinzel',serif;font-size:.56rem;letter-spacing:.06em;transition:all .2s;margin-right:8px}
+#inv-recap{border:1px solid rgba(200,176,112,.3);border-radius:6px;color:#a08850;padding:7px 12px;font-family:'Cinzel',serif;font-size:.56rem;letter-spacing:.06em;transition:all .2s}
 #inv-recap:hover{color:#c8b070;border-color:rgba(200,176,112,.6)}
 #inv-body{flex:1;overflow-y:auto;padding:12px 18px}
 .isec{font-family:'Cinzel',serif;font-size:.48rem;letter-spacing:.2em;text-transform:uppercase;color:#1a3850;margin:12px 0 5px;padding-bottom:4px;border-bottom:1px solid rgba(255,255,255,.04)}
@@ -1959,7 +1966,7 @@ It has been waiting for you to be ready.</div>
 
 <!-- INVENTORY -->
 <div id="scr-inv">
-  <div id="inv-hdr"><h2>✦ DJ Daddy Cool's Collection</h2><div><button id="inv-recap" onclick="openRecap()">✦ Read Every Message</button><button id="inv-reset" onclick="confirmResetProgress()">↺ Start Over</button><button id="inv-close" onclick="closeInv()">✕ Close</button></div></div>
+  <div id="inv-hdr"><h2>✦ DJ Daddy Cool's Collection</h2><div class="hdr-btns"><button id="inv-recap" onclick="openRecap()">✦ Read Every Message</button><button id="inv-reset" onclick="confirmResetProgress()">↺ Start Over</button><button id="inv-close" onclick="closeInv()">✕ Close</button></div></div>
   <div id="inv-body"></div>
 </div>
 
