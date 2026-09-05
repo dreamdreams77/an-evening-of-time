@@ -70,6 +70,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
 /* ── GAME ───────────────────────────────── */
 #scr-game{position:fixed;inset:0;overflow:hidden;display:none}
+#vignette{position:fixed;inset:0;z-index:50;pointer-events:none;
+  box-shadow:inset 0 0 160px 60px rgba(0,0,0,.55),inset 0 0 340px 140px rgba(0,0,0,.28)}
 #scr-game.show{display:block}
 
 /* ── WORLD ──────────────────────────────── */
@@ -98,7 +100,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
      the ellipses, anchored "at 100%" of THIS box, peak right at the horizon
      instead of down inside the ground plane where they'd be invisible */
   position:absolute;left:0;top:390px;width:9000px;height:190px;z-index:-2;
-  pointer-events:none;will-change:transform;
+  pointer-events:none;will-change:transform;filter:blur(2px);
   background-image:
     radial-gradient(ellipse 240px 160px at 20% 100%,rgba(70,105,158,.8),transparent 72%),
     radial-gradient(ellipse 280px 175px at 65% 100%,rgba(58,88,138,.75),transparent 72%);
@@ -108,7 +110,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   /* sits a little lower / bolder than the far layer — closer hills, slightly
      overlapping the ground's top edge for a natural blended horizon */
   position:absolute;left:0;top:460px;width:9000px;height:150px;z-index:-1;
-  pointer-events:none;will-change:transform;
+  pointer-events:none;will-change:transform;filter:blur(1px);
   background-image:
     radial-gradient(ellipse 210px 130px at 14% 100%,rgba(26,74,42,.88),transparent 72%),
     radial-gradient(ellipse 250px 145px at 58% 100%,rgba(30,82,46,.82),transparent 72%);
@@ -158,7 +160,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 @keyframes moonh{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
 
 /* FFVII-style buildings / structures */
-.bld{position:absolute;z-index:3}
+.bld{position:absolute;z-index:3;transition:filter .35s ease}
 
 /* Shop building */
 .shop-body{width:180px;height:130px;background:linear-gradient(180deg,#3a1828,#241010);
@@ -174,7 +176,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   border-right:96px solid transparent;border-bottom:46px solid #3a1428}
 
 /* Tree CSS — FFVII chunky style */
-.tree{position:absolute;z-index:3}
+.tree{position:absolute;z-index:3;transition:filter .35s ease}
 .tree-trunk{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
   width:14px;background:linear-gradient(90deg,#0e0804,#1c0c04,#0e0804);border-radius:4px 4px 2px 2px}
 .tree-crown{position:absolute;left:50%;transform:translateX(-50%);border-radius:50%;
@@ -1695,6 +1697,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
 </div><!-- /world -->
 
+<div id="vignette"></div>
+
 <!-- HUD -->
 <div id="hud">
   <div id="hud-ch">Chapter: <em id="hud-cname">Moonlit Arrival</em></div>
@@ -2528,6 +2532,7 @@ function gotoGame(){
   updateBadges();
   document.getElementById('hud-cname').textContent=CHAPTERS[chapIdx].name;
   document.getElementById('hud-ct').textContent=inv.length+' / '+ITEMS.length;
+  initSceneryDepth();
   updateCam();requestAnimationFrame(loop);
   setTimeout(()=>showChapterCard(CHAPTERS[resumed?chapIdx:0]),600);
   setInterval(saveProgress,4000);
@@ -2610,6 +2615,26 @@ function movePlayer(dt){
   }
 }
 
+// depth-of-field: trees/buildings sharpen as the player approaches and
+// soften again once they've passed — cached once (world x-center per
+// element) rather than measured every frame, since layout doesn't change
+let bgScenery=[];
+function initSceneryDepth(){
+  const wr=worldEl.getBoundingClientRect();
+  bgScenery=Array.from(document.querySelectorAll('#world .tree,#world .bld')).map(el=>{
+    const r=el.getBoundingClientRect();
+    return {el,x:r.left-wr.left+r.width/2};
+  });
+}
+function updateSceneryDepth(){
+  for(const s of bgScenery){
+    const d=Math.abs(PX-s.x);
+    // in focus within ~260px, softly blurred by ~700px away
+    const blur=Math.max(0,Math.min(2.4,(d-260)/190));
+    s.el.style.filter=blur>0.05?`blur(${blur.toFixed(2)}px)`:'';
+  }
+}
+
 function updateCam(){
   const vw=window.innerWidth,vh=window.innerHeight;
   const cx=Math.max(0,Math.min(2600-vw,PX-vw/2));
@@ -2620,6 +2645,7 @@ function updateCam(){
   // translate of -cx*factor, i.e. they scroll slower than the foreground
   parallaxFarEl.style.transform=`translate3d(${cx*0.85}px,0,0)`;
   parallaxMidEl.style.transform=`translate3d(${cx*0.6}px,0,0)`;
+  updateSceneryDepth();
 }
 
 function checkNear(){
