@@ -26,7 +26,9 @@ Eight characters — DanDan, Madge, Princess Lauren, Esma, Euna, Locks, Seita, a
 - **Hidden message:** "I love tinkering. Taking things apart, seeing how they work, making them yours."
 - **Unlocks:** The Tinker's Gift
 
-## The Op-Shop Woman
+## Locks (Op-Shop)
+
+Same person as Locks in Fairyland below, met earlier in the story at her shop.
 
 ### 💍 Ring
 - **Meaning:** A promise, a connection — something that came back to find you.

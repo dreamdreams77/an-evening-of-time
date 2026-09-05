@@ -326,7 +326,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .llleg{width:9px;height:15px;background:#385a8a;border-radius:2px;position:relative}
 .llshoe{position:absolute;bottom:-2px;left:-1px;width:11px;height:5px;background:#7a4820;border-radius:2px}
 
-/* ── OP-SHOP WOMAN (Laws) ─────────── */
+/* ── OP-SHOP WOMAN (Locks) ─────────── */
 .osh{width:26px;height:28px;background:radial-gradient(ellipse at 44% 38%,#d4a880,#b88860);
   border-radius:50% 50% 45% 45%;position:relative;overflow:hidden;margin:0 auto}
 .oshair{position:absolute;top:-2px;left:-1px;right:-1px;height:15px;background:linear-gradient(180deg,#5a3010,#482408);border-radius:50% 50% 18% 18%}
@@ -758,6 +758,46 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   border:1px solid rgba(180,60,160,.25);border-radius:3px;
   padding:1px 5px;margin-top:2px;letter-spacing:.04em}
 
+/* ── CHESS TABLE (side quest) ───────────────────── */
+.chess-prop{position:absolute;z-index:3;display:flex;flex-direction:column;align-items:center;cursor:pointer}
+.chess-tabletop{width:46px;height:46px;border-radius:3px;
+  background:repeating-conic-gradient(#e8dcc0 0deg 90deg,#7a6848 90deg 180deg) 0 0/50% 50%;
+  border:2px solid #4a3820;box-shadow:0 4px 10px rgba(0,0,0,.4)}
+.chess-legs{width:34px;height:16px;margin:-1px auto 0;
+  background:linear-gradient(180deg,#4a3820,#2e2210);
+  clip-path:polygon(8% 0%,92% 0%,78% 100%,22% 100%)}
+.chess-prop-label{margin-top:5px}
+
+#scr-chess{position:fixed;inset:0;z-index:850;display:none;flex-direction:column;
+  align-items:center;justify-content:center;gap:16px;
+  background:linear-gradient(180deg,#0e1018 0%,#0a0c14 60%,#08090f 100%)}
+#scr-chess.open{display:flex}
+#chess-hdr{position:absolute;top:0;left:0;right:0;padding:10px 16px 8px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid rgba(200,176,112,.18)}
+#chess-hdr h2{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.18em;
+  text-transform:uppercase;color:#c8b070}
+#chess-close{border:1px solid rgba(200,176,112,.3);border-radius:6px;color:#a08850;
+  padding:7px 14px;font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.06em;transition:all .2s}
+#chess-close:hover{color:#c8b070;border-color:rgba(200,176,112,.6)}
+#chess-board{display:grid;grid-template-columns:repeat(8,clamp(28px,7vw,44px));
+  grid-template-rows:repeat(8,clamp(28px,7vw,44px));
+  border:3px solid #4a3820;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+.chess-sq{display:flex;align-items:center;justify-content:center;
+  font-size:clamp(1.1rem,4.5vw,1.7rem);position:relative}
+.chess-sq.light{background:#d8c8a0}
+.chess-sq.dark{background:#6a5230}
+.chess-sq.chess-target{cursor:pointer}
+.chess-sq.chess-target::after{content:'';position:absolute;inset:3px;
+  border:2px dashed rgba(200,60,50,.75);border-radius:3px;
+  animation:chesspulse 1.4s ease-in-out infinite}
+@keyframes chesspulse{0%,100%{opacity:.5}50%{opacity:1}}
+.chess-piece{line-height:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+.chess-mover{animation:chessglow 1.4s ease-in-out infinite}
+@keyframes chessglow{0%,100%{filter:drop-shadow(0 0 3px rgba(200,176,112,.4))}50%{filter:drop-shadow(0 0 9px rgba(200,176,112,.9))}}
+#chess-msg{font-size:.6rem;color:#c8b070;font-style:italic;text-align:center;
+  letter-spacing:.04em;max-width:320px;padding:0 20px}
+
 /* ── SUNDAY CAFÉ INTERIOR ───────────────────── */
 #scr-cafe{position:fixed;inset:0;z-index:850;display:none;flex-direction:column;
   background:linear-gradient(180deg,#10180c 0%,#0c1408 40%,#0a0f08 100%);
@@ -1028,7 +1068,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 #battle-dragon{
   position:absolute;
   right:clamp(30px,8vw,100px);
-  bottom:155px;
+  bottom:198px;
   display:flex;flex-direction:column;align-items:center;
   animation:dhover 3s ease-in-out infinite;
   transform-origin:bottom center;
@@ -1064,56 +1104,59 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 }
 .dr-nos{width:clamp(5px,1.2vw,8px);height:clamp(5px,1.2vw,8px);background:#180830;border-radius:50%;border:1px solid rgba(180,100,255,.3)}
 .dr-jaw{
-  position:absolute;bottom:-clamp(12px,3vw,18px);left:10%;right:10%;
+  position:absolute;bottom:calc(-1 * clamp(9px,2.2vw,13px));left:10%;right:10%;
   height:clamp(12px,3vw,18px);
   background:linear-gradient(180deg,#3a0a60,#1a0430);
   border-radius:0 0 40% 40%;
   border:1.5px solid rgba(180,100,255,.2);
+  z-index:1;
 }
 .dr-jaw::after{content:'';position:absolute;top:2px;left:0;right:0;height:2px;background:rgba(255,80,20,.4)}
+.dr-teeth{position:absolute;bottom:-4px;left:0;right:0;display:flex;justify-content:space-evenly;padding:0 4px}
+.dr-tooth{width:0;height:0;border-left:2.5px solid transparent;border-right:2.5px solid transparent;
+  border-top:5px solid #ede4d0}
+/* horns — a clean clip-path triangle with its own highlight baked into
+   the gradient fill, bone-coloured so it reads as a distinct shape
+   against the purple head instead of blending into it */
 .dr-horn-l,.dr-horn-r{
-  position:absolute;top:-clamp(20px,5vw,30px);
-  width:0;height:0;
-  border-left:clamp(6px,1.5vw,9px) solid transparent;
-  border-right:clamp(6px,1.5vw,9px) solid transparent;
-  border-bottom:clamp(22px,5.5vw,33px) solid #6a1a9a;
+  position:absolute;top:calc(-1 * clamp(20px,5vw,30px));
+  width:clamp(12px,3vw,18px);height:clamp(22px,5.5vw,33px);
+  background:linear-gradient(200deg,#f0e0b8,#b89058);
+  clip-path:polygon(50% 0%,100% 100%,0% 100%);
+  filter:drop-shadow(0 1px 3px rgba(0,0,0,.5));
 }
-.dr-horn-l{left:15%;transform:rotate(-15deg)}
-.dr-horn-r{right:15%;transform:rotate(15deg)}
-.dr-horn-l::after,.dr-horn-r::after{
-  content:'';position:absolute;top:clamp(2px,.5vw,3px);left:-3px;
-  width:0;height:0;
-  border-left:3px solid transparent;border-right:3px solid transparent;
-  border-bottom:clamp(12px,3vw,18px) solid rgba(180,100,255,.5);
-}
+.dr-horn-l{left:16%;transform:rotate(-16deg);transform-origin:bottom center}
+.dr-horn-r{right:16%;transform:rotate(16deg);transform-origin:bottom center}
 
-/* Dragon wings */
+/* Dragon wings — angular bat-wing silhouette via clip-path instead of a
+   rounded blob, and brighter membrane colour so they read as wings
+   against the body instead of blending into it */
 .dr-wing-l,.dr-wing-r{
-  position:absolute;top:30%;
-  width:clamp(70px,16vw,120px);height:clamp(55px,12vw,88px);
-  background:linear-gradient(135deg,rgba(90,20,140,.7),rgba(40,5,80,.4));
-  border:1.5px solid rgba(180,80,255,.25);
+  position:absolute;top:22%;
+  width:clamp(74px,17vw,128px);height:clamp(62px,13vw,96px);
+  background:linear-gradient(135deg,rgba(150,60,210,.75),rgba(70,15,120,.55));
+  border:1.5px solid rgba(200,130,255,.4);
+  clip-path:polygon(0% 55%,20% 20%,38% 48%,55% 8%,72% 46%,88% 22%,100% 60%,78% 78%,52% 68%,28% 88%,10% 70%);
 }
 .dr-wing-l{
-  left:-clamp(60px,14vw,110px);
-  border-radius:80% 10% 20% 60%;
+  left:calc(-1 * clamp(64px,15vw,116px));
   transform-origin:right center;
   animation:wflap 2.2s ease-in-out infinite;
 }
 .dr-wing-r{
-  right:-clamp(60px,14vw,110px);
-  border-radius:10% 80% 60% 20%;
+  right:calc(-1 * clamp(64px,15vw,116px));
+  transform:scaleX(-1);
   transform-origin:left center;
-  animation:wflap 2.2s ease-in-out infinite .2s;
+  animation:wflapr 2.2s ease-in-out infinite .2s;
 }
-@keyframes wflap{0%,100%{transform:scaleY(1) rotate(var(--wr,0deg))}50%{transform:scaleY(.7) rotate(calc(var(--wr,0deg)+8deg))}}
-.dr-wing-l{--wr:-6deg}.dr-wing-r{--wr:6deg}
+@keyframes wflap{0%,100%{transform:scaleY(1) rotate(-4deg)}50%{transform:scaleY(.75) rotate(6deg)}}
+@keyframes wflapr{0%,100%{transform:scaleX(-1) scaleY(1) rotate(-4deg)}50%{transform:scaleX(-1) scaleY(.75) rotate(6deg)}}
 /* Wing veins */
 .dr-wing-l::after,.dr-wing-r::after{
   content:'';position:absolute;inset:0;
-  background:repeating-linear-gradient(var(--wva,45deg),transparent,transparent 8px,rgba(180,80,255,.12) 8px,rgba(180,80,255,.12) 9px);
+  background:repeating-linear-gradient(45deg,transparent,transparent 8px,rgba(220,160,255,.16) 8px,rgba(220,160,255,.16) 9px);
+  clip-path:inherit;
 }
-.dr-wing-l::after{--wva:45deg}.dr-wing-r::after{--wva:135deg}
 
 /* Dragon body/torso */
 .dr-body{
@@ -1122,7 +1165,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   border-radius:20% 20% 30% 30%;
   border:1.5px solid rgba(180,100,255,.2);
   box-shadow:0 0 16px rgba(100,30,180,.3);
-  position:relative;margin-top:-4px;
+  position:relative;margin-top:4px;
 }
 .dr-scales{
   position:absolute;inset:4px;
@@ -1130,21 +1173,57 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   border-radius:inherit;
 }
 
-/* Dragon tail */
-.dr-tail{
-  width:clamp(40px,9vw,68px);height:clamp(22px,5vw,35px);
-  background:linear-gradient(90deg,#2a0848,#180230);
-  border-radius:0 40% 40% 0;
-  margin-top:-6px;align-self:flex-end;
-  border:1px solid rgba(180,100,255,.15);
+/* Dragon arms — small clawed forelimbs at the torso's sides, so the
+   body reads as a creature with limbs instead of a floating blob */
+.dr-arm-l,.dr-arm-r{
+  position:absolute;top:10%;
+  width:clamp(13px,3vw,20px);height:clamp(30px,6.5vw,46px);
+  background:linear-gradient(180deg,#3a0a60,#1a0430);
+  border:1.5px solid rgba(180,100,255,.22);
+  border-radius:50% 50% 40% 40%;
+}
+.dr-arm-l{left:calc(-1 * clamp(9px,2.2vw,15px));transform:rotate(24deg);transform-origin:top center}
+.dr-arm-r{right:calc(-1 * clamp(9px,2.2vw,15px));transform:rotate(-24deg);transform-origin:top center}
+.dr-arm-l::after,.dr-arm-r::after{
+  content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);
+  width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;
+  border-top:9px solid #150328;
+}
+
+/* Dragon legs — planted on the arena floor so the dragon stands rather
+   than floating as a head-and-torso blob */
+.dr-legs{display:flex;justify-content:center;gap:clamp(8px,2.6vw,18px);margin-top:-3px}
+.dr-leg{
+  width:clamp(16px,3.4vw,25px);height:clamp(26px,5.6vw,40px);
+  background:linear-gradient(180deg,#3a0a60,#1a0430);
+  border:1.5px solid rgba(180,100,255,.22);
+  border-radius:30% 30% 15% 15%;
   position:relative;
 }
+.dr-foot{
+  position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);
+  width:clamp(18px,4vw,28px);
+  display:flex;justify-content:center;gap:2px;
+}
+.dr-claw{width:0;height:0;border-left:3px solid transparent;border-right:3px solid transparent;
+  border-top:7px solid #150328}
+
+/* Dragon tail — anchored to the back of the body rather than stacked
+   below it, so it doesn't get lost under the legs or clipped by the floor */
+.dr-tail{
+  position:absolute;bottom:clamp(14px,4vw,26px);left:calc(-1 * clamp(24px,6vw,40px));
+  width:clamp(40px,9vw,68px);height:clamp(22px,5vw,35px);
+  background:linear-gradient(90deg,#2a0848,#180230);
+  border-radius:40% 0 0 40%;
+  transform:rotate(18deg);
+  border:1px solid rgba(180,100,255,.15);
+}
 .dr-tail::after{
-  content:'';position:absolute;right:-clamp(8px,2vw,12px);top:50%;transform:translateY(-50%);
+  content:'';position:absolute;left:calc(-1 * clamp(8px,2vw,12px));top:50%;transform:translateY(-50%);
   width:0;height:0;
   border-top:clamp(8px,2vw,12px) solid transparent;
   border-bottom:clamp(8px,2vw,12px) solid transparent;
-  border-left:clamp(14px,3.5vw,22px) solid #3a0858;
+  border-right:clamp(14px,3.5vw,22px) solid #3a0858;
 }
 
 /* Dragon fire breath */
@@ -1317,22 +1396,26 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
       <div class="koi-ripple" style="--kd:12s;--kdel:4s"></div>
     </div>
 
-    <!-- Swan Boat -->
-    <div id="swan-boat" style="left:640px">
-      <div class="sb-sign">🦢 Swan Boats<br>30 min to park</div>
-      <div style="position:relative">
-        <div class="sb-wing-l"></div>
-        <div class="sb-wing-r"></div>
-        <div class="sb-neck">
-          <div class="sb-head">
-            <div class="sb-beak"></div>
-            <div class="sb-eye"></div>
-          </div>
+  </div>
+
+  <!-- Swan Boat — lives outside #river: the river is only 90px tall with
+       overflow:hidden (for the shimmer-line effect), which was clipping the
+       boat's neck/sign since they extend well above its hull. Positioned in
+       #world coordinates instead so nothing gets cut off. -->
+  <div id="swan-boat" style="left:640px;bottom:268px">
+    <div class="sb-sign">🦢 Swan Boats<br>30 min to park</div>
+    <div style="position:relative">
+      <div class="sb-wing-l"></div>
+      <div class="sb-wing-r"></div>
+      <div class="sb-neck">
+        <div class="sb-head">
+          <div class="sb-beak"></div>
+          <div class="sb-eye"></div>
         </div>
-        <div class="sb-hull">
-          <div class="sb-wake"></div>
-          <div class="sb-wake" style="left:-8px;animation-delay:.4s;opacity:.6"></div>
-        </div>
+      </div>
+      <div class="sb-hull">
+        <div class="sb-wake"></div>
+        <div class="sb-wake" style="left:-8px;animation-delay:.4s;opacity:.6"></div>
       </div>
     </div>
   </div>
@@ -1451,6 +1534,13 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     <div class="mbox-shadow"></div>
   </div>
 
+  <!-- Chess Table — an easy side-quest puzzle, tap to sit down and play -->
+  <div class="chess-prop" style="left:1300px;top:410px" onclick="openChess()">
+    <div class="chess-tabletop"></div>
+    <div class="chess-legs"></div>
+    <div class="chess-prop-label mbox-label">♟ Chess Table</div>
+  </div>
+
   <!-- NPC: LittleLove -->
   <div class="npc" id="npc-boy" data-npc="boy" style="left:390px;top:348px;--rc:#4a80d0;--bc:#4a80d0;--lc:#4a80d0">
     <div class="nr"></div><div class="nl">LittleLove</div>
@@ -1463,9 +1553,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     <div class="nsh"></div>
   </div>
 
-  <!-- NPC: Op-Shop Woman -->
+  <!-- NPC: Locks -->
   <div class="npc" id="npc-opshop" data-npc="opshop" style="left:720px;top:338px;--rc:#c050a0;--bc:#c050a0;--lc:#c050a0">
-    <div class="nr"></div><div class="nl">Op-Shop Woman</div>
+    <div class="nr"></div><div class="nl">Locks</div>
     <div class="nc" style="position:relative">
       <div class="nb">3</div><div class="nd">✓</div>
       <div class="osh"><div class="oshair"></div><div class="osyes"><div class="osye"></div><div class="osye"></div></div><div class="osmo"></div></div>
@@ -1733,10 +1823,18 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
         <div class="dr-horn-l"></div><div class="dr-horn-r"></div>
         <div class="dr-eye-l"></div><div class="dr-eye-r"></div>
         <div class="dr-nostril"><div class="dr-nos"></div><div class="dr-nos"></div></div>
-        <div class="dr-jaw"></div>
+        <div class="dr-jaw"><div class="dr-teeth"><div class="dr-tooth"></div><div class="dr-tooth"></div><div class="dr-tooth"></div></div></div>
       </div>
-      <div class="dr-body"><div class="dr-scales"></div></div>
+      <div class="dr-body">
+        <div class="dr-scales"></div>
+        <div class="dr-arm-l"></div>
+        <div class="dr-arm-r"></div>
+      </div>
       <div class="dr-tail"></div>
+      <div class="dr-legs">
+        <div class="dr-leg"><div class="dr-foot"><div class="dr-claw"></div><div class="dr-claw"></div><div class="dr-claw"></div></div></div>
+        <div class="dr-leg"><div class="dr-foot"><div class="dr-claw"></div><div class="dr-claw"></div><div class="dr-claw"></div></div></div>
+      </div>
     </div>
   </div>
 
@@ -1856,7 +1954,7 @@ It has been waiting for you to be ready.</div>
   <div id="opshop-hdr">
     <div>
       <h2>✦ The Op-Shop</h2>
-      <div id="opshop-sub">have a browse — take your time</div>
+      <div id="opshop-sub">have a browse, take your time</div>
     </div>
     <button id="opshop-close" onclick="closeOpShop()">← Leave</button>
   </div>
@@ -1933,6 +2031,16 @@ It has been waiting for you to be ready.</div>
   </div>
 </div>
 
+<!-- CHESS TABLE (side quest) -->
+<div id="scr-chess">
+  <div id="chess-hdr">
+    <h2>♟ An Easy Game of Chess</h2>
+    <button id="chess-close" onclick="closeChess()">← Leave</button>
+  </div>
+  <div id="chess-board"></div>
+  <div id="chess-msg"></div>
+</div>
+
 <!-- SUNDAY CAFÉ INTERIOR -->
 <div id="scr-cafe">
   <div id="cafe-hdr">
@@ -1977,7 +2085,7 @@ It has been waiting for you to be ready.</div>
 const ITEMS=[
   // ── LittleLove — LOVE, JOY, CALCULATOR
   {id:'loveluca',e:'💛',name:'Golden Heart',from:'LittleLove',giver:'boy',
-   meaning:'Love — small hands, honest eyes, the purest kind of love there is.',
+   meaning:'Love. Small hands, honest eyes, the purest kind of love there is.',
    hidden:'Another day down. I am so proud of you. You are doing so well.',
    unlocks:'River Memory',
    pages:[
@@ -1986,16 +2094,16 @@ const ITEMS=[
      {who:'DJ DADDY COOL',txt:'Love in its simplest, clearest form.\n\nAnother day down. I am so proud of you. You are doing so well.'},
    ]},
   {id:'joybird',e:'🐦',name:'Joy Bird',from:'LittleLove',giver:'boy',
-   meaning:'Joy — the unbridled, unashamed kind that lives in small people who haven\'t been told to hide it yet.',
+   meaning:'Joy. The unbridled, unashamed kind that lives in small people who haven\'t been told to hide it yet.',
    hidden:'You deserve everything. Always and forever. No exceptions, no conditions.',
    unlocks:'Time Loop',
    pages:[
      {who:'LITTLELOVE',txt:'It lands on his finger first.\n\nThen looks at you like it\'s been waiting.'},
      {who:'LITTLELOVE',txt:'"It likes you," he says, very seriously.\n\n"It knows things."'},
-     {who:'DJ DADDY COOL',txt:'Joy doesn\'t ask permission.\n\nIt just lands. And you deserve it — everything, always and forever, no exceptions.'},
+     {who:'DJ DADDY COOL',txt:'Joy doesn\'t ask permission.\n\nIt just lands. And you deserve it: everything, always and forever, no exceptions.'},
    ]},
   {id:'calculator',e:'🧮',name:'Calculator',from:'LittleLove',giver:'boy',
-   meaning:'Logic — the way you tried to make sense of things way too early.',
+   meaning:'Logic. The way you tried to make sense of things way too early.',
    hidden:'I can\'t get anything past you these days. And honestly? I\'ve stopped trying.',
    unlocks:'Calculator Scene',
    pages:[
@@ -2004,74 +2112,74 @@ const ITEMS=[
      {who:'DJ DADDY COOL',txt:'Some things can\'t be calculated.\n\nYou were a child doing adult maths. You were never going to get the answer that way.'},
    ]},
   {id:'boy_spintable',e:'🎛️',name:'DJ Spin Table',from:'LittleLove',giver:'boy',
-   meaning:'The tinker\'s gift — he took it apart and put it back together, just to give it to you better.',
+   meaning:'The tinker\'s gift: he took it apart and put it back together, just to give it to you better.',
    hidden:'I love tinkering. Taking things apart, seeing how they work, making them yours.',
    unlocks:"The Tinker's Gift",
    pages:[
      {who:'LITTLELOVE',txt:'He brings it out carefully.\n\nBoth hands. Very serious face.'},
      {who:'LITTLELOVE',txt:'"I fixed it," he says.\n\n"I love tinkering. Taking things apart.\n\nSeeing how they work.\n\nI made it better for you."'},
      {who:'LITTLELOVE',txt:'He sets it down.\n\nSteps back.\n\nWaits to see if you understand what just happened.'},
-     {who:'DJ DADDY COOL',txt:'He gave you the thing he loved doing — his tinkering — and turned it into a gift for you.\n\nThat is the whole love language right there.'},
+     {who:'DJ DADDY COOL',txt:'He gave you the thing he loved doing, his tinkering, and turned it into a gift for you.\n\nThat is the whole love language right there.'},
    ]},
-  // ── Op-Shop Woman — RING, PUFFER, PRESSED FLOWER, TASSIE TRIP
-  {id:'ring',e:'💍',name:'Ring',from:'The Op-Shop Woman',giver:'opshop',
-   meaning:'A promise, a connection — something that came back to find you.',
+  // ── Locks — RING, PUFFER, PRESSED FLOWER, TASSIE TRIP
+  {id:'ring',e:'💍',name:'Ring',from:'Locks',giver:'opshop',
+   meaning:'A promise, a connection, something that came back to find you.',
    hidden:'I promise nothing has changed. You will never lose me. Not ever.',
    unlocks:"Poetic Woman's Corridor",
    pages:[
-     {who:'THE OP-SHOP WOMAN',txt:'She doesn\'t say where it came from.\n\nShe just presses it into your palm.'},
-     {who:'THE OP-SHOP WOMAN',txt:'"It came back," she says.\n\nShe turns away. It fits perfectly.'},
+     {who:'LOCKS',txt:'She doesn\'t say where it came from.\n\nShe just presses it into your palm.'},
+     {who:'LOCKS',txt:'"It came back," she says.\n\nShe turns away. It fits perfectly.'},
      {who:'DJ DADDY COOL',txt:'Some things find you twice.\n\nI promise nothing has changed. You will never lose me.'},
    ]},
-  {id:'puffer',e:'🧥',name:'Puffer Jacket',from:'The Op-Shop Woman',giver:'opshop',
-   meaning:'Warmth, safety — the feeling of being genuinely held.',
+  {id:'puffer',e:'🧥',name:'Puffer Jacket',from:'Locks',giver:'opshop',
+   meaning:'Warmth, safety, the feeling of being genuinely held.',
    hidden:'You\'ve always got this fairy\'s protection. Always and forever. I promise.',
    unlocks:'Deep Forest',
    pages:[
-     {who:'THE OP-SHOP WOMAN',txt:'"Here."\n\nShe doesn\'t explain. She never needs to.'},
-     {who:'THE OP-SHOP WOMAN',txt:'It smells like cedar and old kindness.\n\nYou put it on. Something unclenches.'},
+     {who:'LOCKS',txt:'"Here."\n\nShe doesn\'t explain. She never needs to.'},
+     {who:'LOCKS',txt:'It smells like cedar and old kindness.\n\nYou put it on. Something unclenches.'},
      {who:'DJ DADDY COOL',txt:'The forest won\'t frighten you now.\n\nYou\'ve always got this fairy\'s protection. I promise that.'},
    ]},
-  {id:'shoploveyou',e:'🌸',name:'Pressed Flower',from:'The Op-Shop Woman',giver:'opshop',
-   meaning:'Love from the unexpected place — the shop you wandered into, the person who was already there.',
+  {id:'shoploveyou',e:'🌸',name:'Pressed Flower',from:'Locks',giver:'opshop',
+   meaning:'Love from the unexpected place: the shop you wandered into, the person who was already there.',
    hidden:'I love your wonderful soul. We\'ve all got cracks. They don\'t define us.',
    unlocks:'Hidden Scene',
    pages:[
-     {who:'THE OP-SHOP WOMAN',txt:'It was pressed between two books on the highest shelf.\n\nShe hands it to you without a word.'},
-     {who:'THE OP-SHOP WOMAN',txt:'"Someone left this years ago," she says.\n\n"I always thought it was waiting for the right person."'},
+     {who:'LOCKS',txt:'It was pressed between two books on the highest shelf.\n\nShe hands it to you without a word.'},
+     {who:'LOCKS',txt:'"Someone left this years ago," she says.\n\n"I always thought it was waiting for the right person."'},
      {who:'DJ DADDY COOL',txt:'Love lives in op shops too.\n\nIn pressed flowers and quiet gestures and someone who sees your wonderful soul and says so.'},
    ]},
-  {id:'tassietrip',e:'🗺️',name:'Tassie Trip Plan',from:'The Op-Shop Woman',giver:'opshop',
-   meaning:'Adventure — the kind you take with someone who just gets it.',
+  {id:'tassietrip',e:'🗺️',name:'Tassie Trip Plan',from:'Locks',giver:'opshop',
+   meaning:'Adventure. The kind you take with someone who just gets it.',
    hidden:'Let\'s take a Tassie trip. Just us. We\'ll figure out the rest when we get there.',
    unlocks:'Tassie Road',
    pages:[
-     {who:'THE OP-SHOP WOMAN',txt:'She folds a piece of paper out of nowhere.\n\nA rough map. A few circles. A question mark near the coast.'},
-     {who:'THE OP-SHOP WOMAN',txt:'"Let\'s take a Tassie trip," she says.\n\nLike she\'s been thinking about it for a while.\n\n"Just us. We\'ll figure out the rest when we get there."'},
-     {who:'THE OP-SHOP WOMAN',txt:'She tucks it into your pocket.\n\n"Don\'t lose that."'},
+     {who:'LOCKS',txt:'She folds a piece of paper out of nowhere.\n\nA rough map. A few circles. A question mark near the coast.'},
+     {who:'LOCKS',txt:'"Let\'s take a Tassie trip," she says.\n\nLike she\'s been thinking about it for a while.\n\n"Just us. We\'ll figure out the rest when we get there."'},
+     {who:'LOCKS',txt:'She tucks it into your pocket.\n\n"Don\'t lose that."'},
      {who:'DJ DADDY COOL',txt:'A Tassie trip.\n\nJust the two of you.\n\nThe kind of plan that doesn\'t need to be perfect to be everything.'},
    ]},
   // ── Smile Woman — SMILE, LAUGHTER, CUPCAKE
   {id:'smile',e:'😊',name:'A Smile',from:'The Smile Woman',giver:'smile',
-   meaning:'Warmth — the kind that costs nothing and means everything.',
+   meaning:'Warmth. The kind that costs nothing and means everything.',
    hidden:'I\'ve always got your back. Always. No matter what.',
    unlocks:'Smile Scene',
    pages:[
-     {who:'THE SMILE WOMAN',txt:'She turns around and — there it is.\n\nThe whole smile.\n\nNot polite. Not small.\n\nThe real one, the one that uses every part of her face.'},
+     {who:'THE SMILE WOMAN',txt:'She turns around, and there it is.\n\nThe whole smile.\n\nNot polite. Not small.\n\nThe real one, the one that uses every part of her face.'},
      {who:'THE SMILE WOMAN',txt:'She offers it like a gift.\n\nLike she\'s been saving it up\n\nand you just happened to be the one she wanted to give it to.'},
      {who:'DJ DADDY COOL',txt:'Some people have a smile that changes the room.\n\nShe has a smile that changes the whole evening.'},
    ]},
   {id:'laughter',e:'😂',name:'Laughter',from:'The Smile Woman',giver:'smile',
-   meaning:'Joy that overflows — the kind you can\'t hold in even when you try.',
+   meaning:'Joy that overflows. The kind you can\'t hold in even when you try.',
    hidden:'I will always have your back. That\'s not a maybe. That\'s a fact.',
    unlocks:'Laugh Together',
    pages:[
-     {who:'THE SMILE WOMAN',txt:'Something starts as a giggle.\n\nThen — it doesn\'t stop.\n\nHer dog looks up, confused and delighted in equal measure.'},
+     {who:'THE SMILE WOMAN',txt:'Something starts as a giggle.\n\nThen it doesn\'t stop.\n\nHer dog looks up, confused and delighted in equal measure.'},
      {who:'THE SMILE WOMAN',txt:'The laughter is contagious.\n\nYou don\'t even know what it\'s about.\n\nIt doesn\'t matter. That\'s the whole point.'},
-     {who:'DJ DADDY COOL',txt:'The best laughter is the kind with no reason.\n\nThe kind that just — happens.\n\nThe kind that leaves you feeling lighter than before.'},
+     {who:'DJ DADDY COOL',txt:'The best laughter is the kind with no reason.\n\nThe kind that just happens.\n\nThe kind that leaves you feeling lighter than before.'},
    ]},
   {id:'cupcake',e:'🧁',name:'Cupcake',from:'The Smile Woman',giver:'smile',
-   meaning:'Sweetness, generosity — she baked these and she thought of you.',
+   meaning:'Sweetness, generosity. She baked these and she thought of you.',
    hidden:'I\'ll always have your back, DJ Daddy Cool. Always and ever.',
    unlocks:'Sweet Moment',
    pages:[
@@ -2082,16 +2190,16 @@ const ITEMS=[
    ]},
   // ── Poetic Woman — SONG, POETIC LOVE, VITAMINS, CELL PHONE
   {id:'song',e:'🎵',name:'A Song',from:'The Poetic Woman',giver:'tall',
-   meaning:'Music — the language she speaks when words aren\'t enough.',
+   meaning:'Music. The language she speaks when words aren\'t enough.',
    hidden:'I am so glad you found a part of yourself you love. This unbridled joy is so beautiful.',
    unlocks:"Poetic Woman's Reveal",
    pages:[
      {who:'THE POETIC WOMAN',txt:'She doesn\'t hand you anything.\n\nShe just starts humming.\n\nAnd somehow the humming lands inside your chest like it was always there.'},
      {who:'THE POETIC WOMAN',txt:'It\'s a good song.\n\nNot country. Never country.\n\nBut real, and yours, and right.'},
-     {who:'DJ DADDY COOL',txt:'This unbridled joy — it was always in you.\n\nShe found it and put music to it. That is what the poetic woman does.'},
+     {who:'DJ DADDY COOL',txt:'This unbridled joy was always in you.\n\nShe found it and put music to it. That is what the poetic woman does.'},
    ]},
   {id:'poeticlove',e:'📜',name:'A Poem',from:'The Poetic Woman',giver:'tall',
-   meaning:'Love through language — the kind written carefully, for you, in the quiet.',
+   meaning:'Love through language. The kind written carefully, for you, in the quiet.',
    hidden:'Little manageable changes, stacked together, form habits. Form confidence. Form you.',
    unlocks:'Willow Dialogue',
    pages:[
@@ -2100,7 +2208,7 @@ const ITEMS=[
      {who:'DJ DADDY COOL',txt:'Little changes, stacked together.\n\nThat\'s what this poem is made of. And so are you.'},
    ]},
   {id:'vitamins',e:'💊',name:'Vitamins',from:'The Poetic Woman',giver:'tall',
-   meaning:'Care, maintenance — the small daily acts of keeping yourself going.',
+   meaning:'Care, maintenance. The small daily acts of keeping yourself going.',
    hidden:'I know how much of a change this has been. You are doing so well. I\'m so proud.',
    unlocks:'Time Loop Energy',
    pages:[
@@ -2109,38 +2217,40 @@ const ITEMS=[
      {who:'DJ DADDY COOL',txt:'Take one every morning. Keep going.\n\nI know how much of a change this has been. You are doing so well.'},
    ]},
   {id:'cellphone',e:'📱',name:'Cell Phone',from:'The Poetic Woman',giver:'tall',
-   meaning:'Connection — the line between you and the people who love you, always open.',
+   meaning:'Connection. The line between you and the people who love you, always open.',
    hidden:'You can always call me. Any time. I\'ll always pick up.',
    unlocks:'The Open Line',
    pages:[
-     {who:'THE POETIC WOMAN',txt:'She holds it out.\n\nScreen already on.\n\nYour name in her contacts — at the top, starred.'},
+     {who:'THE POETIC WOMAN',txt:'She holds it out.\n\nScreen already on.\n\nYour name in her contacts, right at the top, starred.'},
      {who:'THE POETIC WOMAN',txt:'"You can always call me," she says.\n\n"Any time."\n\nA pause.\n\n"I\'ll always pick up."'},
      {who:'THE POETIC WOMAN',txt:'She means it the way poets mean things.\n\nAll the way down. No bottom.'},
      {who:'DJ DADDY COOL',txt:'The line is always open.\n\nThat is not a small thing.\n\nThat is everything.'},
+     {who:'THE POETIC WOMAN',txt:'"Come over Friday," she says, already smiling like it\'s decided.\n\n"Let\'s watch a movie. Nothing fancy. Just us and the couch."'},
+     {who:'DJ DADDY COOL',txt:'A movie night, no occasion needed.\n\nShowing up for each other is the whole point. It always was.'},
    ]},
   {id:'alwaysforever',e:'💞',name:'Always & Forever',from:'The Poetic Woman',giver:'tall',
-   meaning:'Gratitude — the kind that goes both ways, freely, without keeping score.',
+   meaning:'Gratitude. The kind that goes both ways, freely, without keeping score.',
    hidden:'Thank you for always and forever. It means more than you know.',
    unlocks:'A Thank You',
    pages:[
-     {who:'THE POETIC WOMAN',txt:'She looks at him the way she always does — like she\'s still a little surprised he\'s real.'},
-     {who:'DJ DADDY COOL',txt:'"Thank you," he says.\n\n"For always and forever."\n\nHe means it the way she taught him to mean things — all the way down.'},
+     {who:'THE POETIC WOMAN',txt:'She looks at him the way she always does, like she\'s still a little surprised he\'s real.'},
+     {who:'DJ DADDY COOL',txt:'"Thank you," he says.\n\n"For always and forever."\n\nHe means it the way she taught him to mean things, all the way down.'},
      {who:'THE POETIC WOMAN',txt:'She doesn\'t say anything clever back.\n\nShe just takes his hand.\n\nSome thank-yous don\'t need a reply. They just need to be received.'},
      {who:'DJ DADDY COOL',txt:'Always and forever.\n\nNot a phrase. A promise, said so many times it became true.'},
    ]},
   // ── Wise Woman (Nana) — LOVE + HEALING HERBS
   {id:'love',e:'❤️',name:'A Letter',from:'The Nine-Finger Wise Woman',giver:'wise',
-   meaning:'Love — the kind that shows up with nine fingers and a steady hand and never leaves.',
+   meaning:'Love. The kind that shows up with nine fingers and a steady hand and never leaves.',
    hidden:'Life has been incredibly unfair to you. The universe decided I was your fairy. I\'m blessed.',
    unlocks:"Wise Woman's Blessing",
    pages:[
      {who:'THE WISE WOMAN',txt:'Nine fingers. She folds a piece of paper slowly.\n\nShe has been writing this for a while.'},
      {who:'THE WISE WOMAN',txt:'She places it in your hand.\n\n"You already know what it says."\n\n"But some things need to be written down."'},
      {who:'THE WISE WOMAN',txt:'"Life has been incredibly unfair to you."\n\n"The universe decided I was your fairy."\n\nShe pauses. "I\'m blessed."'},
-     {who:'DJ DADDY COOL',txt:'She loves you the way a nine-fingered woman loves —\n\ncompletely, without ceremony, without needing the tenth finger to prove it.'},
+     {who:'DJ DADDY COOL',txt:'She loves you the way a nine-fingered woman loves:\n\ncompletely, without ceremony, without needing the tenth finger to prove it.'},
    ]},
   {id:'herbs',e:'🌿',name:'Healing Herbs',from:'The Nine-Finger Wise Woman',giver:'wise',
-   meaning:'Endurance — the quiet remedies that kept you going when nothing else did.',
+   meaning:'Endurance. The quiet remedies that kept you going when nothing else did.',
    hidden:'You have done so much heavy lifting. Let someone else carry some of it now.',
    unlocks:'Healing Scene',
    pages:[
@@ -2149,27 +2259,27 @@ const ITEMS=[
      {who:'DJ DADDY COOL',txt:'You do know the one.\n\nYou\'ve known it a long time. Let someone else carry some of it now.'},
    ]},
   {id:'sundaycafe',e:'☕',name:'Sunday Café Date',from:'The Nine-Finger Wise Woman',giver:'wise',
-   meaning:'A meeting place — the warmth of being asked, specifically, to show up.',
+   meaning:'A meeting place. The warmth of being asked, specifically, to show up.',
    hidden:'Meet me at the Sunday Café. I\'ll be there. I\'ll save you a seat.',
    unlocks:'Sunday Morning',
    pages:[
      {who:'THE WISE WOMAN',txt:'She looks at you for a long moment.\n\nNine fingers folded together.'},
      {who:'THE WISE WOMAN',txt:'"Meet me at the Sunday Café," she says.\n\n"Sunday. I\'ll be there."\n\nA pause.\n\n"I\'ll save you a seat."'},
      {who:'THE WISE WOMAN',txt:'She says it like she\'s been meaning to for a while.\n\nLike maybe she\'s been hoping you\'d wander this way\n\nso she finally could.'},
-     {who:'DJ DADDY COOL',txt:'She saved you a seat.\n\nShe didn\'t wait to be asked. She just — decided you were worth saving one for.\n\nSunday. The café. Don\'t be late.'},
+     {who:'DJ DADDY COOL',txt:'She saved you a seat.\n\nShe didn\'t wait to be asked. She just decided you were worth saving one for.\n\nSunday. The café. Don\'t be late.'},
    ]},
   // ── Moon — SHARED SPACE + COMFORT
   {id:'sharedspace',e:'🌌',name:'Shared Space',from:'The Moon',giver:'moon',
-   meaning:'Shared space — the quiet understanding that you can both be here, together, without explanation.',
+   meaning:'Shared space. The quiet understanding that you can both be here, together, without explanation.',
    hidden:'You are 10 times cooler just for being you. But you were already maximally cool.',
    unlocks:'Sky Text',
    pages:[
-     {who:'THE MOON',txt:'The sky opens.\n\nNot dramatically — just quietly, the way doors open for people who belong.'},
+     {who:'THE MOON',txt:'The sky opens.\n\nNot dramatically, just quietly, the way doors open for people who belong.'},
      {who:'THE MOON',txt:'There\'s room here.\n\nFor both of you.\n\nThere always was.'},
      {who:'DJ DADDY COOL',txt:'Shared space doesn\'t need negotiating.\n\nYou are 10 times cooler just for being you. And you were already maximally cool.'},
    ]},
   {id:'comfort',e:'🫂',name:'Comfort',from:'The Moon',giver:'moon',
-   meaning:'Comfort — the moon has watched you all your life and never once looked away.',
+   meaning:'Comfort. The moon has watched you all your life and never once looked away.',
    hidden:'Please eat and please rest. Care goes both ways. You are worth taking care of.',
    unlocks:'Moon Comfort',
    pages:[
@@ -2179,16 +2289,17 @@ const ITEMS=[
    ]},
   // ── DJ — SPIN TABLE + COMPUTER
   {id:'djspintable',e:'🎛️',name:'DJ Spin Table',from:'DJ Daddy Cool',giver:'dj',
-   meaning:'Rhythm, flow — the way you move through the world when you\'re most yourself.',
-   hidden:'I didn\'t even have wings until I found you. And then suddenly — there they were.',
+   meaning:'Rhythm, flow. The way you move through the world when you\'re most yourself.',
+   hidden:'I didn\'t even have wings until I found you. And then, suddenly, there they were.',
    unlocks:"DJ's Chapter",
    pages:[
      {who:'DJ DADDY COOL',txt:'Your table. Your rhythm.\n\nIt was here before you arrived and it\'ll be here after.'},
-     {who:'DJ DADDY COOL',txt:'I didn\'t even have wings until I found you.\n\nAnd then — suddenly — there they were.'},
+     {who:'DJ DADDY COOL',txt:'I didn\'t even have wings until I found you.\n\nAnd then, suddenly, there they were.'},
      {who:'DJ DADDY COOL',txt:'The music starts before you touch it.\n\nIt always does. I\'m here. I\'m not going anywhere.'},
+     {who:'DJ DADDY COOL',txt:'One day, a bullet train. Somewhere far, somewhere new.\n\nJust the rhythm of the tracks, and you next to me the whole way there.'},
    ]},
   {id:'computer',e:'💻',name:'Computer',from:'DJ Daddy Cool',giver:'dj',
-   meaning:'Connection — the bridge between you and the ones you love, across any distance.',
+   meaning:'Connection. The bridge between you and the ones you love, across any distance.',
    hidden:'You will never lose me. I promise. And you won\'t lose me ever. Not ever.',
    unlocks:'Final Message',
    pages:[
@@ -2208,7 +2319,7 @@ const ITEMS=[
      {who:'DJ DADDY COOL',txt:'You have done so much good work.\n\nSo much heavy lifting. The tree has been watching. It knew you\'d arrive.'},
    ]},
   {id:'willowleaf',e:'🍃',name:'Willow Leaf',from:'The Willow',giver:'willow',
-   meaning:'Healing, growth — you are still becoming, and the willow has always known you would.',
+   meaning:'Healing, growth. You are still becoming, and the willow has always known you would.',
    hidden:'You are still growing. The roots go deeper than you can see. That\'s how it works.',
    unlocks:'Ending',
    pages:[
@@ -2218,7 +2329,7 @@ const ITEMS=[
    ]},
   // ── Fairy — SPARKLE
   {id:'fairysparkle',e:'✨',name:'Fairy Sparkle',from:'The Fairy',giver:'fairy',
-   meaning:'Intuition, truth — the things you already know but haven\'t said yet.',
+   meaning:'Intuition, truth. The things you already know but haven\'t said yet.',
    hidden:'Being your fairy is an honour. You\'ll always have me in your corner. We can do anything.',
    unlocks:'Sparkle Scene',
    pages:[
@@ -2228,18 +2339,18 @@ const ITEMS=[
    ]},
   // ── Green Woods — FAIRY DUST
   {id:'fairydust',e:'🌟',name:'Fairy Dust',from:'The Green Woods',giver:'dandan',
-   meaning:'Magic — the kind that was always in you, waiting for the right moment to rise.',
+   meaning:'Magic. The kind that was always in you, waiting for the right moment to rise.',
    hidden:'The woods have been keeping this for you. Every beam of light, every shimmer between the trees.',
    unlocks:'Green Woods Magic',
    pages:[
-     {who:'✦ THE GREEN WOODS',txt:'The trees lean in.\n\nSomething falls from a high branch —\nnot a leaf, not rain.\n\nSomething older.'},
+     {who:'✦ THE GREEN WOODS',txt:'The trees lean in.\n\nSomething falls from a high branch,\nnot a leaf, not rain.\n\nSomething older.'},
      {who:'✦ THE GREEN WOODS',txt:'It settles on your hands.\n\nGold. Green. A colour that doesn\'t quite exist.\n\nThe woods breathe in together.'},
      {who:'✦ THE GREEN WOODS',txt:'"You came all the way here," the woods say, in the way woods say things.\n\n"Take this. You earned it the moment you started walking."'},
      {who:'DJ DADDY COOL',txt:'Fairy Dust from the Green Woods.\n\nThe magic was already in you. This just makes it visible.'},
    ]},
   // ── Princess Lauren — MIRROR
   {id:'mirror',e:'🪞',name:'Small Gold Mirror',from:'Princess Lauren',giver:'lauren',
-   meaning:'Recognition — seeing yourself the way someone who loves you already sees you.',
+   meaning:'Recognition. Seeing yourself the way someone who loves you already sees you.',
    hidden:'You\'re also the fairy. You always were. I just don\'t think anyone said it out loud before.',
    unlocks:'Lauren\'s Mirror',
    pages:[
@@ -2250,7 +2361,7 @@ const ITEMS=[
    ]},
   // ── Broski — BEER, DRIVE & PHO
   {id:'beer',e:'🍺',name:'Cold Beer',from:'Broski',giver:'broski',
-   meaning:'Easy company — the kind that doesn\'t need a reason, just a car and an open road.',
+   meaning:'Easy company. The kind that doesn\'t need a reason, just a car and an open road.',
    hidden:'Let\'s go for a drive and grab some pho. No plans, no pressure. Just us and the road.',
    unlocks:'Drive & Pho',
    pages:[
@@ -2261,7 +2372,7 @@ const ITEMS=[
    ]},
   // ── Esma — WISH
   {id:'wish',e:'🌟',name:'Emerald Wish',from:'Esma',giver:'esma',
-   meaning:'Hope that finds you even at the edge of the dark — a small good thing to wish for.',
+   meaning:'Hope that finds you even at the edge of the dark, a small good thing to wish for.',
    hidden:'Even in shadow, something gentle stays close.',
    unlocks:"Esma's Wishing Path",
    pages:[
@@ -2276,32 +2387,32 @@ const ITEMS=[
    unlocks:"Euna's Teacup Window",
    pages:[
      {who:'EUNA',txt:'Tucked in tight, small and slow, perfectly content to stay that way.'},
-     {who:'EUNA',txt:'She gives the smallest shiver of a laugh — the kind only the people paying close attention ever notice.'},
+     {who:'EUNA',txt:'She gives the smallest shiver of a laugh, the kind only the people paying close attention ever notice.'},
      {who:'DJ DADDY COOL',txt:'You\'re learning to notice the small laughs now. That\'s new. That\'s good.'},
    ]},
   // ── Locks — LANTERN
   {id:'lantern',e:'🏮',name:'Steady Lantern',from:'Locks',giver:'locks',
-   meaning:"Steadiness — the light someone keeps lit for you, without ever asking to be thanked.",
+   meaning:"Steadiness. The light someone keeps lit for you, without ever asking to be thanked.",
    hidden:"I'll keep it burning as long as you need it.",
    unlocks:"Locks' Watch",
    pages:[
      {who:'LOCKS',txt:'She doesn\'t say much. She just keeps the flame from going out.'},
-     {who:'LOCKS',txt:'Steady hands, steady light — the kind of beautiful that doesn\'t need announcing.'},
+     {who:'LOCKS',txt:'Steady hands, steady light, the kind of beautiful that doesn\'t need announcing.'},
      {who:'DJ DADDY COOL',txt:'Some people are the lantern. Not the fire, not the storm. Just the light that stays.'},
    ]},
   // ── Seita — TEACUP
   {id:'teacup',e:'🍵',name:'Dancing Teacup',from:'Seita',giver:'seita',
-   meaning:'Playfulness, silliness — the enthusiasm that keeps you afloat when nothing is graceful.',
+   meaning:'Playfulness, silliness. The enthusiasm that keeps you afloat when nothing is graceful.',
    hidden:'Dance badly. Dance anyway.',
    unlocks:"Seita's Splash",
    pages:[
      {who:'SEITA',txt:'He does a dramatic flip. Half the tea ends up on the ground. He doesn\'t care even a little.'},
-     {who:'SEITA',txt:'Not graceful. Never graceful. Enthusiastic, though — always enthusiastic.'},
+     {who:'SEITA',txt:'Not graceful. Never graceful. Enthusiastic, though, always enthusiastic.'},
      {who:'DJ DADDY COOL',txt:'You laugh before you decide to. That\'s the whole point of him.'},
    ]},
   // ── Boat Momma — COMPASS
   {id:'compass',e:'🧭',name:'Old Compass',from:'Boat Momma',giver:'boatmomma',
-   meaning:"Distance that doesn't undo love — the ones who sailed far and are still, somehow, still yours.",
+   meaning:"Distance that doesn't undo love. The ones who sailed far and are still, somehow, still yours.",
    hidden:"Far away isn't the same as gone.",
    unlocks:"Boat Momma's Harbor",
    pages:[
@@ -2316,10 +2427,10 @@ const FAIRY_NPCS={
   dandan:{
     name:'DAN DAN',
     pages:[
-      {who:'DAN DAN',txt:'You can\'t see him. Not even a little bit.\n\nBut you know he\'s there — because the gems in the room shimmer just a little brighter, right over there.'},
+      {who:'DAN DAN',txt:'You can\'t see him. Not even a little bit.\n\nBut you know he\'s there, because the gems in the room shimmer just a little brighter, right over there.'},
       {who:'DAN DAN',txt:'His voice comes from somewhere beside you.\n\n"You found the portal. I knew you would. I\'ve been collecting a gem for when you did."'},
       {who:'DAN DAN',txt:'Something cool and smooth appears in your hand.\n\nYou can\'t see who placed it there.\n\nBut you know.'},
-      {who:'DJ DADDY COOL',txt:'DanDan — invisible from head to toe, and the best kind of friend.\n\nThe kind you feel before you see. The kind who has already been keeping something safe for you.'},
+      {who:'DJ DADDY COOL',txt:'DanDan: invisible from head to toe, and the best kind of friend.\n\nThe kind you feel before you see. The kind who has already been keeping something safe for you.'},
       {who:'✦ FAIRYLAND',txt:'In fairyland, the invisible friend is the most loyal kind.\n\nHe loved gems and waterfalls and the deep hum of caves.\n\nHe was always, always there.',isHidden:true,
        hidden:'He didn\'t need to be seen to be real. Just like every good thing you\'ve ever been given.'}
     ]},
@@ -2329,7 +2440,7 @@ const FAIRY_NPCS={
       {who:'MADGE',txt:'She blinks slowly.\n\nOnce. Twice. The way ancient turtles do when they already know what you need to hear.'},
       {who:'MADGE',txt:'A soft green glow rises from her shell.\n\nColors drift upward that don\'t have names yet.'},
       {who:'MADGE',txt:'She doesn\'t speak in words.\n\nShe speaks in stillness. And somehow, you understand her perfectly.'},
-      {who:'DJ DADDY COOL',txt:'Madge — the magic turtle beside the pond.\n\nWhen Fairy was troubled, he would sit beside her. And she would blink, and everything would feel a little easier.'},
+      {who:'DJ DADDY COOL',txt:'Madge: the magic turtle beside the pond.\n\nWhen Fairy was troubled, he would sit beside her. And she would blink, and everything would feel a little easier.'},
       {who:'✦ FAIRYLAND',txt:'Madge held things that were too big for words.\n\nHer ancient eyes full of quiet things.',isHidden:true,
        hidden:'Sometimes the most powerful comfort is simply someone sitting with you, blinking slowly, until you remember you\'re going to be okay.'}
     ]},
@@ -2342,18 +2453,18 @@ const FAIRY_NPCS={
       {who:'PRINCESS LAUREN',txt:'"Do you want to see where the flowers bloom in colours without names yet?"\n\nShe doesn\'t wait for an answer.\n\nShe just starts walking, and the grass stands up straighter as she passes.'},
       {who:'PRINCESS LAUREN',txt:'She stops.\n\nTurns back.\n\nVery seriously:\n\n"I love you, Fairy. Fairy. Dairy. Fairy."\n\nShe nods once, like that settles it completely.\n\nIt does.'},
       {who:'PRINCESS LAUREN',txt:'"Do you have a mirror?" she asks, very seriously, like it\'s an important question. Because to her, it is.'},
-      {who:'PRINCESS LAUREN',txt:'She doesn\'t wait for an answer.\n\nShe holds one out anyway — small, gold-edged, a little crooked.\n\n"Here. Look."'},
+      {who:'PRINCESS LAUREN',txt:'She doesn\'t wait for an answer.\n\nShe holds one out anyway, small, gold-edged, a little crooked.\n\n"Here. Look."'},
       {who:'PRINCESS LAUREN',txt:'"You\'re also the fairy," she tells him. "You always were. I just don\'t think anyone said it out loud before."'},
-      {who:'DJ DADDY COOL',txt:'Princess Lauren — the one who held Fairy\'s hand on the path between the Rainbow Woods and the castle gate.\n\nLittleLove watched from behind a tree. And glowed.'},
+      {who:'DJ DADDY COOL',txt:'Princess Lauren: the one who held Fairy\'s hand on the path between the Rainbow Woods and the castle gate.\n\nLittleLove watched from behind a tree. And glowed.'},
       {who:'✦ FAIRYLAND',txt:'She never said a single thing she didn\'t mean.\n\nAnd Fairy believed her completely. Every time.',isHidden:true,
        hidden:'She said: "I know spells. Real ones. The kind only a princess is allowed to know. Sometimes they\'re in other languages. That\'s how you know they\'re strong."'}
     ]},
   esma:{
     name:'ESMA',
     pages:[
-      {who:'ESMA',txt:'Soft grey fur. Two long ears that swivel toward you before you\'ve even said a word.\n\nAnd eyes the color of new spring leaves — a bright, certain emerald green.'},
+      {who:'ESMA',txt:'Soft grey fur. Two long ears that swivel toward you before you\'ve even said a word.\n\nAnd eyes the color of new spring leaves, a bright, certain emerald green.'},
       {who:'ESMA',txt:'"You found the shadow\'s edge," she says. "Most people don\'t come this close on purpose."'},
-      {who:'ESMA',txt:'"I live here on purpose too," she tells you. "Someone gentle should be nearby — for anyone passing through who feels a little lost, or a little scared, or just wants one small good thing to wish for."'},
+      {who:'ESMA',txt:'"I live here on purpose too," she tells you. "Someone gentle should be nearby, for anyone passing through who feels a little lost, or a little scared, or just wants one small good thing to wish for."'},
       {who:'ESMA',txt:'A turtle once told her, without asking: "You are the wishing rabbit." She didn\'t argue. It was true.'},
       {who:'DJ DADDY COOL',txt:'A rabbit who chose to live at the edge of the dark, on purpose, so no one would have to pass through it alone.'},
       {who:'✦ FAIRYLAND',txt:'Esma never once made anyone feel silly for being afraid of the Shadow Woods.\n\nShe just sat close by, emerald-eyed and certain, until the fear got smaller.',isHidden:true,
@@ -2364,18 +2475,18 @@ const FAIRY_NPCS={
     pages:[
       {who:'EUNA',txt:'Small and slow and perfectly content to stay that way.\n\nMost of the time you\'d only ever see the curve of her shell, tucked in tight, waiting patiently for whatever came next.'},
       {who:'EUNA',txt:'She lives down by the teacup window, where a certain dancing prawn has lived for as long as anyone can remember.'},
-      {who:'EUNA',txt:'She keeps a quiet secret. She isn\'t telling you what it is. But she gives the smallest shiver of a laugh — the kind only someone paying very close attention would ever notice.'},
-      {who:'DJ DADDY COOL',txt:'You noticed. That\'s the whole trick with Euna — not being fast, just being close enough, and quiet enough, to catch it.'},
+      {who:'EUNA',txt:'She keeps a quiet secret. She isn\'t telling you what it is. But she gives the smallest shiver of a laugh, the kind only someone paying very close attention would ever notice.'},
+      {who:'DJ DADDY COOL',txt:'You noticed. That\'s the whole trick with Euna: not being fast, just being close enough, and quiet enough, to catch it.'},
       {who:'✦ FAIRYLAND',txt:'A quiet secret, and the slow magic of an ordinary afternoon.',isHidden:true,
        hidden:'Not everything has to be fast to be real. Euna knew that before anyone had to tell her.'}
     ]},
   locks:{
     name:'LOCKS',
     pages:[
-      {who:'LOCKS',txt:'She doesn\'t say much. She never has to.\n\nShe just keeps the flame from going out — steady hands, steady light, the kind of beautiful that doesn\'t need announcing.'},
+      {who:'LOCKS',txt:'She doesn\'t say much. She never has to.\n\nShe just keeps the flame from going out, steady hands, steady light, the kind of beautiful that doesn\'t need announcing.'},
       {who:'LOCKS',txt:'You\'ve walked past her lantern before without noticing it was ever lit by anyone in particular.'},
       {who:'LOCKS',txt:'It was her. It was always her.'},
-      {who:'DJ DADDY COOL',txt:'Some people are the lantern. Not the fire, not the storm. Just the light that stays — long after everyone else has stopped watching for it.'},
+      {who:'DJ DADDY COOL',txt:'Some people are the lantern. Not the fire, not the storm. Just the light that stays. Long after everyone else has stopped watching for it.'},
       {who:'✦ FAIRYLAND',txt:'Locks never asked to be thanked for the light. She just kept it burning anyway.',isHidden:true,
        hidden:'I\'ll keep it burning as long as you need it. That was never a maybe.'}
     ]},
@@ -2383,10 +2494,10 @@ const FAIRY_NPCS={
     name:'SEITA',
     pages:[
       {who:'SEITA',txt:'He decides the teacup needs dancing in. So he dances in it.'},
-      {who:'SEITA',txt:'Not graceful, exactly — all quick little turns and one dramatic flip that splashes tea everywhere. He does not care even a little.'},
+      {who:'SEITA',txt:'Not graceful, exactly, all quick little turns and one dramatic flip that splashes tea everywhere. He does not care even a little.'},
       {who:'SEITA',txt:'Somewhere close by, tucked in her shell, Euna gives the smallest shiver of a laugh. He\'s the only one who ever notices it.'},
-      {who:'DJ DADDY COOL',txt:'Not graceful. Never graceful. Enthusiastic, though — always enthusiastic. You laugh before you decide to. That\'s the whole point of him.'},
-      {who:'✦ FAIRYLAND',txt:'A kookaburra laughing, a prawn dancing in a teacup — Seita never once let an afternoon stay quiet for long.',isHidden:true,
+      {who:'DJ DADDY COOL',txt:'Not graceful. Never graceful. Enthusiastic, though, always enthusiastic. You laugh before you decide to. That\'s the whole point of him.'},
+      {who:'✦ FAIRYLAND',txt:'A kookaburra laughing, a prawn dancing in a teacup, Seita never once let an afternoon stay quiet for long.',isHidden:true,
        hidden:'Dance badly. Dance anyway. He never learned any other way to do it, and he was right not to.'}
     ]},
   boatmomma:{
@@ -2394,9 +2505,9 @@ const FAIRY_NPCS={
     pages:[
       {who:'BOAT MOMMA',txt:'She sailed far once. Everyone remembers that part.'},
       {who:'BOAT MOMMA',txt:'What they forget to mention: she came back. She always comes back.'},
-      {who:'BOAT MOMMA',txt:'She loves a princess who loves a fairy more than almost anything else in the world — and everyone agrees, without exception, never to mention her singing.'},
+      {who:'BOAT MOMMA',txt:'She loves a princess who loves a fairy more than almost anything else in the world, and everyone agrees, without exception, never to mention her singing.'},
       {who:'BOAT MOMMA',txt:'"Far away," she says, "isn\'t the same as gone." She hands you something small and worn, like she\'s been carrying it for exactly this moment.'},
-      {who:'DJ DADDY COOL',txt:'Still loved. Even from far away. Especially from far away — that\'s the whole shape of what she\'s telling you.'},
+      {who:'DJ DADDY COOL',txt:'Still loved. Even from far away. Especially from far away. That\'s the whole shape of what she\'s telling you.'},
       {who:'✦ FAIRYLAND',txt:'She sailed far, once. She still came home to the people who were waiting.',isHidden:true,
        hidden:'Far away isn\'t the same as gone. She meant it every single time she said it.'}
     ]},
@@ -2404,13 +2515,13 @@ const FAIRY_NPCS={
 
 const CHAPTERS=[
   {n:1,icon:'🌙',name:'Moonlit Arrival',req:null,
-   intro:'You are DJ Daddy Cool.\n\nThe evening is yours. Walk the moonlit world.\n\nEach character is holding something for you — something you need, a message you\'ve been waiting to hear.\n\nApproach them. Speak to them.\n\nThey\'ve been waiting.'},
+   intro:'You are DJ Daddy Cool.\n\nThe evening is yours. Walk the moonlit world.\n\nEach character is holding something for you: something you need, a message you\'ve been waiting to hear.\n\nApproach them. Speak to them.\n\nThey\'ve been waiting.'},
   {n:2,icon:'🌊',name:'River Memory',req:'loveluca',
-   intro:'The river is low and silver.\n\nBeneath the current — a version of you that is younger, looking up.\n\nThe golden heart led you here. The water remembers.'},
+   intro:'The river is low and silver.\n\nBeneath the current, a version of you that is younger, looking up.\n\nThe golden heart led you here. The water remembers.'},
   {n:3,icon:'⏳',name:'Time Loop',req:'joybird',
    intro:'The same moment keeps happening.\n\nBut each time through, you understand something new.\n\nThe joy bird found you here too. You are not lost. You are learning.'},
   {n:4,icon:'🌿',name:"Poetic Woman's Corridor",req:'ring',
-   intro:'Long hallway. Her shadow at the end.\n\nShe has been waiting without waiting — the way people who already know things do.\n\nThe ring opened this door.'},
+   intro:'Long hallway. Her shadow at the end.\n\nShe has been waiting without waiting, the way people who already know things do.\n\nThe ring opened this door.'},
   {n:5,icon:'🌲',name:'Deep Forest',req:'puffer',
    intro:'The trees lean in close.\n\nThey are not threatening. They want to know you.\n\nThe jacket keeps you warm. You are safe to go in.'},
   {n:6,icon:'🤲',name:"Wise Woman's Blessing",req:'love',
@@ -2442,7 +2553,7 @@ const NPC_ITEMS={
   seita:['teacup'],
   boatmomma:['compass'],
 };
-const NPC_NAMES={boy:'LITTLELOVE',opshop:'THE OP-SHOP WOMAN',smile:'THE SMILE WOMAN',tall:'THE POETIC WOMAN',wise:'THE WISE WOMAN',dj:'DJ DADDY COOL',willow:'THE WILLOW',moon:'THE MOON',fairy:'THE FAIRY',dandan:'DAN DAN',madge:'MADGE',lauren:'PRINCESS LAUREN',broski:'BROSKI',esma:'ESMA',euna:'EUNA',locks:'LOCKS',seita:'SEITA',boatmomma:'BOAT MOMMA'};
+const NPC_NAMES={boy:'LITTLELOVE',opshop:'LOCKS',smile:'THE SMILE WOMAN',tall:'THE POETIC WOMAN',wise:'THE WISE WOMAN',dj:'DJ DADDY COOL',willow:'THE WILLOW',moon:'THE MOON',fairy:'THE FAIRY',dandan:'DAN DAN',madge:'MADGE',lauren:'PRINCESS LAUREN',broski:'BROSKI',esma:'ESMA',euna:'EUNA',locks:'LOCKS',seita:'SEITA',boatmomma:'BOAT MOMMA'};
 const NPC_POS={
   boy:{x:410,y:390},opshop:{x:740,y:390},smile:{x:890,y:390},tall:{x:1110,y:390},
   wise:{x:1545,y:390},broski:{x:1690,y:420},dj:{x:1800,y:390},
@@ -2479,7 +2590,7 @@ function saveProgress(){
     localStorage.setItem(SAVE_KEY,JSON.stringify({
       inv,unlocked,chapIdx,PX,PY,
       dragonsDefeated:DRAGONS.map(d=>d.defeated),
-      cafeEntered,
+      cafeEntered,chessSolved,
     }));
   }catch(e){ /* storage unavailable — progress just won't persist */ }
 }
@@ -2497,6 +2608,7 @@ function loadProgress(){
       DRAGONS.forEach((d,i)=>{if(s.dragonsDefeated[i])d.defeated=true;});
     }
     cafeEntered=!!s.cafeEntered;
+    chessSolved=!!s.chessSolved;
     return true;
   }catch(e){ return false; }
 }
@@ -2507,7 +2619,7 @@ function confirmResetProgress(){
     // still-in-memory (pre-reset) progress right back over the clear
     inv=[];unlocked=[];chapIdx=0;
     DRAGONS.forEach(d=>{d.defeated=false;});
-    cafeEntered=false;
+    cafeEntered=false;chessSolved=false;
     try{localStorage.removeItem(SAVE_KEY);}catch(e){}
     location.reload();
   }
@@ -2698,7 +2810,7 @@ document.addEventListener('keyup',e=>{if(typingInField(e))return;delete KEYS[e.k
 
 function worldWalkTo(target,clientX,clientY){
   if(dlgOpen)return;
-  if(target.closest('.npc')||target.closest('#fairyland-portal')||target.closest('.fairy-npc-hit')||target.closest('.mbox-wrap')||target.closest('#joystick'))return;
+  if(target.closest('.npc')||target.closest('#fairyland-portal')||target.closest('.fairy-npc-hit')||target.closest('.mbox-wrap')||target.closest('.chess-prop')||target.closest('#joystick'))return;
   const cx=Math.max(0,Math.min(2600-window.innerWidth,PX-window.innerWidth/2));
   const cy=Math.max(0,Math.min(900-window.innerHeight,PY-window.innerHeight/2));
   PATH_QUEUE=[];
@@ -2766,7 +2878,7 @@ function tryInteract(){if(!nearNPC||dlgOpen)return;openConversation(nearNPC);}
 
 function openFairylandMessage(){
   if(dlgOpen)return;
-  dlgPages=[{who:'✦ THE GREEN WOODS',txt:'A shimmer in the air.\n\nA doorway made of moonlight and old promises.\n\nFairyland is on the other side.\n\nWalk east — past the portal — to find them.'}];
+  dlgPages=[{who:'✦ THE GREEN WOODS',txt:'A shimmer in the air.\n\nA doorway made of moonlight and old promises.\n\nFairyland is on the other side.\n\nWalk east, past the portal, to find them.'}];
   dlgItem=null;dlgIdx=0;buildDots();
   document.getElementById('dlg-hidden').classList.remove('show');
   document.getElementById('dlg-item').classList.remove('show');
@@ -2982,7 +3094,7 @@ function openInv(){
   } else {
     const givers=[
       {k:'boy',l:'From LittleLove'},
-      {k:'opshop',l:'From The Op-Shop Woman'},
+      {k:'opshop',l:'From Locks'},
       {k:'smile',l:'From The Smile Woman'},
       {k:'tall',l:'From The Poetic Woman'},
       {k:'wise',l:'From The Nine-Finger Wise Woman'},
@@ -3080,18 +3192,18 @@ function deleteTrueMemory(id){
 }
 function renderMemoryBox(){
   const body=document.getElementById('mb-body');
-  let html='<div id="mb-intro">A place to keep things. Tap a token you\'ve found to set it inside — and write down whatever\'s true, whenever it\'s true.</div>';
+  let html='<div id="mb-intro">A place to keep things. Tap a token you\'ve found to set it inside, and write down whatever\'s true, whenever it\'s true.</div>';
 
   html+='<div class="isec">✦ Tokens From the Evening</div>';
   if(!inv.length){
-    html+='<div class="inv-empty">Nothing collected yet.<br>Walk up to someone glowing — what they give you can live here too.</div>';
+    html+='<div class="inv-empty">Nothing collected yet.<br>Walk up to someone glowing, what they give you can live here too.</div>';
   } else {
     html+='<div class="mb-hint">Tap a token to place it in the box, or tap it again to take it back out.</div>';
     html+='<div class="mb-grid">';
     inv.forEach(id=>{
       const it=ITEMS.find(i=>i.id===id);if(!it)return; // skips fairy_* intro markers, which aren't real items
       const placed=memTokens.includes(id);
-      html+=`<div class="mb-token ${placed?'placed':'waiting'}" onclick="toggleToken('${id}')" title="${it.name} — ${placed?'in the box':'tap to place in the box'}">
+      html+=`<div class="mb-token ${placed?'placed':'waiting'}" onclick="toggleToken('${id}')" title="${it.name}: ${placed?'in the box':'tap to place in the box'}">
         <div class="mt-em">${it.e}</div><div class="mt-name">${escapeHtml(it.name)}</div>
       </div>`;
     });
@@ -3126,6 +3238,57 @@ function closeMemoryBox(){document.getElementById('scr-membox').classList.remove
 
 function openOpShop(){document.getElementById('scr-opshop').classList.add('open');}
 function closeOpShop(){document.getElementById('scr-opshop').classList.remove('open');}
+
+/* ══ CHESS TABLE (side quest) ══════════════════════════════
+   A small, easy puzzle rather than a real engine: one piece has
+   the single move that delivers checkmate, and it's the only
+   square that responds to a click. Low stakes, quick, done. */
+let chessSolved=false;
+const CHESS_START={
+  wR:'d1', bK:'g8', bP:['f7','g7','h7'],
+};
+const CHESS_MATE_TO='d8';
+function openChess(){
+  document.getElementById('scr-chess').classList.add('open');
+  buildChessBoard();
+}
+function closeChess(){document.getElementById('scr-chess').classList.remove('open');}
+function buildChessBoard(){
+  const board=document.getElementById('chess-board');
+  board.innerHTML='';
+  const pieceAt={};
+  pieceAt[chessSolved?CHESS_MATE_TO:CHESS_START.wR]='♖';
+  pieceAt[CHESS_START.bK]='♚';
+  CHESS_START.bP.forEach(sq=>pieceAt[sq]='♟');
+  for(let row=0;row<8;row++){
+    for(let col=0;col<8;col++){
+      const file=String.fromCharCode(97+col),rank=8-row;
+      const sq=file+rank;
+      const cell=document.createElement('div');
+      cell.className='chess-sq '+((row+col)%2===0?'light':'dark');
+      if(!chessSolved&&sq===CHESS_MATE_TO)cell.classList.add('chess-target');
+      if(pieceAt[sq]){
+        const p=document.createElement('div');
+        p.className='chess-piece'+(sq===CHESS_START.wR&&!chessSolved?' chess-mover':'');
+        p.textContent=pieceAt[sq];
+        cell.appendChild(p);
+      }
+      cell.onclick=()=>chessSquareClick(sq);
+      board.appendChild(cell);
+    }
+  }
+  document.getElementById('chess-msg').textContent=chessSolved
+    ? 'Checkmate. Nicely played, again.'
+    : 'White to move. One move wins it. The rook is waiting.';
+}
+function chessSquareClick(sq){
+  if(chessSolved||sq!==CHESS_MATE_TO)return;
+  chessSolved=true;
+  saveProgress();
+  buildChessBoard();
+  document.getElementById('chess-msg').textContent='Checkmate! The king never had a square to run to.';
+  doSparkles();
+}
 let cafeEntered=false;
 function openCafe(){
   document.getElementById('scr-cafe').classList.add('open');
@@ -3150,7 +3313,8 @@ function cafeTalkToLittleLove(){
     {who:'LITTLELOVE',txt:'He\'s crouched by the café window, completely absorbed, watching something make its way across the glass.'},
     {who:'LITTLELOVE',txt:'"A bug!" he announces, delighted, like this is the best possible news. "I love bugs. And chips. Bugs and chips are my favorite things."'},
     {who:'LITTLELOVE',txt:'He tugs at your sleeve before you can even answer. "Can we go play? Just for a bit. Please."'},
-    {who:'DJ DADDY COOL',txt:'Bugs, chips, and wanting to go play — that\'s the whole list, really. It doesn\'t take much to be happy at that age. Maybe it never should have.'},
+    {who:'LITTLELOVE',txt:'"And a ship!" he adds, like it just occurred to him and it\'s urgent now. "Can we go on a ship? A big one. With a horn that goes really loud."'},
+    {who:'DJ DADDY COOL',txt:'Bugs, chips, wanting to go play, and now a ship: that\'s the whole list, really. It doesn\'t take much to be happy at that age. Maybe it never should have.'},
   ];
   dlgItem=null;dlgIdx=0;buildDots();
   document.getElementById('dlg-hidden').classList.remove('show');
@@ -3183,22 +3347,22 @@ const DRAGONS=[
    x:900,y:420,req:'fairydust',defeated:false,
    maxHP:80,
    intro:'A shadow rises from the ground.\nIt has the shape of every bad thought you\'ve ever believed about yourself.\n\nIt looks like you. Almost.',
-   victory:'The shadow dissolves.\n\nNot because you destroyed it —\nbut because you looked at it directly and it couldn\'t hold its shape.',
-   reward:'Courage — the kind you didn\'t know you had until just now.',
+   victory:'The shadow dissolves.\n\nNot because you destroyed it,\nbut because you looked at it directly and it couldn\'t hold its shape.',
+   reward:'Courage. The kind you didn\'t know you had until just now.',
    music:'Your music cuts right through it.\nThe rhythm finds the cracks.'},
   {id:2,name:'The Weight Dragon',
    x:1450,y:420,req:'ring',defeated:false,
    maxHP:100,
-   intro:'This one is old.\nIt\'s been following you for years —\nyou just didn\'t have a name for it until now.',
-   victory:'It shrinks.\n\nNot gone — but smaller.\nSmall enough that you can walk past it.\nSmall enough that it can\'t block the path anymore.',
-   reward:'Lightness — just a little. But real.',
+   intro:'This one is old.\nIt\'s been following you for years,\nyou just didn\'t have a name for it until now.',
+   victory:'It shrinks.\n\nNot gone, but smaller.\nSmall enough that you can walk past it.\nSmall enough that it can\'t block the path anymore.',
+   reward:'Lightness. Just a little. But real.',
    music:'The music makes it stumble.\nIt doesn\'t know what to do with beauty.'},
   {id:3,name:'The Final Dragon',
    x:1950,y:420,req:'love',defeated:false,
    maxHP:130,
    intro:'This is the one that waited longest.\n\nIt guards the road between who you were\nand who you\'re still becoming.',
-   victory:'It bows.\n\nNot in defeat —\nbut in recognition.\n\nIt always knew you\'d get here.',
-   reward:'The road ahead — clear, and yours.',
+   victory:'It bows.\n\nNot in defeat,\nbut in recognition.\n\nIt always knew you\'d get here.',
+   reward:'The road ahead: clear, and yours.',
    music:'The music becomes something else entirely.\nThe dragon goes still. It\'s listening.'},
 ];
 
@@ -3230,7 +3394,7 @@ function startBattle(dr){
 
   bMsg(dr.intro,()=>{
     setAllBtns(true);
-    bMsg(dr.intro+'\n\n— Choose your action.');
+    bMsg(dr.intro+'\n\nChoose your action.');
   });
 }
 
@@ -3272,13 +3436,13 @@ function bAction(act){
     case 'truth':
       dmg=12+Math.floor(Math.random()*10);
       battleState.stunned=true;
-      msg='You speak a truth the dragon can\'t argue with.\n\nIt staggers. '+dmg+' damage — and it loses a turn.';
+      msg='You speak a truth the dragon can\'t argue with.\n\nIt staggers. '+dmg+' damage, and it loses a turn.';
       break;
     case 'fairy':
       dmg=8+Math.floor(Math.random()*8);
       const healF=14+Math.floor(Math.random()*8);
       battleState.pHP=Math.min(battleState.pMaxHP,battleState.pHP+healF);
-      msg='The fairy on your shoulder blazes.\n\n+'+healF+' HP for you — and '+dmg+' damage to the dragon.';
+      msg='The fairy on your shoulder blazes.\n\n+'+healF+' HP for you, and '+dmg+' damage to the dragon.';
       break;
     case 'rest':
       const healR=22+Math.floor(Math.random()*10);
@@ -3310,7 +3474,7 @@ function dragonTurn(){
     battleState.stunned=false;
     bMsg('The dragon is still reeling from the truth you spoke.\n\nIt loses its turn.',()=>{
       battleState.busy=false;setAllBtns(true);
-      bMsg('The dragon staggers.\n\n— Your move.');
+      bMsg('The dragon staggers.\n\nYour move.');
     });
     return;
   }
@@ -3321,7 +3485,7 @@ function dragonTurn(){
     {name:'Fire',dmg:()=>16+Math.floor(Math.random()*14),
      msg:(d)=>'It breathes fire.\n\nThe old heat of old fears.\n\n'+d+' damage.',fire:true},
     {name:'Roar',dmg:()=>8+Math.floor(Math.random()*6),
-     msg:(d)=>'It roars — the sound that says you\'re not enough.\n\n'+d+' damage. But you\'ve heard it before.'},
+     msg:(d)=>'It roars. The sound that says you\'re not enough.\n\n'+d+' damage. But you\'ve heard it before.'},
   ];
   const mv=moves[Math.floor(Math.random()*moves.length)];
   const dmg=mv.dmg();
@@ -3342,7 +3506,7 @@ function dragonTurn(){
   bMsg(mv.msg(dmg),()=>{
     if(battleState.pHP<=0){bDefeat();return;}
     battleState.busy=false;setAllBtns(true);
-    bMsg(mv.msg(dmg)+'\n\n— Your move.');
+    bMsg(mv.msg(dmg)+'\n\nYour move.');
   });
 }
 
@@ -3355,7 +3519,7 @@ function bVictory(){
   if(zn)zn.style.display='none';
 
   document.getElementById('br-icon').textContent='✨';
-  document.getElementById('br-title').textContent=dr.name+' — Defeated';
+  document.getElementById('br-title').textContent=dr.name+': Defeated';
   document.getElementById('br-sub').textContent=dr.victory;
   document.getElementById('br-reward').textContent='✦ '+dr.reward;
   document.getElementById('battle-result').classList.add('show');
@@ -3368,7 +3532,7 @@ function bDefeat(){
   document.getElementById('br-icon').textContent='🌙';
   document.getElementById('br-title').textContent='Not Yet';
   document.getElementById('br-sub').textContent='The dragon retreats for now.\n\nIt\'ll wait.\nBut so will you.\n\nYou rise again.';
-  document.getElementById('br-reward').textContent='✦ HP restored — try again when you\'re ready.';
+  document.getElementById('br-reward').textContent='✦ HP restored. Try again when you\'re ready.';
   battleState.pHP=50;bUpdateHP();
   document.getElementById('battle-result').classList.add('show');
 }
@@ -3387,7 +3551,7 @@ function closeBattle(){
 /* ── FINALE: SUNRISE LINE-UP ── */
 const FINALE_LINES=[
   {who:'LITTLELOVE',line:'"We love you, DJ Daddy Cool." He says it simply, the way he says everything true.'},
-  {who:'THE OP-SHOP WOMAN',line:'"We love you, DJ Daddy Cool." Said like she already decided, ages ago.'},
+  {who:'LOCKS',line:'"We love you, DJ Daddy Cool." Said like she already decided, ages ago.'},
   {who:'THE SMILE WOMAN',line:'"We love you, DJ Daddy Cool." The whole smile, all the way out.'},
   {who:'THE POETIC WOMAN',line:'"We love you, DJ Daddy Cool." She doesn\'t need a poem for this one. The plain words are enough.'},
   {who:'THE WISE WOMAN',line:'"We love you, DJ Daddy Cool." Nine fingers, steady hand, no exceptions.'},
@@ -3397,10 +3561,10 @@ const FINALE_LINES=[
   {who:'THE FAIRY',line:'"We love you, DJ Daddy Cool." We are one as well, she says again, for good measure.'},
   {who:'DAN DAN',line:'"We love you, DJ Daddy Cool." Still invisible. Still here. Still meaning it.'},
   {who:'MADGE',line:'"We love you, DJ Daddy Cool." She blinks once, slowly. That\'s the whole sentence.'},
-  {who:'PRINCESS LAUREN',line:'"We love you, DJ Daddy Cool." She says it like a spell — the real kind, the kind only a princess knows.'},
+  {who:'PRINCESS LAUREN',line:'"We love you, DJ Daddy Cool." She says it like a spell, the real kind, the kind only a princess knows.'},
   {who:'ESMA',line:'"We love you, DJ Daddy Cool." Ears swiveled toward you, emerald eyes steady, like she\'s been rehearsing it.'},
   {who:'EUNA',line:'"We love you, DJ Daddy Cool." The smallest shiver of a laugh. You\'re the only one who ever catches it.'},
-  {who:'LOCKS',line:'"We love you, DJ Daddy Cool." Said quietly, the way she says everything — and meant all the way through.'},
+  {who:'LOCKS',line:'"We love you, DJ Daddy Cool." Said quietly, the way she says everything, and meant all the way through.'},
   {who:'SEITA',line:'"We love you, DJ Daddy Cool." Does a dramatic flip on the way out, just because he can.'},
   {who:'BOAT MOMMA',line:'"We love you, DJ Daddy Cool." Far away isn\'t the same as gone. She\'s here. She stayed.'},
 ];

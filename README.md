@@ -29,7 +29,7 @@ Your inventory, chapter, defeated dragons, and roughly where you were standing a
 
 ## The world
 
-Walking east from the starting willow takes you past the Op-Shop and the Sunday Café (both enterable — tap their doors) and three dragon encounters, before reaching a portal into Fairyland, where DanDan, Madge, Princess Lauren, Esma, Euna, Locks, Seita, and Boat Momma are all waiting. Beat the third dragon to trigger the sunrise finale.
+Walking east from the starting willow takes you past the Op-Shop (run by Locks, met again later in Fairyland), the Sunday Café, a chess table for an easy side-quest puzzle, and three dragon encounters, before reaching a portal into Fairyland, where DanDan, Madge, Princess Lauren, Esma, Euna, Locks, Seita, and Boat Momma are all waiting. Beat the third dragon to trigger the sunrise finale.
 
 ## Characters & Items
 
