@@ -1010,27 +1010,40 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 @keyframes kripple{0%,100%{opacity:.5}50%{opacity:.2}}
 
 /* ── SWAN BOAT ─────────────────────────── */
+/* outer: drifts the whole rig (sign included) back and forth across the
+   lake — was completely static before, which is why it never looked like
+   it belonged on the water */
 #swan-boat{position:absolute;bottom:18px;z-index:4;
   display:flex;flex-direction:column;align-items:center;
-  animation:swanbob 4s ease-in-out infinite}
+  animation:swandrift var(--sd,16s) ease-in-out infinite}
+@keyframes swandrift{
+  0%,100%{transform:translateX(0)}
+  50%{transform:translateX(var(--sx,340px))}
+}
+/* inner: the bob, isolated on its own element so it doesn't fight the
+   outer drift for the transform property */
+.sb-float{position:relative;animation:swanbob 3.6s ease-in-out infinite}
 @keyframes swanbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-/* boat hull */
-.sb-hull{width:90px;height:28px;
-  background:linear-gradient(180deg,#e8e0c8,#c8b888);
-  border-radius:50% 50% 48% 48% / 40% 40% 60% 60%;
+/* boat hull — pointed at the prow (left, under the neck) so it reads as
+   a boat cutting through water rather than a floating pill */
+.sb-hull{width:92px;height:26px;
+  background:linear-gradient(180deg,#f0e8d0,#c8b070 55%,#a8905a);
+  border-radius:75% 40% 40% 60% / 60% 60% 55% 55%;
   position:relative;border:1.5px solid rgba(200,180,100,.5);
-  box-shadow:0 4px 14px rgba(0,0,0,.35)}
-.sb-hull::before{content:'';position:absolute;top:6px;left:10px;right:10px;height:3px;
-  background:rgba(255,255,255,.25);border-radius:50%}
+  box-shadow:0 4px 14px rgba(0,0,0,.35),0 8px 10px -4px rgba(0,0,0,.3)}
+.sb-hull::before{content:'';position:absolute;top:5px;left:12px;right:14px;height:3px;
+  background:rgba(255,255,255,.3);border-radius:50%}
+.sb-hull::after{content:'';position:absolute;bottom:-2px;left:6px;right:6px;height:5px;
+  background:radial-gradient(ellipse,rgba(0,0,0,.3),transparent 75%)}
 /* swan neck + head */
-.sb-neck{position:absolute;top:-32px;left:14px;
+.sb-neck{position:absolute;top:-32px;left:12px;
   width:10px;height:34px;
-  background:linear-gradient(180deg,#f0ece0,#e0d8c0);
+  background:linear-gradient(180deg,#f8f4e6,#e0d8c0);
   border-radius:50% 50% 30% 30%;
   transform:rotate(-14deg);transform-origin:bottom center}
 .sb-head{position:absolute;top:-12px;left:-3px;
   width:16px;height:12px;
-  background:#f0ece0;border-radius:60% 50% 40% 40%;
+  background:#f8f4e6;border-radius:60% 50% 40% 40%;
   border:1px solid rgba(200,180,100,.3)}
 .sb-beak{position:absolute;top:3px;right:-6px;
   width:7px;height:4px;
@@ -1040,9 +1053,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 /* wings */
 .sb-wing-l,.sb-wing-r{position:absolute;top:2px;
   width:28px;height:18px;
-  background:linear-gradient(135deg,#f8f4e8,#e8e0c8);
+  background:linear-gradient(135deg,#fdf9ec,#e8e0c8);
   border-radius:50%;border:1px solid rgba(200,180,100,.25);
-  animation:swwing 4s ease-in-out infinite}
+  animation:swwing 3.6s ease-in-out infinite}
 .sb-wing-l{left:-16px;transform:rotate(10deg);transform-origin:right center}
 .sb-wing-r{right:-16px;transform:rotate(-10deg);transform-origin:left center;animation-delay:.2s}
 @keyframes swwing{0%,100%{transform:rotate(10deg) scaleY(1)}50%{transform:rotate(6deg) scaleY(.88)}}
@@ -1054,11 +1067,16 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   color:#c8b070;text-align:center;line-height:1.5}
 .sb-sign::after{content:'';position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);
   width:1px;height:5px;background:rgba(200,176,112,.3)}
-/* water wake behind boat */
+/* water wake behind boat — the keyframes this referenced didn't exist,
+   so the ripples just sat there frozen instead of trailing off */
 .sb-wake{position:absolute;bottom:10px;left:-18px;
   width:14px;height:6px;border-radius:50%;
   border:1px solid rgba(100,200,255,.2);
   animation:wake 2s ease-out infinite}
+@keyframes wake{
+  0%{transform:translateX(0) scaleX(.4);opacity:.55}
+  100%{transform:translateX(-22px) scaleX(1.4);opacity:0}
+}
 
 /* ── DRAGON BATTLE ──────────────────────────────────────── */
 #scr-battle{
@@ -1432,10 +1450,13 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   <!-- Swan Boat — lives outside #river: the river is only 90px tall with
        overflow:hidden (for the shimmer-line effect), which was clipping the
        boat's neck/sign since they extend well above its hull. Positioned in
-       #world coordinates instead so nothing gets cut off. -->
-  <div id="swan-boat" style="left:640px;bottom:268px">
+       #world coordinates instead so nothing gets cut off.
+       Drifts back and forth across the lake (see #swan-boat's animation) —
+       the outer div handles the horizontal cruise, .sb-float handles the
+       vertical bob, so the two transforms don't fight on the same element. -->
+  <div id="swan-boat" style="left:520px;bottom:268px;--sx:340px;--sd:16s">
     <div class="sb-sign">🦢 Swan Boats<br>30 min to park</div>
-    <div style="position:relative">
+    <div class="sb-float">
       <div class="sb-wing-l"></div>
       <div class="sb-wing-r"></div>
       <div class="sb-neck">
@@ -2744,6 +2765,15 @@ function movePlayer(dt){
   if(Math.abs(curDY)<0.01)curDY=0;
   PX=Math.max(20,Math.min(2580,PX+curDX*SPD*dt));
   PY=Math.max(100,Math.min(820,PY+curDY*SPD*dt));
+  // shoreline — the river (world y 560-650, where the swan boat and koi
+  // live) is water, not walkable ground. Without this the walking path
+  // beside it did nothing to stop you, so you'd wade straight in and end
+  // up standing on top of the boat. PY tracks the top of the player's
+  // sprite (not the feet — the feet sit ~118px lower), so the cap has to
+  // sit well above 560 to actually keep the feet dry. Fairyland's harbor
+  // past x2180 has its own layout and keeps its own NPCs down at the
+  // water, so it's exempt.
+  if(PX<2180)PY=Math.min(PY,430);
   // transform instead of left/top — GPU-composited, no per-frame layout/paint,
   // which is what was making movement feel choppy
   playerEl.style.transform=`translate3d(${PX}px,${PY}px,0)`;
