@@ -197,6 +197,31 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   animation:fsway 4s ease-in-out infinite}
 @keyframes fsway{0%,100%{transform:rotate(var(--fr,0deg))}50%{transform:rotate(calc(var(--fr,0deg) + 6deg))}}
 
+/* Lantern posts — warm light along the path, breaking up the long dark
+   stretches between characters */
+.lantern-post{position:absolute;z-index:3;display:flex;flex-direction:column;
+  align-items:center;pointer-events:none}
+.lp-lamp{width:18px;height:24px;position:relative;
+  background:linear-gradient(180deg,#4a3818,#2a1c08);
+  border-radius:40% 40% 20% 20%;border:1px solid rgba(255,210,120,.2);
+  display:flex;align-items:center;justify-content:center;margin-bottom:-2px}
+.lp-light{width:10px;height:14px;border-radius:50%;
+  background:radial-gradient(circle,#fff4c8,#ffcf70 55%,#8a5a10);
+  box-shadow:0 0 16px 5px rgba(255,205,110,.55);
+  animation:lpflicker 3.6s ease-in-out infinite}
+@keyframes lpflicker{0%,100%{opacity:1}47%{opacity:.86}53%{opacity:1}78%{opacity:.92}}
+.lp-pole{width:4px;height:72px;background:linear-gradient(90deg,#241c0c,#3a2e14,#241c0c)}
+.lp-glow{position:absolute;bottom:-4px;width:130px;height:56px;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(255,200,110,.2),transparent 72%);
+  filter:blur(1px)}
+
+/* Grass tufts — small ground texture so the path doesn't read as bare */
+.grass-tuft{position:absolute;z-index:2;display:flex;gap:1px;pointer-events:none;
+  transform-origin:bottom center;animation:gsway 5s ease-in-out infinite}
+.gt-blade{width:2.5px;border-radius:2px 2px 0 0;
+  background:linear-gradient(180deg,#2a5828,#0e2a0e);transform-origin:bottom center}
+@keyframes gsway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+
 /* Fireflies */
 .ff{position:absolute;width:3px;height:3px;border-radius:50%;
   background:rgba(150,240,80,.8);box-shadow:0 0 6px rgba(100,220,50,.7);
@@ -1451,6 +1476,67 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     </div>
   </div>
   <div id="world-ff"></div><!-- fireflies -->
+
+  <!-- Lantern posts — warm pools of light along the long dark stretches,
+       positioned in the gaps between characters/props so they don't crowd
+       anyone's interaction radius -->
+  <div class="lantern-post" style="left:550px;top:440px">
+    <div class="lp-lamp"><div class="lp-light"></div></div>
+    <div class="lp-pole"></div>
+    <div class="lp-glow"></div>
+  </div>
+  <div class="lantern-post" style="left:1150px;top:440px">
+    <div class="lp-lamp"><div class="lp-light"></div></div>
+    <div class="lp-pole"></div>
+    <div class="lp-glow"></div>
+  </div>
+  <div class="lantern-post" style="left:1950px;top:440px">
+    <div class="lp-lamp"><div class="lp-light"></div></div>
+    <div class="lp-pole"></div>
+    <div class="lp-glow"></div>
+  </div>
+
+  <!-- Grass tufts — light ground texture along the path -->
+  <div class="grass-tuft" style="left:150px;top:562px;animation-delay:.2s">
+    <div class="gt-blade" style="height:9px;transform:rotate(-6deg)"></div>
+    <div class="gt-blade" style="height:12px"></div>
+    <div class="gt-blade" style="height:8px;transform:rotate(6deg)"></div>
+  </div>
+  <div class="grass-tuft" style="left:500px;top:568px;animation-delay:1.4s">
+    <div class="gt-blade" style="height:10px;transform:rotate(-6deg)"></div>
+    <div class="gt-blade" style="height:13px"></div>
+    <div class="gt-blade" style="height:9px;transform:rotate(6deg)"></div>
+  </div>
+  <div class="grass-tuft" style="left:850px;top:558px;animation-delay:.7s">
+    <div class="gt-blade" style="height:8px;transform:rotate(-6deg)"></div>
+    <div class="gt-blade" style="height:11px"></div>
+    <div class="gt-blade" style="height:9px;transform:rotate(6deg)"></div>
+  </div>
+  <div class="grass-tuft" style="left:1200px;top:565px;animation-delay:2.1s">
+    <div class="gt-blade" style="height:9px;transform:rotate(-6deg)"></div>
+    <div class="gt-blade" style="height:12px"></div>
+    <div class="gt-blade" style="height:8px;transform:rotate(6deg)"></div>
+  </div>
+  <div class="grass-tuft" style="left:1550px;top:560px;animation-delay:.9s">
+    <div class="gt-blade" style="height:10px;transform:rotate(-6deg)"></div>
+    <div class="gt-blade" style="height:13px"></div>
+    <div class="gt-blade" style="height:9px;transform:rotate(6deg)"></div>
+  </div>
+  <div class="grass-tuft" style="left:1900px;top:570px;animation-delay:1.7s">
+    <div class="gt-blade" style="height:8px;transform:rotate(-6deg)"></div>
+    <div class="gt-blade" style="height:11px"></div>
+    <div class="gt-blade" style="height:8px;transform:rotate(6deg)"></div>
+  </div>
+  <div class="grass-tuft" style="left:2250px;top:563px;animation-delay:.4s">
+    <div class="gt-blade" style="height:9px;transform:rotate(-6deg)"></div>
+    <div class="gt-blade" style="height:12px"></div>
+    <div class="gt-blade" style="height:9px;transform:rotate(6deg)"></div>
+  </div>
+  <div class="grass-tuft" style="left:2500px;top:566px;animation-delay:2.4s">
+    <div class="gt-blade" style="height:8px;transform:rotate(-6deg)"></div>
+    <div class="gt-blade" style="height:12px"></div>
+    <div class="gt-blade" style="height:8px;transform:rotate(6deg)"></div>
+  </div>
 
   <!-- Willow tree L -->
   <div class="tree" style="left:40px;top:200px">
